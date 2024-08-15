@@ -31,12 +31,19 @@ const AreasModule: React.FC<AreasModuleProps> = ({
   errorGetAreas,
   setAreas,
 }) => {
+  console.log(errorGetAreas);
   const [isSortOpen, toggleSort, sortedBy, handleClickSort] = useSort("name");
   const [addOpen, handleClickAdd] = useAdd();
   const [isModalOpen, openModal, closeModal] = useModal();
 
   return (
     <div>
+      {errorGetAreas && (
+        <div className="absolute top-36 left-20 font-extralight text-center">
+          <p>Impossible de joindre le server.</p>
+          <p>Veuillez rafraîchir la page.</p>
+        </div>
+      )}
       <div
         onClick={handleClickAdd}
         className={`absolute top-2 ${

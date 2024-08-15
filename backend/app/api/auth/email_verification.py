@@ -54,7 +54,7 @@ async def send_verification_email(
             <p>Afin de confirmer votre adresse email et valider votre
                 inscription, merci de cliquer sur ce bouton :</p>
             <a
-            href="{ settings.BACK_END_URL }{ settings.API_V1_STR }/email/
+            href="{settings.BACK_END_URL}{settings.API_V1_STR}/email/
 confirm-email/{_token}"><button>Valider mon inscription
                 </button></a>
             <p>À tout de suite 🥕</p>
@@ -94,7 +94,7 @@ async def confirm_email(token: str):
     await update_verified_user(verification['email'])
     if verification['check']:
         return RedirectResponse(
-            url=f'{ settings.FRONT_END_URL }/login.html',
+            url=f'{settings.FRONT_END_URL}/login.html',
             status_code=302
         )
 

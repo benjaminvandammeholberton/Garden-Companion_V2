@@ -11,8 +11,8 @@ import wateringIcon from "../../../assets/actions-icons/watering.png";
 import fertilizeIcon from "../../../assets/actions-icons/fertilize.png";
 import weedIcon from "../../../assets/actions-icons/weed.png";
 import parasiteIcon from "../../../assets/actions-icons/parasite.png";
-import cameraIcon from "../../../assets/actions-icons/camera.png";
-import noteIcon from "../../../assets/actions-icons/pin.png";
+// import cameraIcon from "../../../assets/actions-icons/camera.png";
+// import noteIcon from "../../../assets/actions-icons/pin.png";
 
 interface ActionsModuleProps {}
 
@@ -26,13 +26,13 @@ const ActionsModule: React.FC<ActionsModuleProps> = () => {
     setModalContent(content);
   };
   return (
-    <div>
+    <div className="flex justify-center h-5/6">
       <div
         className="
       grid
       grid-cols-3
       place-content-around
-      gap-3
+      gap-6
       "
       >
         <div
@@ -41,7 +41,7 @@ const ActionsModule: React.FC<ActionsModuleProps> = () => {
         >
           <img
             onClick={() => openModal("direct-sowing")}
-            className="w-10"
+            className="w-12"
             src={directSowingIcon}
             alt=""
           />
@@ -53,7 +53,7 @@ const ActionsModule: React.FC<ActionsModuleProps> = () => {
         >
           <img
             onClick={() => openModal("planting")}
-            className="w-10"
+            className="w-12"
             src={plantingIcon}
             alt=""
           />
@@ -65,7 +65,7 @@ const ActionsModule: React.FC<ActionsModuleProps> = () => {
         >
           <img
             onClick={() => openModal("remove")}
-            className="w-10"
+            className="w-12"
             src={wateringIcon}
             alt=""
           />
@@ -77,7 +77,7 @@ const ActionsModule: React.FC<ActionsModuleProps> = () => {
         >
           <img
             onClick={() => openModal("remove")}
-            className="w-10"
+            className="w-12"
             src={fertilizeIcon}
             alt=""
           />
@@ -89,7 +89,7 @@ const ActionsModule: React.FC<ActionsModuleProps> = () => {
         >
           <img
             onClick={() => openModal("remove")}
-            className="w-10"
+            className="w-12"
             src={parasiteIcon}
             alt=""
           />
@@ -101,7 +101,7 @@ const ActionsModule: React.FC<ActionsModuleProps> = () => {
         >
           <img
             onClick={() => openModal("harvest")}
-            className="w-10"
+            className="w-12"
             src={harvestIcon}
             alt=""
           />
@@ -114,7 +114,7 @@ const ActionsModule: React.FC<ActionsModuleProps> = () => {
         >
           <img
             onClick={() => openModal("remove")}
-            className="w-10"
+            className="w-12"
             src={removeIcon}
             alt=""
           />
@@ -127,7 +127,7 @@ const ActionsModule: React.FC<ActionsModuleProps> = () => {
         >
           <img
             onClick={() => openModal("remove")}
-            className="w-10"
+            className="w-12"
             src={weedIcon}
             alt=""
           />
@@ -140,21 +140,21 @@ const ActionsModule: React.FC<ActionsModuleProps> = () => {
         >
           <img
             onClick={() => openModal("remove")}
-            className="w-10"
+            className="w-12"
             src={mulchIcon}
             alt=""
           />
           <p className="text-sm text-gray-500">Pailler</p>
         </div>
       </div>
-      <div className="flex justify-center gap-20 mt-5">
+      {/* <div className="flex justify-center gap-20 mt-5">
         <div
           onClick={() => openModal("remove")}
           className="transition ease-in-out hover:scale-110 flex flex-col items-center cursor-pointer"
         >
           <img
             onClick={() => openModal("remove")}
-            className="w-10"
+            className="w-12"
             src={cameraIcon}
             alt=""
           />
@@ -167,13 +167,13 @@ const ActionsModule: React.FC<ActionsModuleProps> = () => {
         >
           <img
             onClick={() => openModal("remove")}
-            className="w-10"
+            className="w-12"
             src={noteIcon}
             alt=""
           />
           <p className="text-sm text-gray-500">Note</p>
         </div>
-      </div>
+      </div> */}
       <PlantManagerModal
         isOpen={isModalOpen}
         onClose={closeModal}

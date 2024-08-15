@@ -5,7 +5,7 @@ import { useState } from "react";
 import ChatBotModal from "../features/chat-bot/ChatBotModal";
 import Footer from "../components/footer/Footer";
 import Header from "../components/header/Header";
-import Navbar from "../components/navbar/Navbar";
+// import Navbar from "../components/navbar/Navbar";
 
 // Assets
 import chatBotIcon from "../assets/header/chatbot.png";
@@ -18,8 +18,8 @@ const Layout = () => {
   return (
     <div className="flex justify-center main-background gap-5 2xl:gap-10 lg:min-h-screen">
       <Header />
-      <Navbar />
-      <div className="flex flex-col items-center justify-between md:mt-48 lg:ml-20 mt-36 lg:mr-2 lg:mt-28 gap-10 h-full w-full">
+      {/* <Navbar /> */}
+      <div className="flex flex-col items-center justify-between  lg:ml-20 mt-24 lg:mr-2 lg:mt-28 gap-10 h-full w-full">
         <div className="relative md:h-full w-full lg:w-auto flex justify-center">
           <Outlet />
         </div>

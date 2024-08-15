@@ -305,9 +305,7 @@ const Landing = () => {
         </main>
 
         <footer>
-          <p className="text-center">
-            &copy; 2024 Garden Companion - Tous droits réservés
-          </p>
+          <p className="text-center">&copy; 2024 Garden Companion</p>
         </footer>
       </div>
     </div>

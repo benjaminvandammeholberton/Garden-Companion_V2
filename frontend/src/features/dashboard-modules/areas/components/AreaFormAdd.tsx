@@ -56,7 +56,6 @@ const AreaFormAdd: React.FC<AreaFormAddProps> = ({
       environnement: "",
       surface: 0,
     });
-    console.log(newArea.area_id);
     setAreas((prevAreas) => [...prevAreas, newArea]);
     handleClickAdd();
   };

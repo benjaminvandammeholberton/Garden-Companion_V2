@@ -84,7 +84,7 @@ const AreaList: React.FC<AreaListProps> = ({
                       area={area}
                       openModal={openModal}
                       areaIcon={getAreaIcon(area.environnement)}
-                      vegetableUnique={getListUniqueVegetables(area)}
+                      vegetableUnique={getListUniqueVegetables(area) || []}
                     />
                   );
                 })}
@@ -104,7 +104,7 @@ const AreaList: React.FC<AreaListProps> = ({
                   area={area}
                   openModal={openModal}
                   areaIcon={getAreaIcon(area.environnement)}
-                  vegetableUnique={getListUniqueVegetables(area)}
+                  vegetableUnique={getListUniqueVegetables(area) || []}
                 />
               );
             })}

@@ -11,5 +11,5 @@ export interface AreaInterface {
   created_at: string;
   updated_at: string;
   environnement: string;
-  vegetables: VegetableInterface[];
+  vegetables?: VegetableInterface[];
 }

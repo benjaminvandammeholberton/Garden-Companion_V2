@@ -1,3 +1,5 @@
+import { v4 as uuidv4 } from "uuid";
+
 // assets
 import { greenhouse, outdoor, indoor } from "../../../../assets/assets-path";
 
@@ -43,7 +45,10 @@ const AreaFormAdd: React.FC<AreaFormAddProps> = ({
       name: capitalize(formData.name),
       surface: formData.surface,
       environnement: formData.environnement,
+      area_id: uuidv4(),
       sowing_area: false,
+      created_at: new Date().toISOString(),
+      updated_at: new Date().toISOString(),
     };
     await addData(newArea);
     setFormData({
@@ -51,6 +56,7 @@ const AreaFormAdd: React.FC<AreaFormAddProps> = ({
       environnement: "",
       surface: 0,
     });
+    console.log(newArea.area_id);
     setAreas((prevAreas) => [...prevAreas, newArea]);
     handleClickAdd();
   };

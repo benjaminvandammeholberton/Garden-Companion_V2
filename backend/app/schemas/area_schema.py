@@ -20,6 +20,7 @@ class AreaCreate(BaseModel):
     """
     Pydantic model for creating Area.
     """
+    area_id: UUID
     name: str = Field(max_length=25, min_length=1)
     surface: float = Field(ge=0, le=10000)
     sowing_area: bool

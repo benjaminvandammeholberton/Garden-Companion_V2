@@ -1,3 +1,5 @@
+import { Dispatch, SetStateAction } from "react";
+
 // assets
 import { addIcon, sortIcon, backIcon } from "../../../../assets/assets-path";
 
@@ -13,7 +15,22 @@ import useAdd from "../../../../hooks/useAdd";
 // modal
 import AreaModal from "../modals/AreaModal";
 
-const AreasModule = () => {
+// interfaces
+import { AreaInterface } from "../../../../interfaces/interfaces";
+
+interface AreasModuleProps {
+  areas: AreaInterface[];
+  isLoadingAreas: boolean;
+  errorGetAreas: string | null;
+  setAreas: Dispatch<SetStateAction<AreaInterface[]>>;
+}
+
+const AreasModule: React.FC<AreasModuleProps> = ({
+  areas,
+  isLoadingAreas,
+  errorGetAreas,
+  setAreas,
+}) => {
   const [isSortOpen, toggleSort, sortedBy, handleClickSort] = useSort("name");
   const [addOpen, handleClickAdd] = useAdd();
   const [isModalOpen, openModal, closeModal] = useModal();
@@ -62,9 +79,9 @@ const AreasModule = () => {
         </ul>
       </div>
       {addOpen ? (
-        <AreaFormAdd {...{ handleClickAdd }} />
+        <AreaFormAdd {...{ handleClickAdd, setAreas }} />
       ) : (
-        <AreaList {...{ sortedBy, openModal }} />
+        <AreaList {...{ sortedBy, openModal, areas, isLoadingAreas }} />
       )}
 
       <AreaModal isOpen={isModalOpen} onClose={closeModal} />

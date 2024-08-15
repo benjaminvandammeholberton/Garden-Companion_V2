@@ -2,24 +2,30 @@
 import { greenhouse, outdoor, indoor } from "../../../../assets/assets-path";
 import arrow from "../../../../assets/common/up-right-arrow.png";
 
-// hooks
-import useGetAreas from "../../../../hooks/useGetAreas";
-
 // interfaces
 import {
   AreaInterface,
   VegetableInterface,
 } from "../../../../interfaces/interfaces";
+
+// components
 import AreaListItem from "./AreaListItem";
 
 interface AreaListProps {
   sortedBy: string;
   openModal: () => void;
+  areas: AreaInterface[];
+  isLoadingAreas: boolean;
 }
 
-const AreaList: React.FC<AreaListProps> = ({ sortedBy, openModal }) => {
+const AreaList: React.FC<AreaListProps> = ({
+  sortedBy,
+  openModal,
+  areas,
+  isLoadingAreas,
+}) => {
   const environnements = ["greenhouse", "outdoor", "indoor"];
-  const [areas, isLoadingAreas] = useGetAreas();
+  // const [areas, isLoadingAreas] = useGetAreas();
 
   //function to make a list of unique vegetable growing in one area
   const getListUniqueVegetables = (area: AreaInterface) => {
@@ -71,10 +77,10 @@ const AreaList: React.FC<AreaListProps> = ({ sortedBy, openModal }) => {
             );
             return (
               <div key={index}>
-                {sortedAreasOfType.map((area) => {
+                {sortedAreasOfType.map((area, index) => {
                   return (
                     <AreaListItem
-                      key={area.area_id}
+                      key={index}
                       area={area}
                       openModal={openModal}
                       areaIcon={getAreaIcon(area.environnement)}
@@ -88,17 +94,20 @@ const AreaList: React.FC<AreaListProps> = ({ sortedBy, openModal }) => {
         </ul>
       ) : (
         <ul className="flex flex-col">
-          {areas.map((area) => {
-            return (
-              <AreaListItem
-                key={area.area_id}
-                area={area}
-                openModal={openModal}
-                areaIcon={getAreaIcon(area.environnement)}
-                vegetableUnique={getListUniqueVegetables(area)}
-              />
-            );
-          })}
+          {areas
+            .slice()
+            .sort((a, b) => a.name.localeCompare(b.name))
+            .map((area, index) => {
+              return (
+                <AreaListItem
+                  key={index}
+                  area={area}
+                  openModal={openModal}
+                  areaIcon={getAreaIcon(area.environnement)}
+                  vegetableUnique={getListUniqueVegetables(area)}
+                />
+              );
+            })}
         </ul>
       )}
     </div>

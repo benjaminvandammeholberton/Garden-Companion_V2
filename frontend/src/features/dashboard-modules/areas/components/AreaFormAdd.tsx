@@ -2,12 +2,14 @@
 import { greenhouse, outdoor, indoor } from "../../../../assets/assets-path";
 
 // hooks
-import { useState } from "react";
+import { Dispatch, SetStateAction, useState } from "react";
 import useAddArea from "../../../../hooks/useAddArea";
 import capitalize from "../../../../utils/capitalizeStr";
+import { AreaInterface } from "../../../../interfaces/interfaces";
 
 interface AreaFormAddProps {
   handleClickAdd: () => void;
+  setAreas: Dispatch<SetStateAction<AreaInterface[]>>;
 }
 
 interface FormDataInterface {
@@ -16,7 +18,10 @@ interface FormDataInterface {
   surface: number;
 }
 
-const AreaFormAdd: React.FC<AreaFormAddProps> = ({ handleClickAdd }) => {
+const AreaFormAdd: React.FC<AreaFormAddProps> = ({
+  handleClickAdd,
+  setAreas,
+}) => {
   const [formData, setFormData] = useState<FormDataInterface>({
     name: "",
     environnement: "",
@@ -46,6 +51,7 @@ const AreaFormAdd: React.FC<AreaFormAddProps> = ({ handleClickAdd }) => {
       environnement: "",
       surface: 0,
     });
+    setAreas((prevAreas) => [...prevAreas, newArea]);
     handleClickAdd();
   };
 

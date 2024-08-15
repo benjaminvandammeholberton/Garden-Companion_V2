@@ -1,9 +1,14 @@
-import { useEffect, useState } from "react";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { AreaInterface } from "../interfaces/interfaces";
 import useAuth from "./useAuth";
 import { getAllAreas } from "../api/api-services/areas";
 
-type useGetAreasReturnType = [AreaInterface[], boolean, string | null];
+type useGetAreasReturnType = [
+  AreaInterface[],
+  boolean,
+  string | null,
+  Dispatch<SetStateAction<AreaInterface[]>>
+];
 
 const useGetAreas = (): useGetAreasReturnType => {
   const [user] = useAuth();
@@ -28,7 +33,7 @@ const useGetAreas = (): useGetAreasReturnType => {
     if (user) fetchAreas();
   }, [user]);
 
-  return [areas, isLoading, error];
+  return [areas, isLoading, error, setAreas];
 };
 
 export default useGetAreas;

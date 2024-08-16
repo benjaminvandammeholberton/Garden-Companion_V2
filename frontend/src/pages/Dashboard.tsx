@@ -47,21 +47,23 @@ const Dashboard = () => {
       <div className="grid lg:grid-cols-2 xl:grid-cols-3 gap-5 w-full">
         <div
           className={`
-              ${isDeployArea ? "h-[350px]" : "h-[120px]"}
+              ${isDeployArea ? "h-[350px]" : "h-[120px] md:h-[350px]"}
               w-[370px]
               bg-white
               opacity-90
               rounded-3xl
+              cursor-pointer
               `}
-          onClick={() => onTitleClick("area")}
         >
-          <div className="relative w-full h-full overflow-hidden">
+          <div
+            className="relative w-full h-full overflow-hidden cursor-pointer"
+            onClick={() => onTitleClick("area")}
+          >
             <ModuleHeader title={"Zones de Culture"} />
-            {isDeployArea && (
-              <AreasModule
-                {...{ areas, isLoadingAreas, errorGetAreas, setAreas }}
-              />
-            )}
+
+            <AreasModule
+              {...{ areas, isLoadingAreas, errorGetAreas, setAreas }}
+            />
           </div>
         </div>
         <div
@@ -74,7 +76,10 @@ const Dashboard = () => {
               `}
           onClick={() => onTitleClick("action")}
         >
-          <div className="relative w-full h-full overflow-hidden">
+          <div
+            className="relative w-full h-full overflow-hidden cursor-pointer"
+            onClick={() => onTitleClick("action")}
+          >
             <ModuleHeader title={"Nouvelle action"} />
             <ActionsModule />
           </div>
@@ -88,7 +93,10 @@ const Dashboard = () => {
               rounded-3xl
               `}
         >
-          <div className="relative w-full h-full overflow-hidden">
+          <div
+            className="relative w-full h-full overflow-hidden cursor-pointer"
+            onClick={() => onTitleClick("seedlings")}
+          >
             <ModuleHeader title={"Mes semis en pot"} />
             <SeedlingsModule />
           </div>
@@ -102,7 +110,10 @@ const Dashboard = () => {
               rounded-3xl
               `}
         >
-          <div className="relative w-full h-full overflow-hidden">
+          <div
+            className="relative w-full h-full overflow-hidden cursor-pointer"
+            onClick={() => onTitleClick("todo")}
+          >
             <ModuleHeader title={"Liste de tâches"} />
             <ToDoListModule />
           </div>
@@ -116,7 +127,10 @@ const Dashboard = () => {
               rounded-3xl
               `}
         >
-          <div className="relative w-full h-full overflow-hidden">
+          <div
+            className="relative w-full h-full overflow-hidden cursor-pointer"
+            onClick={() => onTitleClick("forecast")}
+          >
             <ModuleHeader title={"Prévisions météo"} />
             <Forecast />
           </div>
@@ -130,7 +144,10 @@ const Dashboard = () => {
               rounded-3xl
               `}
         >
-          <div className="relative w-full h-full overflow-hidden">
+          <div
+            className="relative w-full h-full overflow-hidden cursor-pointer"
+            onClick={() => onTitleClick("recommandations")}
+          >
             <ModuleHeader title={"Prêt à semer !"} />
             <Recommandations />
           </div>

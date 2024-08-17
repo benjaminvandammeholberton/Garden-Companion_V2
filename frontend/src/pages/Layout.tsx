@@ -19,7 +19,7 @@ const Layout = () => {
     <div className="flex justify-center main-background gap-5 2xl:gap-10 lg:min-h-screen">
       <Header />
       {/* <Navbar /> */}
-      <div className="flex flex-col items-center justify-between  lg:ml-20 mt-24 lg:mr-2 lg:mt-28 gap-10 h-full w-full">
+      <div className="flex flex-col items-center justify-between lg:ml-20 mt-24 lg:mr-2 lg:mt-28 gap-10 h-full w-full">
         <div className="relative md:h-full w-full lg:w-auto flex justify-center">
           <Outlet />
         </div>

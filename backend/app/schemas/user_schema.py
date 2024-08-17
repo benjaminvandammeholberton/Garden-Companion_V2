@@ -14,6 +14,14 @@ class LocalisationSchema(BaseModel):
     latitude: float
 
 
+class UserRegister(BaseModel):
+    """
+    """
+    email: EmailStr
+    username: str = Field(min_length=5, max_length=50,)
+    password: str = Field(min_length=5, max_length=24,)
+
+
 class UserAuth(BaseModel):
     """
     UserAuth class for user authentication.

@@ -9,7 +9,7 @@ from app.core.security import (create_access_token,
                                get_password,
                                verify_password)
 from app.models.user_model import User
-from app.schemas.user_schema import UserAuth, UserUpdate
+from app.schemas.user_schema import UserAuth, UserRegister, UserUpdate
 from app.services.area_service import AreaService
 from app.services.todo_service import TodoService
 from app.services.vegetable_info_service import VegetableInfoService
@@ -18,7 +18,7 @@ from app.services.vegetable_manager_service import VegetableManagerService
 
 class UserService:
     @staticmethod
-    async def create_user(user: UserAuth):
+    async def create_user(user: UserRegister):
         """
         Create a new user.
 
@@ -29,12 +29,12 @@ class UserService:
             username=user.username,
             email=user.email,
             hashed_password=get_password(user.password),
-            localisation=user.localisation
+            # localisation=user.localisation
         )
         await user_in.create()
 
         # add vegetable_info to the user
-        await VegetableInfoService.add_all_vegetable_info_to_user(user_in)
+        # await VegetableInfoService.add_all_vegetable_info_to_user(user_in)
 
         await send_verification_email(user.email, user)
 

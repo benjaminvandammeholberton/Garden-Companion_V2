@@ -47,7 +47,7 @@ class User(Document):
     updated_at: datetime = Field(default_factory=datetime.now)
     username: Indexed(str, unique=True)  # type: ignore
     email: Indexed(EmailStr, unique=True)  # type: ignore
-    localisation: LocalisationSchema
+    localisation: LocalisationSchema | None = None
     hashed_password: str
     first_name: str | None = None
     last_name: str | None = None

@@ -6,7 +6,7 @@ API router for handling User-related operations.
 from fastapi import APIRouter, HTTPException, status, Depends
 import pymongo
 
-from app.schemas.user_schema import UserAuth, UserOut
+from app.schemas.user_schema import UserAuth, UserOut, UserRegister
 from app.core.dependencies import get_current_user
 from app.core.security import verify_password
 from app.models.user_model import User
@@ -15,10 +15,10 @@ from app.services.user_service import UserService
 user_router = APIRouter()
 
 
-@user_router.post('/create', summary="Create new user", response_model=UserOut)
-async def create_user(data: UserAuth):
+@user_router.post('/register', summary="Create new user", response_model=UserOut)
+async def create_user(data: UserRegister):
     """
-    Endpoint to create a new user.
+    Endpoint to register a new user.
 
     :param data: Data for creating a new user.
     :return: Created user details.

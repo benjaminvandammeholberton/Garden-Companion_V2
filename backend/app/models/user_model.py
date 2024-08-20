@@ -51,7 +51,7 @@ class User(Document):
     hashed_password: str
     first_name: str | None = None
     last_name: str | None = None
-    disabled: bool = False
+    disabled: bool | None = False
     chat_bot_day_requests: int = 0
     chat_bot_total_requests: int = 0
     last_request_datetime: datetime | None = None

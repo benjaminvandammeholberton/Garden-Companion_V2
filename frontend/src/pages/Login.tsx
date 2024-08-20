@@ -1,37 +1,84 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-
+import { z } from "zod";
 import axios from "axios";
 import { updateTokenInAxiosHeaders } from "../api/axios";
-import HeaderLogin from "../components/header/HeaderLogin";
 
-interface LoginForm {
-  email: string;
-  password: string;
+//shadcn ui
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@radix-ui/react-alert-dialog";
+import { Button } from "@/components/ui/button";
+import {
+  AlertDialogFooter,
+  AlertDialogHeader,
+} from "@/components/ui/alert-dialog";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+
+interface LoginProps {
+  toggleAuth: () => void;
 }
 
-const Login = () => {
+const Login: React.FC<LoginProps> = ({ toggleAuth }) => {
   const navigate = useNavigate();
-  const [loginForm, setLoginForm] = useState<LoginForm>({
-    email: "",
-    password: "",
-  });
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
-  const handleInput = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    setLoginForm((prevState) => ({ ...prevState, [name]: value }));
-  };
+  const formSchema = z.object({
+    email: z.string().email({
+      message: "Veuillez entrer un adresse email valide",
+    }),
+    password: z
+      .string()
+      .min(8, {
+        message: "Votre mot de passe doit contenir 8 caractères minimum",
+      })
+      .regex(/[0-9]/, {
+        message: "Votre mot de passe doit contenir au moins un chiffre",
+      })
+      .regex(/[!@#$%^&*(),.?":{}|<>]/, {
+        message:
+          "Votre mot de passe doit contenir au moins un caractère spécial",
+      }),
+  });
 
-  const submitLoginForm = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+  const form = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      email: "",
+      password: "",
+    },
+  });
+
+  const submitLoginForm = async (values: z.infer<typeof formSchema>) => {
     setIsLoading(true);
     try {
       const response = await axios.post(
-        "http://192.168.1.192:8001/api/v1/auth/login",
+        "http://localhost:8001/api/v1/auth/login",
         `grant_type=&username=${encodeURIComponent(
-          loginForm.email
-        )}&password=${encodeURIComponent(loginForm.password)}`,
+          values.email
+        )}&password=${encodeURIComponent(values.password)}`,
         {
           headers: {
             Accept: "application/json",
@@ -53,54 +100,69 @@ const Login = () => {
   };
 
   return (
-    <div className="h-screen w-screen flex flex-col gap-5 items-center justify-center main-background ">
-      <HeaderLogin />
-      <div className=" 
-              w-[370px] h-[350px]
-              bg-white
-              opacity-90
-              rounded-3xl
-              flex flex-col
-              justify-between
-              items-center
-              p-3
-              "
-            >
-      <h1 className="text-3xl">Login</h1>
-      {isLoading && <span>Chargement</span>}
-      <form onSubmit={submitLoginForm} className="flex flex-col gap-4">
-        <div className="flex flex-col items-center">
-            <label htmlFor="email">Email</label>
-            <input
-              className="border"
-              type="email"
-              id="name"
+    <Card className="px-10 mt-20">
+      <CardHeader>
+        <CardTitle>
+          Connexion
+        </CardTitle>
+      </CardHeader>
+      <CardContent className="w-80">
+        {isLoading && <span>Chargement</span>}
+        <Form {...form}>
+          <form onSubmit={form.handleSubmit(submitLoginForm)} className="space-y-4">
+            <FormField
+              control={form.control}
               name="email"
-              value={loginForm.email}
-              onChange={handleInput}
-              />
-          </div>
-          <div className="flex flex-col items-center gap-1">
-            <label htmlFor="password">Password</label>
-            <input
-              className="border"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Email</FormLabel>
+                  <FormControl>
+                    <Input placeholder="jardinierdu53@gmail.fr" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
               name="password"
-              type="password"
-              id="password"
-              value={loginForm.password}
-              onChange={handleInput}
-              />
-          </div>
-          <button className="border p-2 rounded-3xl mt-2" type="submit">
-            Se connecter
-          </button>
-        </form>
-        <div className="font-thin flex flex-col text-center">
-        <a href="#">Mot de passe oublié</a>
-        <a href="/register">Pas encore inscrit ?</a>
-        </div>
-      </div>
-    </div>
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Mot de passe</FormLabel>
+                  <FormControl>
+                    <Input type="password" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <Button type="submit">Se connecter</Button>
+          </form>
+        </Form>
+      </CardContent>
+      <CardFooter className="flex flex-col items-center">
+        <AlertDialog>
+          <AlertDialogTrigger>
+            <a href="#">Mot de passe oublié</a>
+          </AlertDialogTrigger>
+          <AlertDialogContent>
+            <AlertDialogHeader>
+              <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+              <AlertDialogDescription>
+                This action cannot be undone. This will permanently delete your
+                account and remove your data from our servers.
+              </AlertDialogDescription>
+            </AlertDialogHeader>
+            <AlertDialogFooter>
+              <AlertDialogAction>Ok</AlertDialogAction>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
+        <a className="cursor-pointer" onClick={toggleAuth}>
+          Pas encore inscrit ?
+        </a>
+      </CardFooter>
+    </Card>
   );
 };
 

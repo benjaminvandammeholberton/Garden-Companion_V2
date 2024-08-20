@@ -14,6 +14,7 @@ import useAuth from "./hooks/useAuth";
 // import Tools from "./pages/Tools";
 // import Seeds from "./pages/Seeds";
 import Layout from "./pages/Layout";
+import Auth from "./pages/Auth";
 // import MySpace from "./pages/MySpace";
 
 interface ProtectedRouteProps {
@@ -34,13 +35,23 @@ function App() {
       element: <Landing />,
     },
     {
-      path: "/login",
-      element: <Login />,
+      path: "/auth", 
+      element: <Auth />,
+      children: [
+        {
+          path: "login",
+          element: <Login />,
+        },
+        {
+          path: "register",
+          element: <Register />,
+        },
+      ],
     },
-    {
-      path: "/register",
-      element: <Register />,
-    },
+    // {
+    //   path: "/register",
+    //   element: <Auth />,
+    // },
     {
       element: <Layout />,
       children: [

@@ -1,43 +1,85 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
-
 import axios from "axios";
-import { updateTokenInAxiosHeaders } from "../api/axios";
-import HeaderLogin from "../components/header/HeaderLogin";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
 
-interface RegisterForm {
-  username: string;
-  email: string;
-  password: string;
-  confirmPassword: string;
+// shadcn ui
+import { Button } from "@/components/ui/button";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+
+import { Input } from "@/components/ui/input";
+
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+
+interface RegisterProps {
+  toggleAuth: () => void;
 }
 
-const Register = () => {
-  const navigate = useNavigate();
-  const [registerForm, setRegisterForm] = useState<RegisterForm>({
-    username: "",
-    email: "",
-    password: "",
-    confirmPassword: "",
-  });
+const Register: React.FC<RegisterProps> = ({ toggleAuth }) => {
+  const [isRegister, setIsRegister] = useState(true);
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
-  const handleInput = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    setRegisterForm((prevState) => ({ ...prevState, [name]: value }));
-  };
+  const formSchema = z.object({
+    username: z.string().min(4, {
+      message: "Votre nom d'utilisateur doit comporter au minimum 4 caractères",
+    }),
+    email: z.string().email({
+      message: "Veuillez entrer un adresse email valide",
+    }),
+    password: z
+      .string()
+      .min(8, {
+        message: "Votre mot de passe doit contenir 8 caractères minimum",
+      })
+      .regex(/[0-9]/, {
+        message: "Votre mot de passe doit contenir au moins un chiffre",
+      })
+      .regex(/[!@#$%^&*(),.?":{}|<>]/, {
+        message:
+          "Votre mot de passe doit contenir au moins un caractère spécial",
+      }),
+    passwordConfirm: z
+      .string()
+      .refine((data) => data.password === data.passwordConfirm, {
+        message: "Les mots de passe ne correspondent pas",
+        path: ["passwordConfirm"],
+      }),
+  });
 
-  const submitRegisterForm = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+  const form = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      username: "",
+      email: "",
+      password: "",
+      passwordConfirm: "",
+    },
+  });
+
+  const submitRegisterForm = async (values: z.infer<typeof formSchema>) => {
     setIsLoading(true);
     try {
       const userData = {
-        username: registerForm.username,
-        email: registerForm.email,
-        password: registerForm.password,
+        username: values.username,
+        email: values.email,
+        password: values.password,
       };
       const response = await axios.post(
-        "http://192.168.1.192:8001/api/v1/users/register",
+        "http://localhost:8001/api/v1/users/register",
         userData,
         {
           headers: {
@@ -47,7 +89,7 @@ const Register = () => {
         }
       );
       if (response.status === 200) {
-        navigate("/login");
+        toggleAuth;
       }
     } catch (err) {
       console.error("Login failed", err);
@@ -57,148 +99,79 @@ const Register = () => {
   };
 
   return (
-    <div className="w-full min-h-screen sm:h-screen flex flex-col gap-5 items-center justify-center main-background">
-      <HeaderLogin />
-      <div
-        className=" 
-              w-[370px] h-[450px]
-              bg-white
-              opacity-90
-              rounded-3xl
-              flex flex-col
-              justify-between
-              items-center
-              p-3
-              mt-28
-              mb-10
-              "
-      >
-        <h1 className="text-3xl">Inscription</h1>
+    <Card className="px-10 mt-20">
+      <CardHeader>
+        <CardTitle>Inscription</CardTitle>
+      </CardHeader>
+      <CardContent className="w-80">
         {isLoading && <span>Chargement</span>}
-        <form onSubmit={submitRegisterForm} className="flex flex-col gap-4">
-          <div className="flex flex-col items-center">
-            <label htmlFor="username">Nom d'utilisateur</label>
-            <input
-              className="border"
-              type="text"
-              id="username"
+        <Form {...form}>
+          <form
+            onSubmit={form.handleSubmit(submitRegisterForm)}
+            className="space-y-4"
+          >
+            <FormField
+              control={form.control}
               name="username"
-              value={registerForm.username}
-              onChange={handleInput}
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Nom d'utiliisateur</FormLabel>
+                  <FormControl>
+                    <Input placeholder="Joy" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
             />
-          </div>
-          <div className="flex flex-col items-center">
-            <label htmlFor="email">Email</label>
-            <input
-              className="border"
-              type="email"
-              id="email"
+            <FormField
+              control={form.control}
               name="email"
-              value={registerForm.email}
-              onChange={handleInput}
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Email</FormLabel>
+                  <FormControl>
+                    <Input placeholder="jardinierdu53@gmail.fr" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
             />
-          </div>
-          <div className="flex flex-col items-center gap-1">
-            <label htmlFor="password">Mot de passe</label>
-            <input
-              className="border"
+            <FormField
+              control={form.control}
               name="password"
-              type="password"
-              id="password"
-              value={registerForm.password}
-              onChange={handleInput}
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Mot de passe</FormLabel>
+                  <FormControl>
+                    <Input type="password" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
             />
-          </div>
-          <div className="flex flex-col items-center gap-1">
-            <label htmlFor="confirm-password">Confirmer mot de passe</label>
-            <input
-              className="border"
-              name="confirmPassword"
-              type="password"
-              id="confirm-password"
-              value={registerForm.confirmPassword}
-              onChange={handleInput}
+            <FormField
+              control={form.control}
+              name="passwordConfirm"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Confirmer mot de passe</FormLabel>
+                  <FormControl>
+                    <Input type="password" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
             />
-          </div>
-          {/* <br />
-          <div className="flex flex-col items-center gap-1 relative">
-            <label htmlFor="country">Pays</label>
-            <input
-              className="border"
-              name="country"
-              type="text"
-              id="country"
-              value={registerForm.country}
-              onChange={handleInput}
-            />
-            <div
-              className="
-              choices-list 
-              flex 
-              flex-col 
-              gap-1 
-              border
-              rounded-xl
-              px-2
-              h-44 
-              z-50
-              absolute 
-              bg-white 
-              w-64
-              top-16 
-              hidden
-            "
-            ></div>
-          </div>
-          <div className="flex flex-col items-center gap-1">
-            <label htmlFor="post-code">Code postal</label>
-            <input
-              className="border"
-              name="post-code"
-              type="text"
-              id="post-code"
-              value={registerForm.postCode}
-              onChange={handleInput}
-            />
-          </div>
-          <div className="flex flex-col items-center gap-1 relative">
-            <label htmlFor="city">Ville</label>
-            <input
-              className="border"
-              name="city"
-              type="text"
-              id="city"
-              value={registerForm.city}
-              onChange={handleInput}
-            />
-            <div
-              className="
-              choices-list 
-              flex 
-              flex-col 
-              gap-1 
-              border
-              rounded-xl
-              px-2
-              h-44 
-              z-50
-              absolute 
-              bg-white 
-              w-64
-              top-16 
-              hidden
-            "
-            ></div>
-          </div> */}
-          <button className="border p-2 rounded-3xl mt-2" type="submit">
-            Créer un compte
-          </button>
-        </form>
-        <div className="font-thin flex flex-col text-center">
-          <a href="/login">Déjà inscrit ?</a>
-        </div>
-      </div>
-    </div>
+            <Button type="submit">S'inscrire</Button>
+          </form>
+        </Form>
+      </CardContent>
+      <CardFooter className="flex flex-col items-center">
+        <a className="cursor-pointer" onClick={toggleAuth}>
+          Déjà inscrit ?
+        </a>
+      </CardFooter>
+    </Card>
   );
 };
 

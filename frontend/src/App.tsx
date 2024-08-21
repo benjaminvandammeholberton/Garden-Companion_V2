@@ -48,10 +48,6 @@ function App() {
         },
       ],
     },
-    // {
-    //   path: "/register",
-    //   element: <Auth />,
-    // },
     {
       element: <Layout />,
       children: [

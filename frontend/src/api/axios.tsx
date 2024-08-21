@@ -5,7 +5,7 @@ const getToken = () => {
 };
 
 const axiosInstance = axios.create({
-  baseURL: "http://192.168.1.192:8001",
+  baseURL: "http://localhost:8001",
   headers: {
     common: {
       Authorization: `Bearer ${getToken()}`,

@@ -4,8 +4,6 @@ import { ToDoInterface } from "../interfaces";
 // assets
 import priorityIcon from "../assets/priority.png";
 import deleteIcon from "../assets/delete.png";
-import checkboxChecked from "../../../../assets/common/checkbox-checked.png";
-import checkboxUnhecked from "../../../../assets/common/checkbox-checked.png";
 
 // utils
 import {

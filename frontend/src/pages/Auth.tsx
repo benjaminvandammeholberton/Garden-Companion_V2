@@ -3,6 +3,7 @@ import { useNavigate, useLocation, Outlet } from "react-router-dom";
 import HeaderLogin from "../components/header/HeaderLogin";
 import Login from "./Login";
 import Register from "./Register";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 
 const Auth = () => {
   const navigate = useNavigate();
@@ -29,7 +30,16 @@ const Auth = () => {
 
   return (
     <div className="w-full min-h-screen flex flex-col gap-5 items-center justify-center main-background pb-10">
+
       <HeaderLogin />
+      <div className="w-64 absolute right-0 top-20">   
+        <Alert className="bg-green-50">
+          <AlertTitle>Votre compte a été créé 👍</AlertTitle>
+          <AlertDescription>
+            Rendez-vous dans votre boite mail pour valider l'inscription
+          </AlertDescription>
+        </Alert>
+      </div>
       {isRegister ? (
         <Register toggleAuth={toggleAuth} />
       ) : (

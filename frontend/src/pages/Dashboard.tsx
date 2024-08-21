@@ -2,12 +2,14 @@ import { useState } from "react";
 import ModuleHeader from "../features/dashboard-modules/ModuleHeader";
 import ActionsModule from "../features/dashboard-modules/actions/ActionsModule";
 import AreasModule from "../features/dashboard-modules/areas/components/AreasModule";
+
 // import dashboardModulesList from "../features/dashboard-modules/dashboardModulesList";
 import Forecast from "../features/dashboard-modules/forecast/Forecast";
 import Recommandations from "../features/dashboard-modules/recommandations/Recommandations";
 import SeedlingsModule from "../features/dashboard-modules/seedlings/SeedlingsModule";
 import ToDoListModule from "../features/dashboard-modules/todo-list/components/ToDoListModule";
 import useGetAreas from "../hooks/useGetAreas";
+import { Card, CardContent } from "@/components/ui/card";
 
 const Dashboard = () => {
   const [areas, isLoadingAreas, errorGetAreas, setAreas] = useGetAreas();
@@ -45,113 +47,74 @@ const Dashboard = () => {
   return (
     <div>
       <div className="grid lg:grid-cols-2 xl:grid-cols-3 gap-5 w-full">
-        <div
-          className={`
-              ${isDeployArea ? "h-[350px]" : "h-[120px] md:h-[350px]"}
-              w-[370px]
-              bg-white
-              opacity-90
-              rounded-3xl
-              cursor-pointer
-              `}
-        >
+        <Card className="h-[350px] w-[370px]">
           <div
             className="relative w-full h-full overflow-hidden cursor-pointer"
             onClick={() => onTitleClick("area")}
           >
             <ModuleHeader title={"Zones de Culture"} />
-
-            <AreasModule
-              {...{ areas, isLoadingAreas, errorGetAreas, setAreas }}
-            />
+            <CardContent>
+              <AreasModule
+                {...{ areas, isLoadingAreas, errorGetAreas, setAreas }}
+              />
+            </CardContent>
           </div>
-        </div>
-        <div
-          className={`
-              ${isDeployAction ? "h-[350px]" : "h-[120px]"}
-              w-[370px]
-              bg-white
-              opacity-90
-              rounded-3xl
-              `}
-          onClick={() => onTitleClick("action")}
-        >
+        </Card>
+        <Card className="h-[350px] w-[370px]">
           <div
             className="relative w-full h-full overflow-hidden cursor-pointer"
             onClick={() => onTitleClick("action")}
           >
             <ModuleHeader title={"Nouvelle action"} />
-            <ActionsModule />
+            <CardContent>
+              <ActionsModule />
+            </CardContent>
           </div>
-        </div>
-        <div
-          className={`
-              ${isDeploySeedling ? "h-[350px]" : "h-[120px]"}
-              w-[370px]
-              bg-white
-              opacity-90
-              rounded-3xl
-              `}
-        >
+        </Card>
+        <Card className="h-[350px] w-[370px]">
           <div
             className="relative w-full h-full overflow-hidden cursor-pointer"
             onClick={() => onTitleClick("seedlings")}
           >
             <ModuleHeader title={"Mes semis en pot"} />
-            <SeedlingsModule />
+            <CardContent>
+              <SeedlingsModule />
+            </CardContent>
           </div>
-        </div>
-        <div
-          className={`
-              ${isDeployToDoList ? "h-[350px]" : "h-[120px]"}
-              w-[370px]
-              bg-white
-              opacity-90
-              rounded-3xl
-              `}
-        >
+        </Card>
+        <Card className="h-[350px] w-[370px]">
           <div
             className="relative w-full h-full overflow-hidden cursor-pointer"
             onClick={() => onTitleClick("todo")}
           >
             <ModuleHeader title={"Liste de tâches"} />
-            <ToDoListModule />
+            <CardContent>
+              <ToDoListModule />
+            </CardContent>
           </div>
-        </div>
-        <div
-          className={`
-              ${isDeployForecast ? "h-[350px]" : "h-[120px]"}
-              w-[370px]
-              bg-white
-              opacity-90
-              rounded-3xl
-              `}
-        >
+        </Card>
+        <Card className="h-[350px] w-[370px]">
           <div
             className="relative w-full h-full overflow-hidden cursor-pointer"
             onClick={() => onTitleClick("forecast")}
           >
             <ModuleHeader title={"Prévisions météo"} />
-            <Forecast />
+            <CardContent>
+              <Forecast />
+            </CardContent>
           </div>
-        </div>
-        <div
-          className={`
-              ${isDeployRecommandations ? "h-[350px]" : "h-[120px]"}
-              w-[370px]
-              bg-white
-              opacity-90
-              rounded-3xl
-              `}
-        >
+        </Card>
+        <Card className="h-[350px] w-[370px]">
           <div
             className="relative w-full h-full overflow-hidden cursor-pointer"
             onClick={() => onTitleClick("recommandations")}
           >
             <ModuleHeader title={"Prêt à semer !"} />
-            <Recommandations />
+            <CardContent>
+              <Recommandations />
+            </CardContent>
           </div>
-        </div>
+        </Card>
 
         {/* {dashboardModulesList.map((module) => {
           return (

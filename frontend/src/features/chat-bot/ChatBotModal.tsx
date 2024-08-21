@@ -40,7 +40,7 @@ const ChatBotModal: React.FC<ChatBotModalProps> = ({ isOpen, onClose }) => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    !isAuth && navigate("/login");
+    !isAuth && navigate("/auth/login");
   }, [isAuth, navigate]);
 
   // Prevent scrolling of body content when modal is open

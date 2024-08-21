@@ -32,7 +32,7 @@ const useAuth = (): [User | null, boolean, boolean] => {
         }
       } catch (error) {
         console.error(error);
-        navigate("/login");
+        navigate("/auth/login");
       } finally {
         setIsLoading(false);
       }

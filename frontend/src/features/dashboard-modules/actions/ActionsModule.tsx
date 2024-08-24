@@ -40,7 +40,6 @@ const ActionsModule: React.FC<ActionsModuleProps> = () => {
           className="transition ease-in-out hover:scale-110 flex flex-col items-center cursor-pointer"
         >
           <img
-            onClick={() => openModal("direct-sowing")}
             className="w-12"
             src={directSowingIcon}
             alt=""
@@ -52,7 +51,6 @@ const ActionsModule: React.FC<ActionsModuleProps> = () => {
           className="transition ease-in-out hover:scale-110 flex flex-col items-center cursor-pointer"
         >
           <img
-            onClick={() => openModal("planting")}
             className="w-12"
             src={plantingIcon}
             alt=""
@@ -60,11 +58,10 @@ const ActionsModule: React.FC<ActionsModuleProps> = () => {
           <p className="text-sm text-gray-500">Planter</p>
         </div>
         <div
-          onClick={() => openModal("remove")}
+          onClick={() => openModal("water")}
           className="transition ease-in-out hover:scale-110 flex flex-col items-center cursor-pointer"
         >
           <img
-            onClick={() => openModal("remove")}
             className="w-12"
             src={wateringIcon}
             alt=""
@@ -72,11 +69,10 @@ const ActionsModule: React.FC<ActionsModuleProps> = () => {
           <p className="text-sm text-gray-500">Arroser</p>
         </div>
         <div
-          onClick={() => openModal("remove")}
+          onClick={() => openModal("fertilize")}
           className="transition ease-in-out hover:scale-110 flex flex-col items-center cursor-pointer"
         >
           <img
-            onClick={() => openModal("remove")}
             className="w-12"
             src={fertilizeIcon}
             alt=""
@@ -84,11 +80,10 @@ const ActionsModule: React.FC<ActionsModuleProps> = () => {
           <p className="text-sm text-gray-500">Fertiliser</p>
         </div>
         <div
-          onClick={() => openModal("remove")}
+          onClick={() => openModal("treat")}
           className="transition ease-in-out hover:scale-110 flex flex-col items-center cursor-pointer"
         >
           <img
-            onClick={() => openModal("remove")}
             className="w-12"
             src={parasiteIcon}
             alt=""
@@ -100,7 +95,6 @@ const ActionsModule: React.FC<ActionsModuleProps> = () => {
           className="transition ease-in-out hover:scale-110 flex flex-col items-center cursor-pointer"
         >
           <img
-            onClick={() => openModal("harvest")}
             className="w-12"
             src={harvestIcon}
             alt=""
@@ -113,7 +107,6 @@ const ActionsModule: React.FC<ActionsModuleProps> = () => {
           className="transition ease-in-out hover:scale-110 flex flex-col items-center cursor-pointer"
         >
           <img
-            onClick={() => openModal("remove")}
             className="w-12"
             src={removeIcon}
             alt=""
@@ -122,24 +115,22 @@ const ActionsModule: React.FC<ActionsModuleProps> = () => {
         </div>
 
         <div
-          onClick={() => openModal("remove")}
+          onClick={() => openModal("weed")}
           className="transition ease-in-out hover:scale-110 flex flex-col items-center cursor-pointer"
         >
           <img
-            onClick={() => openModal("remove")}
             className="w-12"
             src={weedIcon}
             alt=""
           />
-          <p className="text-sm text-gray-500">Nettoyer</p>
+          <p className="text-sm text-gray-500">Désherber</p>
         </div>
 
         <div
-          onClick={() => openModal("remove")}
+          onClick={() => openModal("mulch")}
           className="transition ease-in-out hover:scale-110 flex flex-col items-center cursor-pointer"
         >
           <img
-            onClick={() => openModal("remove")}
             className="w-12"
             src={mulchIcon}
             alt=""
@@ -153,7 +144,6 @@ const ActionsModule: React.FC<ActionsModuleProps> = () => {
           className="transition ease-in-out hover:scale-110 flex flex-col items-center cursor-pointer"
         >
           <img
-            onClick={() => openModal("remove")}
             className="w-12"
             src={cameraIcon}
             alt=""
@@ -166,7 +156,6 @@ const ActionsModule: React.FC<ActionsModuleProps> = () => {
           className="transition ease-in-out hover:scale-110 flex flex-col items-center cursor-pointer"
         >
           <img
-            onClick={() => openModal("remove")}
             className="w-12"
             src={noteIcon}
             alt=""

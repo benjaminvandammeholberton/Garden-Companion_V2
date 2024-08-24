@@ -3,6 +3,7 @@ import ReactDOM from "react-dom";
 
 import RenderPlantManagerModalContent from "./RenderPlantManagerModalContent";
 import CloseModal from "../components/CloseModal";
+import { Card } from "@/components/ui/card";
 
 interface PlantManagerModalProps {
   isOpen: boolean;
@@ -53,7 +54,7 @@ const PlantManagerModal: React.FC<PlantManagerModalProps> = ({
   return ReactDOM.createPortal(
     <div className="fixed inset-0 flex items-center justify-center  z-50">
       <div className="absolute inset-0 bg-gray-900 opacity-50"></div>
-      <div
+      <Card
         className="
       plant-manager-modal-content 
       bg-white 
@@ -63,10 +64,9 @@ const PlantManagerModal: React.FC<PlantManagerModalProps> = ({
       transform 
       -translate-x-1/2
       -translate-y-1/2
-      md:rounded-3xl
       p-5
-      w-full md:w-[750px]
-      h-full md:h-[500px]
+      w-full md:w-[500px]
+      h-full md:h-[700px]
       "
       >
         <CloseModal {...{ onClose }} />
@@ -76,7 +76,7 @@ const PlantManagerModal: React.FC<PlantManagerModalProps> = ({
             onClose={onClose}
           />
         </div>
-      </div>
+      </Card>
     </div>,
     document.getElementById("portal")!
   );

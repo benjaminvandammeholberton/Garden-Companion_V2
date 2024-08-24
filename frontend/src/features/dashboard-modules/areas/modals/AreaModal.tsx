@@ -54,9 +54,25 @@ const AreaModal: React.FC<AreaModalProps> = ({ isOpen, onClose }) => {
   if (!isOpen) return null;
 
   return ReactDOM.createPortal(
-    <div className="fixed inset-0 flex justify-center h-full ">
+    <div className="fixed inset-0 flex justify-center z-50">
       <div className="absolute inset-0 bg-gray-900 opacity-50 "></div>
-      <div className="area-modal-content px-5 bg-white w-3/4 h-3/4 absolute  left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2  rounded-3xl flex flex-col">
+      <div className="
+        area-modal-content 
+        px-5 
+        bg-white 
+        fixed 
+        left-1/2
+        top-1/2 
+        transform 
+        -translate-x-1/2 
+        -translate-y-1/2  
+        md:rounded-2xl 
+        flex 
+        flex-col
+        w-full md:w-5/6 
+        h-full md:h-5/6
+        "
+      >
         <div
           className="absolute cursor-pointer top-5 right-5"
           onClick={onClose}

@@ -36,7 +36,7 @@ class UserService:
         # add vegetable_info to the user
         # await VegetableInfoService.add_all_vegetable_info_to_user(user_in)
 
-        await send_verification_email(user.email, user)
+        # await send_verification_email(user.email, user)
 
         return user_in
 

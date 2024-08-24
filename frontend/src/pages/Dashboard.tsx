@@ -49,7 +49,7 @@ const Dashboard = () => {
       <div className="grid lg:grid-cols-2 xl:grid-cols-3 gap-5 w-full">
         <Card className="h-[350px] w-[370px]">
           <div
-            className="relative w-full h-full overflow-hidden cursor-pointer"
+            className="relative w-full h-full overflow-hidden"
             onClick={() => onTitleClick("area")}
           >
             <ModuleHeader title={"Zones de Culture"} />
@@ -62,7 +62,7 @@ const Dashboard = () => {
         </Card>
         <Card className="h-[350px] w-[370px]">
           <div
-            className="relative w-full h-full overflow-hidden cursor-pointer"
+            className="relative w-full h-full overflow-hidden"
             onClick={() => onTitleClick("action")}
           >
             <ModuleHeader title={"Nouvelle action"} />
@@ -73,18 +73,18 @@ const Dashboard = () => {
         </Card>
         <Card className="h-[350px] w-[370px]">
           <div
-            className="relative w-full h-full overflow-hidden cursor-pointer"
+            className="relative w-full overflow-hidden h-full overflow-scroll"
             onClick={() => onTitleClick("seedlings")}
           >
             <ModuleHeader title={"Mes semis en pot"} />
-            <CardContent>
+            <CardContent className="">
               <SeedlingsModule />
             </CardContent>
           </div>
         </Card>
         <Card className="h-[350px] w-[370px]">
           <div
-            className="relative w-full h-full overflow-hidden cursor-pointer"
+            className="relative w-full h-full overflow-hidden"
             onClick={() => onTitleClick("todo")}
           >
             <ModuleHeader title={"Liste de tâches"} />
@@ -95,7 +95,7 @@ const Dashboard = () => {
         </Card>
         <Card className="h-[350px] w-[370px]">
           <div
-            className="relative w-full h-full overflow-hidden cursor-pointer"
+            className="relative w-full h-full overflow-hidden"
             onClick={() => onTitleClick("forecast")}
           >
             <ModuleHeader title={"Prévisions météo"} />
@@ -106,7 +106,7 @@ const Dashboard = () => {
         </Card>
         <Card className="h-[350px] w-[370px]">
           <div
-            className="relative w-full h-full overflow-hidden cursor-pointer"
+            className="relative w-full h-full overflow-hidden"
             onClick={() => onTitleClick("recommandations")}
           >
             <ModuleHeader title={"Prêt à semer !"} />

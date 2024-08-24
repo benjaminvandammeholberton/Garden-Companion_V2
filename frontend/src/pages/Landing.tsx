@@ -46,13 +46,13 @@ const Landing = () => {
                 className=" font-bold border-b-2 border-transparent hover:border-black text-zinc-900 md:whitespace-nowrap text-lg lg:text-xl"
                 role="button"
               >
-                <Link to="/auth">Se connecter</Link>
+                <Link to="/auth/login">Se connecter</Link>
               </button>
               <button
                 className=" font-bold border-b-2 border-transparent hover:border-black text-zinc-900 md:whitespace-nowrap text-lg lg:text-xl"
                 role="button"
               >
-                <Link to="/auth">Démarrer gratuitement</Link>
+                <Link to="/auth/register">Démarrer gratuitement</Link>
               </button>
             </div>
           </div>

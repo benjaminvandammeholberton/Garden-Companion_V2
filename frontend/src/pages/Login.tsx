@@ -39,11 +39,14 @@ import { Input } from "@/components/ui/input";
 
 interface LoginProps {
   toggleAuth: () => void;
+  removeMessageSuccess: () => void;
 }
 
-const Login: React.FC<LoginProps> = ({ toggleAuth }) => {
+const Login: React.FC<LoginProps> = ({ toggleAuth, removeMessageSuccess }) => {
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState<boolean>(false);
+
+  removeMessageSuccess()
 
   const formSchema = z.object({
     email: z.string().email({

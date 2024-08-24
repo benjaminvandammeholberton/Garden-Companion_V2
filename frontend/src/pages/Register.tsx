@@ -27,10 +27,10 @@ import {
 
 interface RegisterProps {
   toggleAuth: () => void;
+  displayMessageSuccess: () => void
 }
 
-const Register: React.FC<RegisterProps> = ({ toggleAuth }) => {
-  const [isRegister, setIsRegister] = useState(true);
+const Register: React.FC<RegisterProps> = ({ toggleAuth, displayMessageSuccess }) => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const formSchema = z.object({
@@ -89,7 +89,8 @@ const Register: React.FC<RegisterProps> = ({ toggleAuth }) => {
         }
       );
       if (response.status === 200) {
-        toggleAuth;
+        form.reset()
+        displayMessageSuccess()
       }
     } catch (err) {
       console.error("Login failed", err);

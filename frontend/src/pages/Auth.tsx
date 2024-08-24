@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useNavigate, useLocation, Outlet } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import HeaderLogin from "../components/header/HeaderLogin";
 import Login from "./Login";
 import Register from "./Register";
@@ -9,6 +9,15 @@ const Auth = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const [isRegister, setIsRegister] = useState(false);
+  const [messageSuccess, SetMessageSuccess] = useState(false)
+
+  const displayMessageSuccess = () => {
+    SetMessageSuccess(true)
+  }
+
+  const removeMessageSuccess = () => {
+    SetMessageSuccess(false)
+  }
 
   // Check the current path and set the initial state accordingly
   useEffect(() => {
@@ -32,6 +41,7 @@ const Auth = () => {
     <div className="w-full min-h-screen flex flex-col gap-5 items-center justify-center main-background pb-10">
 
       <HeaderLogin />
+      {messageSuccess && 
       <div className="w-64 absolute right-0 top-20">   
         <Alert className="bg-green-50">
           <AlertTitle>Votre compte a été créé 👍</AlertTitle>
@@ -39,11 +49,11 @@ const Auth = () => {
             Rendez-vous dans votre boite mail pour valider l'inscription
           </AlertDescription>
         </Alert>
-      </div>
+      </div>}
       {isRegister ? (
-        <Register toggleAuth={toggleAuth} />
+        <Register toggleAuth={toggleAuth} displayMessageSuccess={displayMessageSuccess} />
       ) : (
-        <Login toggleAuth={toggleAuth} />
+        <Login toggleAuth={toggleAuth} removeMessageSuccess={removeMessageSuccess} />
       )}
     </div>
   );

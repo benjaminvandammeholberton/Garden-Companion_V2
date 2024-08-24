@@ -100,6 +100,7 @@ const InputUserAreas: React.FC<InputUserAreasInterface> = ({
           top-12
           rounded-xl
           px-2
+          z-50
           ${!isAreaFocus && "hidden"}
           `}
           onFocus={() => {

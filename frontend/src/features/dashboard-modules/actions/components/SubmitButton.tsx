@@ -1,8 +1,10 @@
+import { Button } from "@/components/ui/button";
+
 const SubmitButton = () => {
   return (
-    <button className="border px-2 w-32 h-10 mx-auto rounded-xl bg-green-300">
+    <Button className="bg-green-500 sm:w-1/5 mx-auto w-3/5">
       Valider
-    </button>
+    </Button>
   );
 };
 

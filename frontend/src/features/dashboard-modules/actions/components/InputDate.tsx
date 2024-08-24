@@ -19,7 +19,7 @@ const InputDate: React.FC<InputDateInterface> = ({ setInput }) => {
 
   return (
     <div className="flex flex-col items-center">
-      <label htmlFor="">Date du semis</label>
+      <label htmlFor="">Date</label>
       <input
         type="date"
         className="border border-zinc-400 outline-gray-200 px-2 w-64 h-10 rounded-xl"

@@ -2,52 +2,112 @@ import carrot from "../../../assets/landing/icons/carrot.png";
 
 import tomato from "../../../assets/landing/icons/tomato.png";
 
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
+
+const testData = [
+  {
+    name: "Carotte",
+    variety: "Nantaise",
+    sowingDate: new Date(),
+    icon: carrot,
+  },
+  {
+    name: "Carotte",
+    variety: "Yellowstone",
+    sowingDate: new Date(),
+    icon: carrot,
+  },
+  {
+    name: "Tomate",
+    variety: "Ananas",
+    sowingDate: new Date(),
+    icon: tomato,
+  },
+  {
+    name: "Tomate",
+    variety: "Coeur de Boeuf",
+    sowingDate: new Date(),
+    icon: tomato,
+  },
+  {
+    name: "Carotte",
+    variety: "Nantaise",
+    sowingDate: new Date(),
+    icon: carrot,
+  },
+  {
+    name: "Carotte",
+    variety: "Yellowstone",
+    sowingDate: new Date(),
+    icon: carrot,
+  },
+  {
+    name: "Tomate",
+    variety: "Ananas",
+    sowingDate: new Date(),
+    icon: tomato,
+  },
+  {
+    name: "Tomate",
+    variety: "Coeur de Boeuf",
+    sowingDate: new Date(),
+    icon: tomato,
+  },
+  {
+    name: "Carotte",
+    variety: "Nantaise",
+    sowingDate: new Date(),
+    icon: carrot,
+  },
+  {
+    name: "Carotte",
+    variety: "Yellowstone",
+    sowingDate: new Date(),
+    icon: carrot,
+  },
+  {
+    name: "Tomate",
+    variety: "Ananas",
+    sowingDate: new Date(),
+    icon: tomato,
+  },
+  {
+    name: "Tomate",
+    variety: "Coeur de Boeuf",
+    sowingDate: new Date(),
+    icon: tomato,
+  },
+];
+
 const SeedlingsList = () => {
   return (
-    <div>
-      <ul className="text-xl font-thin overflow-y-scroll h-5/6 p-2">
-        <li className="flex gap-3 w-full justify-between">
-          <div className="cursor-pointer flex gap-3">
-            <img className="w-5 h-5" src={carrot} alt="" />
-            <span>Carotte - Nantaise</span>
-          </div>
-          <span className="flex items-center">2 sem</span>
-        </li>
-        <li className="flex gap-3 w-full justify-between">
-          <div className="cursor-pointer flex gap-3">
-            <img className="w-5 h-5" src={carrot} alt="" />
-            <span>Carotte - Yellowstone</span>
-          </div>
-          <span className="flex items-center">4 sem</span>
-        </li>
-        <li className="flex gap-3 w-full justify-between">
-          <div className="cursor-pointer flex gap-3">
-            <img className="w-5 h-5" src={carrot} alt="" />
-            <span>Carotte - Nantaise</span>
-          </div>
-          <span className="flex items-center">6 sem</span>
-        </li>
-        <li className="flex gap-3 w-full justify-between">
-          <div className="cursor-pointer flex gap-3">
-            <img className="w-5 h-5" src={tomato} alt="" />
-            <span>Tomate - Ananas</span>
-          </div>
-          <span className="flex items-center">2 sem</span>
-        </li>
-        <li className="flex gap-3 w-full justify-between">
-          <div className="cursor-pointer flex gap-3">
-            <img className="w-5 h-5" src={tomato} alt="" />
-            <span>Tomate - Coeur de Boeuf</span>
-          </div>
-          <span className="flex items-center">3 sem</span>
-        </li>
-        <li className="flex gap-3 w-full justify-between">
-          <div className="cursor-pointer flex gap-3">
-            <img className="w-5 h-5" src={tomato} alt="" />
-            <span>Tomate - Géante</span>
-          </div>
-          <span className="flex items-center">8 sem</span>
-        </li>
+    <div className="overflow-scroll">
+      <ul className="text-lg font-thin h-5/6 p-2 cursor-default">
+        {testData.map((vegetable) => {
+          return (
+            <li className="flex gap-3 w-full justify-between items-center">
+              <div className="flex gap-3">
+                <img className="w-5 h-5" src={vegetable.icon} alt="" />
+                <span>
+                  {vegetable.name} - {vegetable.variety}
+                </span>
+              </div>
+              <TooltipProvider delayDuration={100}>
+                <Tooltip>
+                  <TooltipTrigger>4 sem</TooltipTrigger>
+                  <TooltipContent>
+                    <p>Semé le {vegetable.sowingDate.toDateString()}</p>
+                  </TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
+            </li>
+          );
+        })}
       </ul>
     </div>
   );

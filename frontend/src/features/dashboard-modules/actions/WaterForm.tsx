@@ -1,7 +1,7 @@
 import { useState } from "react";
 
 // assets
-import directSowingIcon from "../../../assets/actions-icons/planting.png";
+import waterIcon from "../../../assets/actions-icons/watering.png";
 
 // components
 import FormHeader from "./components/FormHeader";
@@ -14,11 +14,11 @@ import SubmitButton from "./components/SubmitButton";
 import { createVegetable } from "../../../api/api-services/vegetables";
 import InputQuantity from "./components/InputQuantity";
 
-interface PlantingFormInterface {
+interface FertilizeFormInterface {
   onClose: () => void;
 }
 
-const PlantingForm: React.FC<PlantingFormInterface> = ({ onClose }) => {
+const FertilizeForm: React.FC<FertilizeFormInterface> = ({ onClose }) => {
   const [name, setName] = useState<string>("");
   const [variety, setVariety] = useState<string>("");
   const [area, setArea] = useState<string>("");
@@ -59,18 +59,17 @@ const PlantingForm: React.FC<PlantingFormInterface> = ({ onClose }) => {
 
   return (
     <div className="flex flex-col gap-5 overflow-y-scroll w-full mt-5">
-      <FormHeader icon={directSowingIcon} name="Planter" />
+      <FormHeader icon={waterIcon} name="Arroser" />
       <form className="flex flex-col gap-5" onSubmit={handleSubmit}>
-        <InputAllVegetables setInput={setName} />
-        <InputVariety setInput={setVariety} />
-        <InputQuantity
-          setInputQuantity={setQuantity}
-          setInputUnit={setQuantityUnit}
-        />
-        <InputUserAreas
+      <InputUserAreas
           setInput={setArea}
           inputErrorMessage={errorArea}
           setInputErrorMessage={setErrorArea}
+        />
+        <InputAllVegetables setInput={setName} />
+        <InputQuantity
+          setInputQuantity={setQuantity}
+          setInputUnit={setQuantityUnit}
         />
         <InputDate setInput={setDate} />
         <InputNote setInput={setNotes} />
@@ -79,4 +78,4 @@ const PlantingForm: React.FC<PlantingFormInterface> = ({ onClose }) => {
     </div>
   );
 };
-export default PlantingForm;
+export default FertilizeForm;

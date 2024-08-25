@@ -19,6 +19,7 @@ from app.api.api_v1.handlers import (
     vegetable_manager,
     chat_bot,
     forecast,
+    seedling
 )
 from app.api.auth.email_verification import email_verification_router
 from app.api.auth.forget_password import password_reset
@@ -75,4 +76,9 @@ router.include_router(
     password_reset,
     prefix='/password_reset',
     tags=['password_reset']
+)
+router.include_router(
+    seedling.seedling_router,
+    prefix='/seedling',
+    tags=['seedling']
 )

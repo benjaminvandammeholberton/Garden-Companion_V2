@@ -14,6 +14,7 @@ from app.models.todo_model import Todo
 from app.models.user_model import User
 from app.models.vegetable_info_model import VegetableInfo
 from app.models.vegetable_manager_model import VegetableManager
+from app.models.seedling_model import Seedling
 
 
 @asynccontextmanager
@@ -37,7 +38,8 @@ async def lifespan(app: FastAPI):
             Todo,
             VegetableInfo,
             Area,
-            VegetableManager
+            VegetableManager,
+            Seedling
         ]
     )
     app.include_router(router, prefix=settings.API_V1_STR)

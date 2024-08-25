@@ -69,6 +69,7 @@ class Settings(BaseSettings):
     # FRONT_END_URL: str = config("FRONT_END_URL", cast=str)
     FRONT_END_URL: str = "http://localhost:3000"
     BACK_END_URL: str = config("BACK_END_URL", cast=str)
+    DEBUG: bool = config("DEBUG", cast=bool)
 
     class ConfigDict:
         """

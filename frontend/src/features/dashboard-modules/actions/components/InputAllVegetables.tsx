@@ -2,6 +2,13 @@ import vegetableIconsMaps from "../../../../maps/vegetableMaps";
 import useCompletion from "../../../../hooks/useCompletion";
 import unknownVegetableIcon from "../../../../assets/vegetables-icons/unknown-vegetable.png";
 import { Dispatch, SetStateAction, useEffect } from "react";
+import { Input } from "@/components/ui/input";
+import {
+  FormControl,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
 
 interface InputAllVegetablesInterface {
   setInput: Dispatch<SetStateAction<string>>;
@@ -23,32 +30,25 @@ const InputAllVegetables: React.FC<InputAllVegetablesInterface> = ({
     setInput(nameInput);
   }, [nameInput, setInput]);
   return (
-    <div className="flex flex-col items-center ">
-      <label htmlFor="" className="text-lg">
-        Choisissez votre plante **
-      </label>
-      <div className="relative">
-        <input
-          value={nameInput}
-          onChange={handleNameInputChange}
-          onFocus={() => {
-            setIsNameFocus(true);
-          }}
-          onBlur={() => {
-            setIsNameFocus(false);
-          }}
-          className={`
-          border 
-          border-zinc-400 
-          outline-gray-200 
-          px-2 
-          w-64 
-          h-10 
-          pl-9
-          rounded-xl
+    <FormItem className="flex flex-col items-center">
+      <FormLabel>Choisissez votre plante</FormLabel>
+      <div className="relative w-full">
+        <FormControl>
+          <Input
+            value={nameInput}
+            onChange={handleNameInputChange}
+            onFocus={() => {
+              setIsNameFocus(true);
+            }}
+            onBlur={() => {
+              setIsNameFocus(false);
+            }}
+            className={`pl-9
           ${isNameFocus ? "" : "cursor-pointer"}
           `}
-        />
+          />
+        </FormControl>
+        <FormMessage />
         {nameInput.length > 0 && (
           <img
             className="absolute top-2 left-2 w-6"
@@ -66,17 +66,15 @@ const InputAllVegetables: React.FC<InputAllVegetablesInterface> = ({
         <div
           className={`
           choices-list 
-          flex 
-          flex-col 
+          flex flex-col 
           gap-1 
           border
           rounded-xl
           px-2
-          h-44 
+          h-44 w-64
           z-50
           absolute 
           bg-white 
-          w-64
           top-12 
           ${!isNameFocus && "hidden"}
           `}
@@ -106,7 +104,7 @@ const InputAllVegetables: React.FC<InputAllVegetablesInterface> = ({
           </ul>
         </div>
       </div>
-    </div>
+    </FormItem>
   );
 };
 

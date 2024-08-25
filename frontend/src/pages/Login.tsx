@@ -4,7 +4,7 @@ import { z } from "zod";
 import axios from "axios";
 import { updateTokenInAxiosHeaders } from "../api/axios";
 
-//shadcn ui
+// ui
 import {
   Card,
   CardContent,
@@ -12,19 +12,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogTitle,
-  AlertDialogTrigger,
-} from "@radix-ui/react-alert-dialog";
 import { Button } from "@/components/ui/button";
-import {
-  AlertDialogFooter,
-  AlertDialogHeader,
-} from "@/components/ui/alert-dialog";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
@@ -36,17 +24,15 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import BarLoader from "react-spinners/BarLoader";
 
 interface LoginProps {
   toggleAuth: () => void;
-  removeMessageSuccess: () => void;
 }
 
-const Login: React.FC<LoginProps> = ({ toggleAuth, removeMessageSuccess }) => {
+const Login: React.FC<LoginProps> = ({ toggleAuth }) => {
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState<boolean>(false);
-
-  removeMessageSuccess()
 
   const formSchema = z.object({
     email: z.string().email({
@@ -93,6 +79,9 @@ const Login: React.FC<LoginProps> = ({ toggleAuth, removeMessageSuccess }) => {
       if (response.status === 200 && token) {
         localStorage.setItem("JWTGP", token);
         updateTokenInAxiosHeaders(token);
+        const delay = (ms: number) =>
+          new Promise((resolve) => setTimeout(resolve, ms));
+        await delay(3000);
         navigate("/me/dashboard");
       }
     } catch (err) {
@@ -103,16 +92,17 @@ const Login: React.FC<LoginProps> = ({ toggleAuth, removeMessageSuccess }) => {
   };
 
   return (
-    <Card className="px-10 mt-20">
-      <CardHeader>
-        <CardTitle>
-          Connexion
-        </CardTitle>
+    <Card className="relative px-10 mt-20">
+      <CardHeader className="flex flex-row items-center gap-4">
+        <CardTitle>Connexion</CardTitle>
+        <BarLoader color="#33ffb3" loading={isLoading} width={75} />
       </CardHeader>
-      <CardContent className="w-80">
-        {isLoading && <span>Chargement</span>}
+      <CardContent className="relative w-80">
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(submitLoginForm)} className="space-y-4">
+          <form
+            onSubmit={form.handleSubmit(submitLoginForm)}
+            className="space-y-4"
+          >
             <FormField
               control={form.control}
               name="email"
@@ -139,28 +129,14 @@ const Login: React.FC<LoginProps> = ({ toggleAuth, removeMessageSuccess }) => {
                 </FormItem>
               )}
             />
-            <Button type="submit">Se connecter</Button>
+            <Button className="mx-auto w-full" type="submit">
+              Se connecter
+            </Button>
           </form>
         </Form>
       </CardContent>
       <CardFooter className="flex flex-col items-center">
-        <AlertDialog>
-          <AlertDialogTrigger>
-            <a href="#">Mot de passe oublié</a>
-          </AlertDialogTrigger>
-          <AlertDialogContent>
-            <AlertDialogHeader>
-              <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
-              <AlertDialogDescription>
-                This action cannot be undone. This will permanently delete your
-                account and remove your data from our servers.
-              </AlertDialogDescription>
-            </AlertDialogHeader>
-            <AlertDialogFooter>
-              <AlertDialogAction>Ok</AlertDialogAction>
-            </AlertDialogFooter>
-          </AlertDialogContent>
-        </AlertDialog>
+        <a href="#">Mot de passe oublié</a>
         <a className="cursor-pointer" onClick={toggleAuth}>
           Pas encore inscrit ?
         </a>

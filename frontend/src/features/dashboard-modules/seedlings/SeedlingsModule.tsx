@@ -7,7 +7,6 @@ import { useState } from "react";
 // assets
 import { addIcon, sortIcon, backIcon } from "../../../assets/assets-path";
 
-
 const seedlingsData = {};
 
 const SeedlingsModule = () => {
@@ -23,7 +22,7 @@ const SeedlingsModule = () => {
     ["nom (z - a)", "name descending"],
   ];
   return (
-    <div>
+    <div className="">
       <div
         onClick={handleClickAdd}
         className={`absolute top-2 ${

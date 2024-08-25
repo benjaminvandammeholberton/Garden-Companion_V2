@@ -86,7 +86,7 @@ const testData = [
 
 const SeedlingsList = () => {
   return (
-    <div className="overflow-scroll">
+    <div className="h-[280px] overflow-scroll">
       <ul className="text-lg font-thin h-5/6 p-2 cursor-default">
         {testData.map((vegetable) => {
           return (

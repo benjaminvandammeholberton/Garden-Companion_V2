@@ -11,6 +11,7 @@ import logoutIcon from "../../assets/header/logout.png";
 import darkModeIcon from "../../assets/header/dark-mode.png";
 import { useNavigate } from "react-router-dom";
 import NavbarMobile from "../navbar/NavbarMobile";
+import { ModeToggle } from "./ToogleTheme";
 
 const Header = () => {
   const navigate = useNavigate();
@@ -138,6 +139,7 @@ const Header = () => {
           />
 
           <img className="w-8 h-10 lg:hidden" src={burgerMenuIcon} alt="" /> */}
+          {/* <ModeToggle /> */}
           <img className="w-8 h-8 cursor-pointer" src={darkModeIcon} alt="" />
         </div>
       </div>

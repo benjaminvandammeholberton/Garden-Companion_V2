@@ -1,6 +1,8 @@
+import { useContext } from "react";
+
 // assets
 import { greenhouse, outdoor, indoor } from "../../../../assets/assets-path";
-import arrow from "../../../../assets/common/up-right-arrow.png";
+// import arrow from "../../../../assets/common/up-right-arrow.png";
 
 // interfaces
 import {
@@ -10,23 +12,21 @@ import {
 
 // components
 import AreaListItem from "./AreaListItem";
+import AreasContext from "@/contexts/AreasContext";
+import { Skeleton } from "@/components/ui/skeleton";
 
 interface AreaListProps {
   sortedBy: string;
-  openModal: () => void;
-  areas: AreaInterface[];
-  isLoadingAreas: boolean;
+  openModal: (id: string) => void;
 }
 
-const AreaList: React.FC<AreaListProps> = ({
-  sortedBy,
-  openModal,
-  areas,
-  isLoadingAreas,
-}) => {
+const AreaList: React.FC<AreaListProps> = ({ sortedBy, openModal }) => {
+  const areasContext = useContext(AreasContext);
+  if (!areasContext) {
+    throw new Error("AreasContext must be used within an AreasProvider");
+  }
+  const { areas, isLoading } = areasContext;
   const environnements = ["greenhouse", "outdoor", "indoor"];
-  // const [areas, isLoadingAreas] = useGetAreas();
-
   //function to make a list of unique vegetable growing in one area
   const getListUniqueVegetables = (area: AreaInterface) => {
     return area.vegetables?.reduce(
@@ -52,7 +52,7 @@ const AreaList: React.FC<AreaListProps> = ({
 
   return (
     <div className="overflow-y-scroll overflow-x-hidden  h-[285px] my-2 pr-2 mx-2 font-thin text-xl">
-      {areas.length === 0 && (
+      {/* {areas.length === 0 && (
         <div className="relative w-full top-0 flex flex-col items-end p-30 gap-10">
           <img
             src={arrow}
@@ -63,24 +63,31 @@ const AreaList: React.FC<AreaListProps> = ({
             Pour commencer, ajoutez une zone de culture
           </p>
         </div>
-      )}
-      {isLoadingAreas && <p>Chargement</p>}
-
-      {sortedBy === "environnement" ? (
-        <ul className=" flex flex-col gap-2">
+      )} */}
+      {isLoading ? (
+        <div className="space-y-2">
+          {Array.from({ length: 8 }).map((_, index) => (
+            <Skeleton
+              key={index}
+              className="w-[290px] h-[25px] rounded-full bg-gradient-to-r from-blue-50 to-blue-100"
+            />
+          ))}
+        </div>
+      ) : sortedBy === "environnement" ? (
+        <ul className=" space-y-4">
           {environnements.map((env, index) => {
-            const areasOfType = areas.filter(
-              (area) => area.environnement === env
+            const areasOfType: AreaInterface[] = areas.filter(
+              (area: AreaInterface) => area.environnement === env
             );
             const sortedAreasOfType = areasOfType.sort((a, b) =>
               a.name.localeCompare(b.name)
             );
             return (
               <div key={index}>
-                {sortedAreasOfType.map((area, index) => {
+                {sortedAreasOfType.map((area) => {
                   return (
                     <AreaListItem
-                      key={index}
+                      key={area.area_id}
                       area={area}
                       openModal={openModal}
                       areaIcon={getAreaIcon(area.environnement)}
@@ -93,11 +100,11 @@ const AreaList: React.FC<AreaListProps> = ({
           })}
         </ul>
       ) : (
-        <ul className="flex flex-col">
+        <ul>
           {areas
             .slice()
             .sort((a, b) => a.name.localeCompare(b.name))
-            .map((area, index) => {
+            .map((area: AreaInterface, index: number) => {
               return (
                 <AreaListItem
                   key={index}

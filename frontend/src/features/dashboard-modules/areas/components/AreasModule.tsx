@@ -1,5 +1,3 @@
-import { Dispatch, SetStateAction } from "react";
-
 // assets
 import { addIcon, sortIcon, backIcon } from "../../../../assets/assets-path";
 
@@ -22,19 +20,16 @@ interface AreasModuleProps {
   areas: AreaInterface[];
   isLoadingAreas: boolean;
   errorGetAreas: string | null;
-  setAreas: Dispatch<SetStateAction<AreaInterface[]>>;
 }
 
 const AreasModule: React.FC<AreasModuleProps> = ({
   areas,
   isLoadingAreas,
   errorGetAreas,
-  setAreas,
 }) => {
-  console.log(errorGetAreas);
   const [isSortOpen, toggleSort, sortedBy, handleClickSort] = useSort("name");
   const [addOpen, handleClickAdd] = useAdd();
-  const [isModalOpen, openModal, closeModal] = useModal();
+  const [isModalOpen, openModal, closeModal, area_id] = useModal();
 
   return (
     <div>
@@ -86,12 +81,12 @@ const AreasModule: React.FC<AreasModuleProps> = ({
         </ul>
       </div>
       {addOpen ? (
-        <AreaFormAdd {...{ handleClickAdd, setAreas }} />
+        <AreaFormAdd {...{ handleClickAdd }} />
       ) : (
         <AreaList {...{ sortedBy, openModal, areas, isLoadingAreas }} />
       )}
 
-      <AreaModal isOpen={isModalOpen} onClose={closeModal} />
+      <AreaModal isOpen={isModalOpen} onClose={closeModal} areaId={area_id} />
     </div>
   );
 };

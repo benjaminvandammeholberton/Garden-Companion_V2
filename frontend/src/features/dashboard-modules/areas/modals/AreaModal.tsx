@@ -2,7 +2,7 @@
 import ReactDOM from "react-dom";
 
 // hooks
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 
 // assets
 import { greenhouse } from "../../../../assets/assets-path";
@@ -10,13 +10,26 @@ import { greenhouse } from "../../../../assets/assets-path";
 // components
 import Diary from "../../../diary/Diary";
 import TableProduction from "../../../../components/table-production/TableProduction";
+import AreasContext from "@/contexts/AreasContext";
+import { Button } from "@/components/ui/button";
+import { useToast } from "@/components/ui/use-toast";
+import { AreaInterface } from "@/interfaces/interfaces";
 
 interface AreaModalProps {
   isOpen: boolean;
   onClose: () => void;
+  areaId: string;
 }
 
-const AreaModal: React.FC<AreaModalProps> = ({ isOpen, onClose }) => {
+const AreaModal: React.FC<AreaModalProps> = ({ isOpen, onClose, areaId }) => {
+  const areasContext = useContext(AreasContext);
+  if (!areasContext) {
+    throw new Error("AreasContext must be used within an AreasProvider");
+  }
+  const { areas, deleteArea } = areasContext;
+
+  const { toast } = useToast();
+
   const [diaryOpen, setDiaryOpen] = useState(true);
   const [tableOpen, setTableOpen] = useState(false);
 
@@ -51,12 +64,25 @@ const AreaModal: React.FC<AreaModalProps> = ({ isOpen, onClose }) => {
     };
   }, [isOpen, onClose]);
 
+  const handleDelete = (areaId: string) => {
+    onClose();
+    const deletedArea = areas.filter(
+      (area: AreaInterface) => area.area_id === areaId
+    );
+    toast({
+      title: "Zone de culture suprimée 👍",
+      description: `${deletedArea[0].name}`,
+    });
+    deleteArea(areaId);
+  };
+
   if (!isOpen) return null;
 
   return ReactDOM.createPortal(
     <div className="fixed inset-0 flex justify-center z-50">
       <div className="absolute inset-0 bg-gray-900 opacity-50 "></div>
-      <div className="
+      <div
+        className="
         area-modal-content 
         px-5 
         bg-white 
@@ -83,7 +109,7 @@ const AreaModal: React.FC<AreaModalProps> = ({ isOpen, onClose }) => {
           <img className="" src={greenhouse} alt="" />
           <span className="text-2xl font-thin ">Serre - Gauche</span>
         </div>
-
+        <Button onClick={() => handleDelete(areaId)}>Supprimer</Button>
         <div className="">
           <ul className="flex justify-center gap-36 p-2 text-lg ">
             <li

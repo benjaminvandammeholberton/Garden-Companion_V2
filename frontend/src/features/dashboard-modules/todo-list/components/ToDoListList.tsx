@@ -131,7 +131,7 @@ const ToDoListList: React.FC<ToDoListListProps> = ({
                 )}
                 <p
                   onClick={() => handleClickEdit(todo.todo_id)}
-                  className="text-xl leading-none cursor-pointer"
+                  className="text-lg leading-none cursor-pointer"
                 >
                   {todo.title}
                 </p>

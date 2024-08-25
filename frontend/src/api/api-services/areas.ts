@@ -1,3 +1,4 @@
+import { AreaInterface } from "@/interfaces/interfaces";
 import axiosInstance from "../axios";
 
 export const getAllAreas = async () => {
@@ -10,13 +11,13 @@ export const getAllAreas = async () => {
   }
 };
 
-interface dataInterface {
-  name: string;
-  surface: number;
-  sowing_area: boolean;
-}
+// interface dataInterface {
+//   name: string;
+//   surface: number;
+//   sowing_area: boolean;
+// }
 
-export const createAreaApi = async (data: dataInterface) => {
+export const createAreaApi = async (data: Omit<AreaInterface, "id">) => {
   try {
     const response = await axiosInstance.post("/api/v1/area/create", data);
     return response.data;

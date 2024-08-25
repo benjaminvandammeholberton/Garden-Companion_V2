@@ -9,7 +9,7 @@ import VegetableIconsList from "./VegetableIconsList";
 
 interface AreaListItemInterface {
   area: AreaInterface;
-  openModal: () => void;
+  openModal: (id: string) => void;
   areaIcon: string | undefined;
   vegetableUnique: VegetableInterface[];
 }
@@ -23,11 +23,11 @@ const AreaListItem: React.FC<AreaListItemInterface> = ({
   return (
     <li className="flex gap-3 w-full justify-between">
       <div
-        onClick={openModal}
+        onClick={() => openModal(area.area_id)}
         className="cursor-pointer flex items-center gap-3"
       >
-        <img className="w-6 h-6" src={areaIcon} alt="" />
-        <span className="text-2xl">{area.name}</span>
+        <img className="w-5 h-5" src={areaIcon} alt="" />
+        <span className="text-lg">{area.name}</span>
       </div>
       <VegetableIconsList vegetableUnique={vegetableUnique} />
     </li>

@@ -16,6 +16,8 @@ import useAuth from "./hooks/useAuth";
 import Layout from "./pages/Layout";
 import Auth from "./pages/Auth";
 // import MySpace from "./pages/MySpace";
+import { Toaster } from "@/components/ui/toaster";
+import { ThemeProvider } from "./contexts/theme-provider";
 
 interface ProtectedRouteProps {
   element: ReactNode;
@@ -35,7 +37,7 @@ function App() {
       element: <Landing />,
     },
     {
-      path: "/auth", 
+      path: "/auth",
       element: <Auth />,
       children: [
         {
@@ -83,7 +85,14 @@ function App() {
       element: <NotFound />,
     },
   ]);
-  return <RouterProvider router={router} />;
+  return (
+    <>
+      <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
+        <RouterProvider router={router} />
+        <Toaster />
+      </ThemeProvider>
+    </>
+  );
 }
 
 export default App;

@@ -1,3 +1,10 @@
+import {
+  FormControl,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
 import { Dispatch, SetStateAction } from "react";
 
 interface InputVarietyInterface {
@@ -9,13 +16,13 @@ const InputVariety: React.FC<InputVarietyInterface> = ({ setInput }) => {
     setInput(e.target.value);
   };
   return (
-    <div className="flex flex-col items-center">
-      <label htmlFor="">Variété ou nom distinctif **</label>
-      <input
-        onChange={setVariety}
-        className="border border-zinc-400 outline-gray-200 px-2 w-64 h-10 rounded-xl"
-      />
-    </div>
+    <FormItem className="flex flex-col items-center">
+      <FormLabel>Variété ou nom distinctif</FormLabel>
+      <FormControl>
+        <Input onChange={setVariety} />
+      </FormControl>
+      <FormMessage />
+    </FormItem>
   );
 };
 

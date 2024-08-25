@@ -4,14 +4,16 @@ import { v4 as uuidv4 } from "uuid";
 import { greenhouse, outdoor, indoor } from "../../../../assets/assets-path";
 
 // hooks
-import { Dispatch, SetStateAction, useState } from "react";
-import useAddArea from "../../../../hooks/useAddArea";
+import { useContext, useState } from "react";
+
 import capitalize from "../../../../utils/capitalizeStr";
-import { AreaInterface } from "../../../../interfaces/interfaces";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { useToast } from "@/components/ui/use-toast";
+import AreasContext from "@/contexts/AreasContext";
 
 interface AreaFormAddProps {
   handleClickAdd: () => void;
-  setAreas: Dispatch<SetStateAction<AreaInterface[]>>;
 }
 
 interface FormDataInterface {
@@ -20,16 +22,19 @@ interface FormDataInterface {
   surface: number;
 }
 
-const AreaFormAdd: React.FC<AreaFormAddProps> = ({
-  handleClickAdd,
-  setAreas,
-}) => {
+const AreaFormAdd: React.FC<AreaFormAddProps> = ({ handleClickAdd }) => {
+  const areasContext = useContext(AreasContext);
+  if (!areasContext) {
+    throw new Error("AreasContext must be used within an AreasProvider");
+  }
+  const { createArea } = areasContext;
   const [formData, setFormData] = useState<FormDataInterface>({
     name: "",
     environnement: "",
     surface: 0,
   });
-  const [addData, isLoading] = useAddArea();
+
+  const { toast } = useToast();
 
   const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -50,13 +55,16 @@ const AreaFormAdd: React.FC<AreaFormAddProps> = ({
       created_at: new Date().toISOString(),
       updated_at: new Date().toISOString(),
     };
-    await addData(newArea);
+    await createArea(newArea);
     setFormData({
       name: "",
       environnement: "",
       surface: 0,
     });
-    setAreas((prevAreas) => [...prevAreas, newArea]);
+    toast({
+      title: "Nouvelle zone de culture 👍",
+      description: `${newArea.name}`,
+    });
     handleClickAdd();
   };
 
@@ -65,12 +73,21 @@ const AreaFormAdd: React.FC<AreaFormAddProps> = ({
       className="flex flex-col h-[280px] items-center justify-around"
       onSubmit={submitForm}
     >
-      {isLoading && <p>Chargement</p>}
-      <div className="flex flex-col justify-around gap-5">
+      <div className="flex flex-col items-center gap-5">
         <div className="flex justify-around gap-5">
-          <div className="flex flex-col ">
+          <div className="flex flex-col gap-2 ">
             <label htmlFor="name">Nom</label>
-            <input
+            <Input
+              autoComplete="off"
+              required
+              className=""
+              id="name"
+              type="text"
+              name="name"
+              value={formData.name}
+              onChange={handleNameChange}
+            />
+            {/* <input
               autoComplete="off"
               required
               className="border border-stone-600 px-2 w-38"
@@ -79,19 +96,28 @@ const AreaFormAdd: React.FC<AreaFormAddProps> = ({
               name="name"
               value={formData.name}
               onChange={handleNameChange}
-            />
+            /> */}
           </div>
-          <div className="flex flex-col items-center">
+          <div className="flex flex-col items-center gap-2">
             <label htmlFor="surface">Surface</label>
             <div className="flex items-end gap-1">
-              <input
-                className="border border-stone-600 px-2 w-16"
+              <Input
+                className="w-20"
                 id="surface"
                 type="number"
                 name="surface"
                 value={formData.surface}
                 onChange={handleNameChange}
               />
+
+              {/* <input
+                className="border border-stone-600 px-2 w-16"
+                id="surface"
+                type="number"
+                name="surface"
+                value={formData.surface}
+                onChange={handleNameChange}
+              /> */}
               <span className="leading-none">
                 m<sup>2</sup>
               </span>
@@ -146,12 +172,7 @@ const AreaFormAdd: React.FC<AreaFormAddProps> = ({
           </div>
         </div>
       </div>
-      <button
-        className="border px-4 w-36 bg-green-300 py-2 rounded-3xl"
-        type="submit"
-      >
-        Créer
-      </button>
+      <Button type="submit">Ajouter</Button>
     </form>
   );
 };

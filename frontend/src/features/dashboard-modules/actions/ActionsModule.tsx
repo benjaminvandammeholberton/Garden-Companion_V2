@@ -25,6 +25,7 @@ const ActionsModule: React.FC<ActionsModuleProps> = () => {
     setIsModalOpen(true);
     setModalContent(content);
   };
+
   return (
     <div className="flex justify-center h-5/6">
       <div
@@ -39,66 +40,42 @@ const ActionsModule: React.FC<ActionsModuleProps> = () => {
           onClick={() => openModal("direct-sowing")}
           className="transition ease-in-out hover:scale-110 flex flex-col items-center cursor-pointer"
         >
-          <img
-            className="w-12"
-            src={directSowingIcon}
-            alt=""
-          />
+          <img className="w-12" src={directSowingIcon} alt="" />
           <p className="text-sm text-gray-500">Semer</p>
         </div>
         <div
           onClick={() => openModal("planting")}
           className="transition ease-in-out hover:scale-110 flex flex-col items-center cursor-pointer"
         >
-          <img
-            className="w-12"
-            src={plantingIcon}
-            alt=""
-          />
+          <img className="w-12" src={plantingIcon} alt="" />
           <p className="text-sm text-gray-500">Planter</p>
         </div>
         <div
           onClick={() => openModal("water")}
           className="transition ease-in-out hover:scale-110 flex flex-col items-center cursor-pointer"
         >
-          <img
-            className="w-12"
-            src={wateringIcon}
-            alt=""
-          />
+          <img className="w-12" src={wateringIcon} alt="" />
           <p className="text-sm text-gray-500">Arroser</p>
         </div>
         <div
           onClick={() => openModal("fertilize")}
           className="transition ease-in-out hover:scale-110 flex flex-col items-center cursor-pointer"
         >
-          <img
-            className="w-12"
-            src={fertilizeIcon}
-            alt=""
-          />
+          <img className="w-12" src={fertilizeIcon} alt="" />
           <p className="text-sm text-gray-500">Fertiliser</p>
         </div>
         <div
           onClick={() => openModal("treat")}
           className="transition ease-in-out hover:scale-110 flex flex-col items-center cursor-pointer"
         >
-          <img
-            className="w-12"
-            src={parasiteIcon}
-            alt=""
-          />
+          <img className="w-12" src={parasiteIcon} alt="" />
           <p className="text-sm text-gray-500">Traiter</p>
         </div>
         <div
           onClick={() => openModal("harvest")}
           className="transition ease-in-out hover:scale-110 flex flex-col items-center cursor-pointer"
         >
-          <img
-            className="w-12"
-            src={harvestIcon}
-            alt=""
-          />
+          <img className="w-12" src={harvestIcon} alt="" />
           <p className="text-sm text-gray-500">Récolter</p>
         </div>
 
@@ -106,11 +83,7 @@ const ActionsModule: React.FC<ActionsModuleProps> = () => {
           onClick={() => openModal("remove")}
           className="transition ease-in-out hover:scale-110 flex flex-col items-center cursor-pointer"
         >
-          <img
-            className="w-12"
-            src={removeIcon}
-            alt=""
-          />
+          <img className="w-12" src={removeIcon} alt="" />
           <p className="text-sm text-gray-500">Fin de culture</p>
         </div>
 
@@ -118,11 +91,7 @@ const ActionsModule: React.FC<ActionsModuleProps> = () => {
           onClick={() => openModal("weed")}
           className="transition ease-in-out hover:scale-110 flex flex-col items-center cursor-pointer"
         >
-          <img
-            className="w-12"
-            src={weedIcon}
-            alt=""
-          />
+          <img className="w-12" src={weedIcon} alt="" />
           <p className="text-sm text-gray-500">Désherber</p>
         </div>
 
@@ -130,11 +99,7 @@ const ActionsModule: React.FC<ActionsModuleProps> = () => {
           onClick={() => openModal("mulch")}
           className="transition ease-in-out hover:scale-110 flex flex-col items-center cursor-pointer"
         >
-          <img
-            className="w-12"
-            src={mulchIcon}
-            alt=""
-          />
+          <img className="w-12" src={mulchIcon} alt="" />
           <p className="text-sm text-gray-500">Pailler</p>
         </div>
       </div>

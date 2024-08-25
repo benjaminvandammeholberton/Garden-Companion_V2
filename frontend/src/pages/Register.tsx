@@ -24,41 +24,52 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { useToast } from "@/components/ui/use-toast";
+import { useNavigate } from "react-router-dom";
+import BarLoader from "react-spinners/BarLoader";
 
 interface RegisterProps {
   toggleAuth: () => void;
-  displayMessageSuccess: () => void
 }
 
-const Register: React.FC<RegisterProps> = ({ toggleAuth, displayMessageSuccess }) => {
+const Register: React.FC<RegisterProps> = ({ toggleAuth }) => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
-  const formSchema = z.object({
-    username: z.string().min(4, {
-      message: "Votre nom d'utilisateur doit comporter au minimum 4 caractères",
-    }),
-    email: z.string().email({
-      message: "Veuillez entrer un adresse email valide",
-    }),
-    password: z
-      .string()
-      .min(8, {
-        message: "Votre mot de passe doit contenir 8 caractères minimum",
-      })
-      .regex(/[0-9]/, {
-        message: "Votre mot de passe doit contenir au moins un chiffre",
-      })
-      .regex(/[!@#$%^&*(),.?":{}|<>]/, {
+  const { toast } = useToast();
+  const navigate = useNavigate();
+
+  const formSchema = z
+    .object({
+      username: z.string().min(4, {
         message:
-          "Votre mot de passe doit contenir au moins un caractère spécial",
+          "Votre nom d'utilisateur doit comporter au minimum 4 caractères",
       }),
-    passwordConfirm: z
-      .string()
-      .refine((data) => data.password === data.passwordConfirm, {
-        message: "Les mots de passe ne correspondent pas",
-        path: ["passwordConfirm"],
+      email: z.string().email({
+        message: "Veuillez entrer un adresse email valide",
       }),
-  });
+      password: z
+        .string()
+        .min(8, {
+          message: "Votre mot de passe doit contenir 8 caractères minimum",
+        })
+        .regex(/[0-9]/, {
+          message: "Votre mot de passe doit contenir au moins un chiffre",
+        })
+        .regex(/[!@#$%^&*(),.?":{}|<>]/, {
+          message:
+            "Votre mot de passe doit contenir au moins un caractère spécial",
+        }),
+      passwordConfirm: z.string(),
+    })
+    .superRefine(({ password, passwordConfirm }, ctx) => {
+      if (password !== passwordConfirm) {
+        ctx.addIssue({
+          code: "custom",
+          message: "Les mots de passe ne correspondent pas",
+          path: ["passwordConfirm"],
+        });
+      }
+    });
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -89,8 +100,13 @@ const Register: React.FC<RegisterProps> = ({ toggleAuth, displayMessageSuccess }
         }
       );
       if (response.status === 200) {
-        form.reset()
-        displayMessageSuccess()
+        form.reset();
+        toast({
+          title: "Votre compte a été créé 👍",
+          description:
+            "Rendez-vous dans votre boite mail pour valider l'inscription",
+        });
+        navigate("/auth/login");
       }
     } catch (err) {
       console.error("Login failed", err);
@@ -101,29 +117,16 @@ const Register: React.FC<RegisterProps> = ({ toggleAuth, displayMessageSuccess }
 
   return (
     <Card className="px-10 mt-20">
-      <CardHeader>
+      <CardHeader className="flex flex-row items-center gap-4">
         <CardTitle>Inscription</CardTitle>
+        <BarLoader color="#33ffb3" loading={isLoading} width={75} />
       </CardHeader>
       <CardContent className="w-80">
-        {isLoading && <span>Chargement</span>}
         <Form {...form}>
           <form
             onSubmit={form.handleSubmit(submitRegisterForm)}
             className="space-y-4"
           >
-            <FormField
-              control={form.control}
-              name="username"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Nom d'utiliisateur</FormLabel>
-                  <FormControl>
-                    <Input placeholder="Joy" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
             <FormField
               control={form.control}
               name="email"
@@ -132,6 +135,19 @@ const Register: React.FC<RegisterProps> = ({ toggleAuth, displayMessageSuccess }
                   <FormLabel>Email</FormLabel>
                   <FormControl>
                     <Input placeholder="jardinierdu53@gmail.fr" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="username"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Nom d'utiliisateur</FormLabel>
+                  <FormControl>
+                    <Input placeholder="Joy" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -163,7 +179,9 @@ const Register: React.FC<RegisterProps> = ({ toggleAuth, displayMessageSuccess }
                 </FormItem>
               )}
             />
-            <Button type="submit">S'inscrire</Button>
+            <Button className="mx-auto w-full" type="submit">
+              S'inscrire
+            </Button>
           </form>
         </Form>
       </CardContent>

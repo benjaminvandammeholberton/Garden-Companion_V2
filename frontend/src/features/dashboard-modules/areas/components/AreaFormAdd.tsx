@@ -6,10 +6,15 @@ import { greenhouse, outdoor, indoor } from "../../../../assets/assets-path";
 // hooks
 import { useContext, useState } from "react";
 
+// utils
 import capitalize from "../../../../utils/capitalizeStr";
+
+// ui
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
+
+//contexts
 import AreasContext from "@/contexts/AreasContext";
 
 interface AreaFormAddProps {
@@ -87,16 +92,6 @@ const AreaFormAdd: React.FC<AreaFormAddProps> = ({ handleClickAdd }) => {
               value={formData.name}
               onChange={handleNameChange}
             />
-            {/* <input
-              autoComplete="off"
-              required
-              className="border border-stone-600 px-2 w-38"
-              id="name"
-              type="text"
-              name="name"
-              value={formData.name}
-              onChange={handleNameChange}
-            /> */}
           </div>
           <div className="flex flex-col items-center gap-2">
             <label htmlFor="surface">Surface</label>
@@ -109,15 +104,6 @@ const AreaFormAdd: React.FC<AreaFormAddProps> = ({ handleClickAdd }) => {
                 value={formData.surface}
                 onChange={handleNameChange}
               />
-
-              {/* <input
-                className="border border-stone-600 px-2 w-16"
-                id="surface"
-                type="number"
-                name="surface"
-                value={formData.surface}
-                onChange={handleNameChange}
-              /> */}
               <span className="leading-none">
                 m<sup>2</sup>
               </span>

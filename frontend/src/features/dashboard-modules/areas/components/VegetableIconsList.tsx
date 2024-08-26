@@ -1,18 +1,50 @@
 // This component display a list of vegetable
 
-import { VegetableInterface } from "../../../../interfaces/interfaces";
+import { useEffect, useState } from "react";
+
+// interfaces
+import {
+  AreaInterface,
+  VegetableInterface,
+} from "../../../../interfaces/interfaces";
+
+//assets
 import vegetableIconsMaps from "../../../../maps/vegetableMaps";
 
 interface VegetableIconsListInterface {
-  vegetableUnique: VegetableInterface[];
+  area: AreaInterface;
 }
 
 const VegetableIconsList: React.FC<VegetableIconsListInterface> = ({
-  vegetableUnique,
+  area,
 }) => {
+  const [listVegetables, setListVegetables] = useState<VegetableInterface[]>(
+    []
+  );
+
+  //function to make a list of unique vegetable growing in one area
+  const getListUniqueVegetables = (area: AreaInterface) => {
+    return (
+      area.vegetables?.reduce(
+        (acc: VegetableInterface[], vegetable: VegetableInterface) => {
+          if (acc.some((v) => v.name === vegetable.name)) {
+            return acc;
+          }
+          acc.push(vegetable);
+          return acc;
+        },
+        []
+      ) || []
+    );
+  };
+
+  useEffect(() => {
+    setListVegetables(getListUniqueVegetables(area));
+  }, [area]);
+
   return (
     <div className="flex items-center gap-1">
-      {vegetableUnique?.map((vegetable) => {
+      {listVegetables?.map((vegetable) => {
         if (!vegetable.removeDate) {
           const vegetableAsset = vegetableIconsMaps.find(
             (asset) => asset.name.fr === vegetable.name.toLowerCase()
@@ -26,21 +58,15 @@ const VegetableIconsList: React.FC<VegetableIconsListInterface> = ({
                 <img className="w-6 h-6" src={vegetableAsset.assets} alt="" />
                 <div
                   className="
-                    absolute 
-                    right-0 
-                    z-50 
-                    text-xs 
-                    text-center 
+                    absolute right-0 z-50 
+                    text-center text-xs text-white
                     bg-gray-700 
-                    text-white 
                     rounded 
-                    py-1 
-                    px-2 
+                    py-1 px-2 
                     opacity-0 
                     group-hover:opacity-100 
                     pointer-events-none
-                    "
-                >
+                    ">
                   {vegetable.name}
                 </div>
               </div>

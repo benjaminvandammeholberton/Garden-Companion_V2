@@ -3,7 +3,6 @@
 
 import {
   AreaInterface,
-  VegetableInterface,
 } from "../../../../interfaces/interfaces";
 import VegetableIconsList from "./VegetableIconsList";
 
@@ -11,14 +10,12 @@ interface AreaListItemInterface {
   area: AreaInterface;
   openModal: (id: string) => void;
   areaIcon: string | undefined;
-  vegetableUnique: VegetableInterface[];
 }
 
 const AreaListItem: React.FC<AreaListItemInterface> = ({
   area,
   openModal,
   areaIcon,
-  vegetableUnique,
 }) => {
   return (
     <li className="flex gap-3 w-full justify-between">
@@ -29,7 +26,7 @@ const AreaListItem: React.FC<AreaListItemInterface> = ({
         <img className="w-5 h-5" src={areaIcon} alt="" />
         <span className="text-lg">{area.name}</span>
       </div>
-      <VegetableIconsList vegetableUnique={vegetableUnique} />
+      <VegetableIconsList area={area} />
     </li>
   );
 };

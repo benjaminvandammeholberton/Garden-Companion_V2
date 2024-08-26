@@ -22,6 +22,7 @@ import { Input } from "@/components/ui/input";
 
 // api
 import { createSeedling } from "@/api/api-services/seedlingsApi";
+import { useToast } from "@/components/ui/use-toast";
 
 interface SeedlingsAddProps {
   handleClickAdd: () => void;
@@ -30,6 +31,8 @@ interface SeedlingsAddProps {
 const SeedlingsAdd: React.FC<SeedlingsAddProps> = ({
   handleClickAdd,
 }) => {
+
+  const { toast } = useToast();
 
   const formSchema = z.object({
     name: z.string().min(2).max(50),
@@ -59,7 +62,11 @@ const SeedlingsAdd: React.FC<SeedlingsAddProps> = ({
       updated_at: Date.toString()
     }
     try {
-      await createSeedling(data)
+      const newSeedling = await createSeedling(data)
+      toast({
+        title: "Nouveau semis 👍",
+        description:  `${newSeedling.name} ${newSeedling.variety}`
+      })
       handleClickAdd()
     } catch (error)  {
       console.error(error)

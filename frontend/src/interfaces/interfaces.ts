@@ -13,3 +13,12 @@ export interface AreaInterface {
   environnement: string;
   vegetables?: VegetableInterface[];
 }
+
+export interface SeedlingInterface {
+  seedling_id: string;
+  name: string;
+  variety: string;
+  quantity: number;
+  created_at: string;
+  updated_at: string;
+}

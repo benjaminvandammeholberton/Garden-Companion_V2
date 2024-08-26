@@ -1,3 +1,4 @@
+//  ui
 import {
   FormControl,
   FormItem,
@@ -5,10 +6,9 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Dispatch, SetStateAction } from "react";
 
 interface InputVarietyInterface {
-  setInput: Dispatch<SetStateAction<string>>;
+  setInput: (value: string) => void;
 }
 
 const InputVariety: React.FC<InputVarietyInterface> = ({ setInput }) => {

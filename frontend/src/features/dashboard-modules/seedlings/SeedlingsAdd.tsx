@@ -1,79 +1,35 @@
-import { v4 as uuidv4 } from "uuid";
-
-// assets
-import { greenhouse, outdoor, indoor } from "../../../assets/assets-path";
-
-// hooks
-import { Dispatch, SetStateAction, useState } from "react";
-import useAddArea from "../../../hooks/useAddArea";
-import capitalize from "../../../utils/capitalizeStr";
-import { AreaInterface } from "../../../interfaces/interfaces";
-import { Input } from "@/components/ui/input";
-import InputAllVegetables from "../actions/components/InputAllVegetables";
-import InputVariety from "../actions/components/InputVariety";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
+
+// hooks
 import { useForm } from "react-hook-form";
+
+// components
+import InputAllVegetables from "../actions/components/InputAllVegetables";
+import InputVariety from "../actions/components/InputVariety";
+
+// ui
 import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+
+// api
+import { createSeedling } from "@/api/api-services/seedlingsApi";
 
 interface SeedlingsAddProps {
   handleClickAdd: () => void;
-  setAreas: Dispatch<SetStateAction<AreaInterface[]>>;
 }
-
-// interface FormDataInterface {
-//   name: string;
-//   environnement: string;
-//   surface: number;
-// }
 
 const SeedlingsAdd: React.FC<SeedlingsAddProps> = ({
   handleClickAdd,
-  setAreas,
 }) => {
-  // const [input, setInput] = useState("");
-  // const [formData, setFormData] = useState<FormDataInterface>({
-  //   name: "",
-  //   environnement: "",
-  //   surface: 0,
-  // });
-  // const [addData, isLoading] = useAddArea();
-
-  // const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-  //   const { name, value } = e.target;
-  //   setFormData((prevState) => ({
-  //     ...prevState,
-  //     [name]: value,
-  //   }));
-  // };
-
-  // const submitForm = async (e: React.FormEvent<HTMLFormElement>) => {
-  //   e.preventDefault();
-  //   const newArea = {
-  //     name: capitalize(formData.name),
-  //     surface: formData.surface,
-  //     sowing_area: false,
-  //     created_at: new Date().toISOString(),
-  //     updated_at: new Date().toISOString(),
-  //   };
-  //   await addData(newArea);
-  //   setFormData({
-  //     name: "",
-  //     environnement: "",
-  //     surface: 0,
-  //   });
-  //   setAreas((prevAreas) => [...prevAreas, newArea]);
-  //   handleClickAdd();
-  // };
 
   const formSchema = z.object({
     name: z.string().min(2).max(50),
@@ -94,9 +50,20 @@ const SeedlingsAdd: React.FC<SeedlingsAddProps> = ({
       quantity: 0,
     },
   });
-  const { setValue } = form;
-  function onSubmit(values: z.infer<typeof formSchema>) {
+
+  const onSubmit = async (values: z.infer<typeof formSchema>) => {
     console.log(values);
+    const data = {
+      ...values,
+      created_at: Date.toString(),
+      updated_at: Date.toString()
+    }
+    try {
+      await createSeedling(data)
+      handleClickAdd()
+    } catch (error)  {
+      console.error(error)
+    }
   }
 
   return (
@@ -110,14 +77,14 @@ const SeedlingsAdd: React.FC<SeedlingsAddProps> = ({
           name="name"
           render={() => (
             <InputAllVegetables
-              setInput={(value) => setValue("variety", value)}
+              setInput={(value) => form.setValue("name", value)}
             />
           )}
         />
         <FormField
           control={form.control}
           name="variety"
-          render={() => <InputVariety setInput={setValue} />}
+          render={() => <InputVariety setInput={(value) => form.setValue("variety", value)} />}
         />
         <FormField
           control={form.control}
@@ -139,23 +106,3 @@ const SeedlingsAdd: React.FC<SeedlingsAddProps> = ({
 };
 
 export default SeedlingsAdd;
-// <form
-//   className="flex flex-col h-[280px] items-center justify-around"
-//   onSubmit={submitForm}
-// >
-//   {isLoading && <p>Chargement</p>}
-//   <div className="flex flex-col items-center gap-5">
-//     <div className="flex flex-col gap-2 ">
-//       <InputAllVegetables setInput={setInput} />
-//     </div>
-//     <div className="flex flex-col items-center gap-2">
-//       {/* <label htmlFor="surface">Quan</label> */}
-//       <div className="flex items-end gap-1">
-//         <InputVariety setInput={setInput} />
-//       </div>
-//     </div>
-//   </div>
-//   <Button className="w-36 bg-green-300 text-black" type="submit">
-//     Ajouter
-//   </Button>
-// </form>

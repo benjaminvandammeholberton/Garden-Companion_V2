@@ -1,7 +1,10 @@
-import carrot from "../../../assets/landing/icons/carrot.png";
+import { useEffect, useState } from "react";
 
-import tomato from "../../../assets/landing/icons/tomato.png";
+// assets
+import vegetableIconsMaps from "@/maps/vegetableMaps";
+import unknowVegetable from "../../../assets/vegetables-icons/unknown-vegetable.png"
 
+// ui
 import {
   Tooltip,
   TooltipContent,
@@ -9,99 +12,72 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 
-const testData = [
-  {
-    name: "Carotte",
-    variety: "Nantaise",
-    sowingDate: new Date(),
-    icon: carrot,
-  },
-  {
-    name: "Carotte",
-    variety: "Yellowstone",
-    sowingDate: new Date(),
-    icon: carrot,
-  },
-  {
-    name: "Tomate",
-    variety: "Ananas",
-    sowingDate: new Date(),
-    icon: tomato,
-  },
-  {
-    name: "Tomate",
-    variety: "Coeur de Boeuf",
-    sowingDate: new Date(),
-    icon: tomato,
-  },
-  {
-    name: "Carotte",
-    variety: "Nantaise",
-    sowingDate: new Date(),
-    icon: carrot,
-  },
-  {
-    name: "Carotte",
-    variety: "Yellowstone",
-    sowingDate: new Date(),
-    icon: carrot,
-  },
-  {
-    name: "Tomate",
-    variety: "Ananas",
-    sowingDate: new Date(),
-    icon: tomato,
-  },
-  {
-    name: "Tomate",
-    variety: "Coeur de Boeuf",
-    sowingDate: new Date(),
-    icon: tomato,
-  },
-  {
-    name: "Carotte",
-    variety: "Nantaise",
-    sowingDate: new Date(),
-    icon: carrot,
-  },
-  {
-    name: "Carotte",
-    variety: "Yellowstone",
-    sowingDate: new Date(),
-    icon: carrot,
-  },
-  {
-    name: "Tomate",
-    variety: "Ananas",
-    sowingDate: new Date(),
-    icon: tomato,
-  },
-  {
-    name: "Tomate",
-    variety: "Coeur de Boeuf",
-    sowingDate: new Date(),
-    icon: tomato,
-  },
-];
+// interfaces
+import { SeedlingInterface } from "@/interfaces/interfaces";
 
-const SeedlingsList = () => {
+// api
+import { getAllSeedlings } from "@/api/api-services/seedlingsApi";
+
+// utils
+import capitalize from "@/utils/capitalizeStr";
+
+interface SeedlingsListProps {
+  sortedBy: string;
+  handleClickSort: (type: string) => void;
+}
+
+const SeedlingsList: React.FC<SeedlingsListProps> = () => {
+  const [seedlings, setSeedlings] = useState<SeedlingInterface[]>([]);
+
+  useEffect(() => {
+    const fetchSeedlings = async () => {
+      try {
+        const data = await getAllSeedlings();
+        console.log(data);
+        setSeedlings(data);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    fetchSeedlings();
+  }, []);
+
+  const vegetableIcon = (vegetableName: string) => {
+    const icon = vegetableIconsMaps.find(
+      (asset) => asset.name.fr === vegetableName.toLowerCase()
+    );
+    if (icon) {
+      return icon.assets;
+    }
+    return unknowVegetable;
+  };
+
   return (
     <div className="h-[280px] overflow-scroll">
       <ul className="text-lg font-thin h-5/6 p-2 cursor-default">
-        {testData.map((vegetable) => {
+        {seedlings.map((vegetable) => {
           return (
-            <li className="flex gap-3 w-full justify-between items-center">
+            <li
+              className="flex gap-3 w-full justify-between items-center"
+              key={vegetable.seedling_id}
+            >
               <div className="flex gap-3">
-                <img className="w-5 h-5" src={vegetable.icon} alt="" />
+                <img
+                  className="w-5 h-5"
+                  src={vegetableIcon(vegetable.name)}
+                  alt=""
+                />
                 <span>
-                  {vegetable.name} - {vegetable.variety}
+                  {capitalize(vegetable.name)} - {capitalize(vegetable.variety)}
                 </span>
               </div>
               <TooltipProvider delayDuration={100}>
                 <Tooltip>
                   <TooltipTrigger>4 sem</TooltipTrigger>
                   <TooltipContent>
-                    <p>Semé le {vegetable.sowingDate.toDateString()}</p>
+                    <p>
+                      Semé le {new Date(vegetable.created_at).toDateString()}
+                    </p>
                   </TooltipContent>
                 </Tooltip>
               </TooltipProvider>

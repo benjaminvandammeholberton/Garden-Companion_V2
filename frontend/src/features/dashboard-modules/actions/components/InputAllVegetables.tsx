@@ -1,7 +1,11 @@
+import { useEffect } from "react";
+
+// assets
 import vegetableIconsMaps from "../../../../maps/vegetableMaps";
 import useCompletion from "../../../../hooks/useCompletion";
 import unknownVegetableIcon from "../../../../assets/vegetables-icons/unknown-vegetable.png";
-import { Dispatch, SetStateAction, useEffect } from "react";
+
+// ui
 import { Input } from "@/components/ui/input";
 import {
   FormControl,
@@ -11,7 +15,7 @@ import {
 } from "@/components/ui/form";
 
 interface InputAllVegetablesInterface {
-  setInput: Dispatch<SetStateAction<string>>;
+  setInput: (value: string) => void;
 }
 
 const InputAllVegetables: React.FC<InputAllVegetablesInterface> = ({
@@ -29,6 +33,7 @@ const InputAllVegetables: React.FC<InputAllVegetablesInterface> = ({
   useEffect(() => {
     setInput(nameInput);
   }, [nameInput, setInput]);
+
   return (
     <FormItem className="flex flex-col items-center">
       <FormLabel>Choisissez votre plante</FormLabel>
@@ -44,8 +49,8 @@ const InputAllVegetables: React.FC<InputAllVegetablesInterface> = ({
               setIsNameFocus(false);
             }}
             className={`pl-9
-          ${isNameFocus ? "" : "cursor-pointer"}
-          `}
+            ${isNameFocus ? "" : "cursor-pointer"}
+            `}
           />
         </FormControl>
         <FormMessage />

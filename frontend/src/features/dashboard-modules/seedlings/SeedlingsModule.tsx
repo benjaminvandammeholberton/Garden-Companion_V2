@@ -1,19 +1,18 @@
 import useSort from "../../../hooks/useSort";
 import useAdd from "../../../hooks/useAdd";
+
+// components
 import SeedlingsAdd from "./SeedlingsAdd";
 import SeedlingsList from "./SeedlingsList";
-import { useState } from "react";
 
 // assets
 import { addIcon, sortIcon, backIcon } from "../../../assets/assets-path";
 
-const seedlingsData = {};
 
 const SeedlingsModule = () => {
   const [isSortOpen, toggleSort, sortedBy, handleClickSort] =
     useSort("date ascending");
   const [addOpen, handleClickAdd] = useAdd();
-  const [seedlings, setSeedlings] = useState(seedlingsData);
 
   const sortChoices = [
     ["date d'ajout (ancien en tête)", "date ascending"],
@@ -63,9 +62,9 @@ const SeedlingsModule = () => {
       </div>
 
       {addOpen ? (
-        <SeedlingsAdd {...{ setSeedlings, handleClickAdd }} />
+        <SeedlingsAdd {...{ handleClickAdd }} />
       ) : (
-        <SeedlingsList {...{ sortedBy, seedlings, handleClickSort }} />
+        <SeedlingsList {...{ sortedBy, handleClickSort }} />
       )}
     </div>
   );

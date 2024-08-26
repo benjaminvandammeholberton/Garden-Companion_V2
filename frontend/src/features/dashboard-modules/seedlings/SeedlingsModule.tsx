@@ -21,7 +21,7 @@ const SeedlingsModule = () => {
     ["nom (z - a)", "name descending"],
   ];
   return (
-    <div className="">
+    <div>
       <div
         onClick={handleClickAdd}
         className={`absolute top-2 ${

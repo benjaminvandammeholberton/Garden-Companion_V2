@@ -87,7 +87,7 @@ function App() {
   ]);
   return (
     <>
-      <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
+      <ThemeProvider defaultTheme="light" storageKey="vite-ui-theme">
         <RouterProvider router={router} />
         <Toaster />
       </ThemeProvider>

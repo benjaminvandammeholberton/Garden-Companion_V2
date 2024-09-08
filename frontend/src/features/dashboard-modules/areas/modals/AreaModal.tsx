@@ -98,10 +98,10 @@ const AreaModal: React.FC<AreaModalProps> = ({ isOpen, onClose, area }) => {
         transform 
         -translate-x-1/2 
         -translate-y-1/2  
-        md:rounded-2xl 
+        md:rounded-sm 
         flex 
         flex-col
-        w-full md:w-5/6 
+        w-full md:w-[700px] 
         h-full md:h-5/6
         space-y-3
         "

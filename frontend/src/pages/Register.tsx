@@ -29,7 +29,7 @@ import { useNavigate } from "react-router-dom";
 import BarLoader from "react-spinners/BarLoader";
 
 interface RegisterProps {
-  toggleAuth: () => void;
+  toggleAuth?: () => void;
 }
 
 const Register: React.FC<RegisterProps> = ({ toggleAuth }) => {

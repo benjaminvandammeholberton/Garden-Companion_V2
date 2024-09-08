@@ -1,23 +1,8 @@
+import { VegetableInterface } from "@/interfaces/interfaces";
 import axiosInstance from "../axios";
 
-interface dataInterface {
-  name: string;
-  variety: string;
-  quantity: number;
-  quantity_unit?: string;
-  sowed: boolean;
-  planted: boolean;
-  sowing_date: string;
-  planting_date?: string | null;
-  harvest_date?: string | null | null;
-  harvest_quantity?: number | null;
-  harvest_unit?: string | null;
-  remove_date?: string | null;
-  notes: string | null;
-  area: string | null;
-}
 
-export const createVegetable = async (data: dataInterface) => {
+export const createVegetableApi = async (data: VegetableInterface) => {
   try {
     const response = await axiosInstance.post(
       "/api/v1/vegetable_manager/create",

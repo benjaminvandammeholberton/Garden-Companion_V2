@@ -45,7 +45,7 @@ const VegetableIconsList: React.FC<VegetableIconsListInterface> = ({
   return (
     <div className="flex items-center gap-1">
       {listVegetables?.map((vegetable) => {
-        if (!vegetable.removeDate) {
+        if (!vegetable.remove_date) {
           const vegetableAsset = vegetableIconsMaps.find(
             (asset) => asset.name.fr === vegetable.name.toLowerCase()
           );

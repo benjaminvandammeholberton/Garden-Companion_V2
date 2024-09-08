@@ -1,20 +1,21 @@
+import { AreaInterface } from "@/interfaces/interfaces";
 import { useState } from "react";
 
-type UseModalReturnType = [boolean, (id: string) => void, () => void, string];
+type UseModalReturnType = [boolean, (area: AreaInterface) => void, () => void, AreaInterface | undefined];
 
 const useModal = (): UseModalReturnType => {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
-  const [areaId, setAreaId] = useState<string>("");
+  const [area, setArea] = useState<AreaInterface>();
 
-  const openModal = (id: string) => {
+  const openModal = (area: AreaInterface) => {
     setIsModalOpen(true);
-    setAreaId(id);
+    setArea(area);
   };
 
   const closeModal = () => {
     setIsModalOpen(false);
   };
-  return [isModalOpen, openModal, closeModal, areaId];
+  return [isModalOpen, openModal, closeModal, area];
 };
 
 export default useModal;

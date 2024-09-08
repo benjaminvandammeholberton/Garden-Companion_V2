@@ -8,7 +8,7 @@ import VegetableIconsList from "./VegetableIconsList";
 
 interface AreaListItemInterface {
   area: AreaInterface;
-  openModal: (id: string) => void;
+  openModal: (area: AreaInterface) => void;
   areaIcon: string | undefined;
 }
 
@@ -17,10 +17,11 @@ const AreaListItem: React.FC<AreaListItemInterface> = ({
   openModal,
   areaIcon,
 }) => {
+  const areaId = area.area_id ?? "";
   return (
     <li className="flex gap-3 w-full justify-between">
       <div
-        onClick={() => openModal(area.area_id)}
+        onClick={() => openModal(area)}
         className="cursor-pointer flex items-center gap-3"
       >
         <img className="w-5 h-5" src={areaIcon} alt="" />

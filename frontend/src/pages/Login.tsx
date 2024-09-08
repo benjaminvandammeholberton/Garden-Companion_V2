@@ -27,7 +27,7 @@ import { Input } from "@/components/ui/input";
 import BarLoader from "react-spinners/BarLoader";
 
 interface LoginProps {
-  toggleAuth: () => void;
+  toggleAuth?: () => void;
 }
 
 const Login: React.FC<LoginProps> = ({ toggleAuth }) => {

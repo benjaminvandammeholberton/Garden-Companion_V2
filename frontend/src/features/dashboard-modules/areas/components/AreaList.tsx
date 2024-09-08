@@ -16,7 +16,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 
 interface AreaListProps {
   sortedBy: string;
-  openModal: (id: string) => void;
+  openModal: (area: AreaInterface) => void;
 }
 
 const AreaList: React.FC<AreaListProps> = ({ sortedBy, openModal }) => {
@@ -37,7 +37,7 @@ const AreaList: React.FC<AreaListProps> = ({ sortedBy, openModal }) => {
   };
 
   return (
-    <div className="overflow-y-scroll overflow-x-hidden  h-[285px] my-2 pr-2 mx-2 font-thin text-xl">
+    <div className="overflow-y-scroll overflow-x-hidden h-[285px] my-2 pr-2 mx-2 font-thin text-xl">
       {isLoading ? (
         <div className="space-y-2">
           {Array.from({ length: 8 }).map((_, index) => (

@@ -29,7 +29,7 @@ const AreasModule: React.FC<AreasModuleProps> = ({
 }) => {
   const [isSortOpen, toggleSort, sortedBy, handleClickSort] = useSort("name");
   const [addOpen, handleClickAdd] = useAdd();
-  const [isModalOpen, openModal, closeModal, area_id] = useModal();
+  const [isModalOpen, openModal, closeModal, area] = useModal();
 
   return (
     <div>
@@ -86,7 +86,7 @@ const AreasModule: React.FC<AreasModuleProps> = ({
         <AreaList {...{ sortedBy, openModal, areas, isLoadingAreas }} />
       )}
 
-      <AreaModal isOpen={isModalOpen} onClose={closeModal} areaId={area_id} />
+      <AreaModal isOpen={isModalOpen} onClose={closeModal} area={area} />
     </div>
   );
 };

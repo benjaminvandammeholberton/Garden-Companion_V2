@@ -21,7 +21,7 @@ import tomatoIcon from "../assets/landing/icons/tomato.png";
 import useAuth from "../hooks/useAuth";
 
 const Landing = () => {
-  const [user, isLoading] = useAuth();
+  const [, isLoading] = useAuth();
   if (isLoading) return <div>Chargement</div>;
 
   return (

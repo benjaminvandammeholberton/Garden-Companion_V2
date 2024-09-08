@@ -51,7 +51,7 @@ const Header = () => {
     navigate("/");
   };
   return (
-    <div className="w-full fixed top-0 z-50 bg-white border-b">
+    <div className="w-full fixed top-0 z-50 border-b">
       {/* <div className="lg:hidden flex flex-col items-center w-full gap-2 lg:pb-2">
         <div className="flex gap-5 items-center"></div>
         <div className="text-center">
@@ -90,7 +90,7 @@ const Header = () => {
         </div>
       </div> */}
 
-      <div className=" bg-white opacity-95 flex items-center justify-between w-full border-b px-10 py-2">
+      <div className=" bg-white dark:bg-slate-800 opacity-95 flex items-center justify-between w-full border-b px-10 py-2">
         <img
           className="w-8 h-8 cursor-pointer"
           src={logoutIcon}
@@ -139,7 +139,7 @@ const Header = () => {
           />
 
           <img className="w-8 h-10 lg:hidden" src={burgerMenuIcon} alt="" /> */}
-          {/* <ModeToggle /> */}
+          <ModeToggle />
           <img className="w-8 h-8 cursor-pointer" src={darkModeIcon} alt="" />
         </div>
       </div>

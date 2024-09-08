@@ -50,12 +50,11 @@ const SeedlingsAdd: React.FC<SeedlingsAddProps> = ({
     defaultValues: {
       name: "",
       variety: "",
-      quantity: 0,
+      quantity: 1,
     },
   });
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
-    console.log(values);
     const data = {
       ...values,
       created_at: Date.toString(),

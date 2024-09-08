@@ -13,11 +13,13 @@ import useGetAreas from "../hooks/useGetAreas";
 // shadcn ui
 import { Card, CardContent } from "@/components/ui/card";
 import { AreasProvider } from "@/contexts/AreasContext";
+import { VegetablesProvider } from "@/contexts/VegetableContext";
 
 const Dashboard = () => {
   const [areas, isLoadingAreas, errorGetAreas, setAreas] = useGetAreas();
 
   return (
+    <VegetablesProvider>
     <AreasProvider>
       <div>
         <div className="grid lg:grid-cols-2 xl:grid-cols-3 gap-5 w-full">
@@ -62,6 +64,7 @@ const Dashboard = () => {
         </div>
       </div>
     </AreasProvider>
+    </VegetablesProvider>
   );
 };
 

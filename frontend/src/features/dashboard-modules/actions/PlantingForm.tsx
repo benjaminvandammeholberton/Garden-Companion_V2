@@ -1,82 +1,318 @@
-import { useState } from "react";
-
+import { useContext } from "react";
+import { z } from "zod";
+import { format } from "date-fns";
+import { fr } from "date-fns/locale";
 // assets
-import directSowingIcon from "../../../assets/actions-icons/planting.png";
+import plantingIcon from "../../../assets/actions-icons/planting.png";
 
 // components
 import FormHeader from "./components/FormHeader";
 import InputAllVegetables from "./components/InputAllVegetables";
 import InputUserAreas from "./components/InputAreas";
-import InputDate from "./components/InputDate";
-import InputNote from "./components/InputNote";
+
+// contexts
+import VegetablesContext from "@/contexts/VegetableContext";
+import AreasContext from "@/contexts/AreasContext";
+
+import { useToast } from "@/components/ui/use-toast";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+
+// ui
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
 import InputVariety from "./components/InputVariety";
-import SubmitButton from "./components/SubmitButton";
-import { createVegetable } from "../../../api/api-services/vegetables";
-import InputQuantity from "./components/InputQuantity";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@radix-ui/react-popover";
+import { CalendarIcon } from "lucide-react";
+
+import { cn } from "@/lib/utils";
+import { Calendar } from "@/components/ui/calendar";
+import { AreaInterface } from "@/interfaces/interfaces";
 
 interface PlantingFormInterface {
   onClose: () => void;
+  defaultValues?: object
 }
 
-const PlantingForm: React.FC<PlantingFormInterface> = ({ onClose }) => {
-  const [name, setName] = useState<string>("");
-  const [variety, setVariety] = useState<string>("");
-  const [area, setArea] = useState<string>("");
-  const [date, setDate] = useState<string>("");
-  const [notes, setNotes] = useState<string>("");
-  const [quantity, setQuantity] = useState<string>("0");
-  const [quantityUnit, setQuantityUnit] = useState<string>("");
-  const [errorArea, setErrorArea] = useState<string | null>(null);
+const PlantingForm: React.FC<PlantingFormInterface> = ({ onClose, defaultValues }) => {
+  const { toast } = useToast();
+  const vegetablesContext = useContext(VegetablesContext);
+  if (!vegetablesContext) {
+    throw new Error(
+      "VegetablesContext must be used within an VegetablesProvider"
+    );
+  }
+  const { createVegetable } = vegetablesContext;
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    if (area === "") setErrorArea("Zone de culture invalide");
-    const new_vegetable = {
-      name,
-      variety,
-      quantity: parseInt(quantity),
-      sowed: true,
-      planted: false,
-      sowing_date: date,
-      notes: notes !== "" ? notes : null,
-      area: area,
-      quantity_unit: quantityUnit.toLowerCase(),
+  const areasContext = useContext(AreasContext);
+  if (!areasContext) {
+    throw new Error("AreasContext must be used within an AreasProvider");
+  }
+  const { areas, setAreas } = areasContext;
+
+  const formSchema = z.object({
+    name: z.string().min(2).max(50),
+    variety: z.string().min(2).max(50),
+    quantity: z.coerce
+      .number({
+        required_error: "La quantité est requise",
+        invalid_type_error: "La quantité doit être un nombre",
+      })
+      .positive(),
+    quantity_unit: z.string().min(2).max(50),
+    area: z.string(),
+    planting_date: z.date({}),
+  });
+
+  const form = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      name: defaultValues?.planting?.name  ?? "",
+      variety: defaultValues?.planting?.variety ?? "",
+      quantity: defaultValues?.planting?.quantity ?? 0,
+      quantity_unit: "",
+      area: "",
+      planting_date: new Date(),
+    },
+  });
+
+  const onSubmit = async (values: z.infer<typeof formSchema>) => {
+    const data = {
+      ...values,
+      planting_date: values.planting_date.toISOString().slice(0, 10),
     };
-    await createVegetable(new_vegetable);
-    // const new_vegetable_response = await createVegetable(new_vegetable);
-
-    // const areasToUpdate: AreaInterface = areas.find(
-    //   (area: AreaInterface) => area.area_id === new_vegetable.area
-    // );
-    // areasToUpdate.vegetables.push(new_vegetable_response);
-    // const areasToSet = areas.map((area: AreaInterface) => {
-    //   if (area.area_id === new_vegetable_response.area) return areasToUpdate;
-    //   return area;
-    // });
-    // SetAreas(areasToSet);
-    onClose();
+    try {
+      let selected_area: AreaInterface | undefined = undefined;
+      const newVegetable = await createVegetable(data);
+      const newAreas = areas.map((area) => {
+        if (area.area_id === newVegetable?.area) {
+          selected_area = area;
+          return {
+            ...area,
+            vegetables: [...(area.vegetables ?? []), newVegetable],
+          };
+        }
+        return area;
+      });
+      setAreas(newAreas);
+      toast({
+        title: "Nouvelle plantation 👍",
+        description: `${newVegetable?.name} - ${newVegetable?.variety} (${newVegetable?.quantity}) dans votre espace: ${selected_area?.name}`,
+      });
+      onClose();
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   return (
-    <div className="flex flex-col gap-5 overflow-y-scroll w-full mt-5">
-      <FormHeader icon={directSowingIcon} name="Planter" />
-      <form className="flex flex-col gap-5" onSubmit={handleSubmit}>
-        <InputAllVegetables setInput={setName} />
-        <InputVariety setInput={setVariety} />
-        <InputQuantity
-          setInputQuantity={setQuantity}
-          setInputUnit={setQuantityUnit}
-        />
-        <InputUserAreas
-          setInput={setArea}
-          inputErrorMessage={errorArea}
-          setInputErrorMessage={setErrorArea}
-        />
-        <InputDate setInput={setDate} />
-        <InputNote setInput={setNotes} />
-        <SubmitButton />
-      </form>
+    <div className="flex flex-col gap-10 w-1/2">
+      <Form {...form}>
+        <FormHeader icon={plantingIcon} name="Planter" />
+        <form
+          onSubmit={form.handleSubmit(onSubmit)}
+          className="flex flex-col gap-5"
+        >
+          <FormField
+            control={form.control}
+            name="name"
+            render={() => (
+              <InputAllVegetables
+                setInput={(value) => form.setValue("name", value)}
+                defaultValue = {defaultValues?.planting?.name}
+              />
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="variety"
+            render={(field) => (
+              <InputVariety
+                setInput={(value) => form.setValue("variety", value)}
+                {...field}
+              />
+            )}
+          />
+          <div className="flex justify-between">
+            <FormField
+              control={form.control}
+              name="quantity"
+              render={({ field }) => (
+                <FormItem className="flex flex-col items-center w-4/12">
+                  <FormLabel>Quantité</FormLabel>
+                  <FormControl>
+                    <Input type="number" {...field} className="h-8" />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="quantity_unit"
+              render={({ field }) => (
+                <FormItem className="flex flex-col items-center w-3/6">
+                  <FormLabel>Unité</FormLabel>
+                  <FormControl>
+                    <Input
+                      placeholder="ligne, rangée, plant, ..."
+                      type="text"
+                      {...field}
+                      className="h-8"
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
+          <FormField
+            control={form.control}
+            name="area"
+            render={() => (
+              <InputUserAreas
+                setInput={(value) => form.setValue("area", value)}
+              />
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="planting_date"
+            render={({ field }) => (
+              <FormItem className="flex flex-col items-center">
+                <FormLabel>Date</FormLabel>
+                <Popover>
+                  <PopoverTrigger asChild>
+                    <FormControl>
+                      <Button
+                        variant={"outline"}
+                        className={cn(
+                          "w-full pl-3 text-left font-normal",
+                          !field.value && "text-muted-foreground"
+                        )}
+                      >
+                        {field.value &&
+                          format(field.value, "PPP", { locale: fr })}
+                        <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                      </Button>
+                    </FormControl>
+                  </PopoverTrigger>
+                  <PopoverContent
+                    className="w-auto p-0 bg-white border"
+                    align="center"
+                  >
+                    <Calendar
+                      mode="single"
+                      selected={field.value}
+                      onSelect={field.onChange}
+                      disabled={(date) => date < new Date("1900-01-01")}
+                      initialFocus
+                    />
+                  </PopoverContent>
+                </Popover>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <Button type="submit">Planter</Button>
+        </form>
+      </Form>
     </div>
   );
 };
 export default PlantingForm;
+
+// import { useState } from "react";
+
+// // assets
+// import directSowingIcon from "../../../assets/actions-icons/planting.png";
+
+// // components
+// import FormHeader from "./components/FormHeader";
+// import InputAllVegetables from "./components/InputAllVegetables";
+// import InputUserAreas from "./components/InputAreas";
+// import InputDate from "./components/InputDate";
+// import InputNote from "./components/InputNote";
+// import InputVariety from "./components/InputVariety";
+// import SubmitButton from "./components/SubmitButton";
+// import { createVegetableApi } from "../../../api/api-services/vegetables";
+// import InputQuantity from "./components/InputQuantity";
+
+// interface PlantingFormInterface {
+//   onClose: () => void;
+// }
+
+// const PlantingForm: React.FC<PlantingFormInterface> = ({ onClose }) => {
+//   const [name, setName] = useState<string>("");
+//   const [variety, setVariety] = useState<string>("");
+//   const [area, setArea] = useState<string>("");
+//   const [date, setDate] = useState<string>("");
+//   const [notes, setNotes] = useState<string>("");
+//   const [quantity, setQuantity] = useState<string>("0");
+//   const [quantityUnit, setQuantityUnit] = useState<string>("");
+//   const [errorArea, setErrorArea] = useState<string | null>(null);
+
+//   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+//     e.preventDefault();
+//     if (area === "") setErrorArea("Zone de culture invalide");
+//     const new_vegetable = {
+//       name,
+//       variety,
+//       quantity: parseInt(quantity),
+//       sowed: true,
+//       planted: false,
+//       planting_date: date,
+//       notes: notes !== "" ? notes : null,
+//       area: area,
+//       quantity_unit: quantityUnit.toLowerCase(),
+//     };
+//     await createVegetable(new_vegetable);
+//     // const new_vegetable_response = await createVegetable(new_vegetable);
+
+//     // const areasToUpdate: AreaInterface = areas.find(
+//     //   (area: AreaInterface) => area.area_id === new_vegetable.area
+//     // );
+//     // areasToUpdate.vegetables.push(new_vegetable_response);
+//     // const areasToSet = areas.map((area: AreaInterface) => {
+//     //   if (area.area_id === new_vegetable_response.area) return areasToUpdate;
+//     //   return area;
+//     // });
+//     // SetAreas(areasToSet);
+//     onClose();
+//   };
+
+//   return (
+//     <div className="flex flex-col gap-5 overflow-y-scroll w-full mt-5">
+//       <FormHeader icon={directSowingIcon} name="Planter" />
+//       <form className="flex flex-col gap-5" onSubmit={handleSubmit}>
+//         <InputAllVegetables setInput={setName} />
+//         <InputVariety setInput={setVariety} />
+//         <InputQuantity
+//           setInputQuantity={setQuantity}
+//           setInputUnit={setQuantityUnit}
+//         />
+//         <InputUserAreas
+//           setInput={setArea}
+//           inputErrorMessage={errorArea}
+//           setInputErrorMessage={setErrorArea}
+//         />
+//         <InputDate setInput={setDate} />
+//         <InputNote setInput={setNotes} />
+//         <SubmitButton />
+//       </form>
+//     </div>
+//   );
+// };
+// export default PlantingForm;

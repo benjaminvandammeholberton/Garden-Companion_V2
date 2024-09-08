@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { createAreaApi } from "../api/api-services/areas";
 import useAuth from "./useAuth";
+import { AreaInterface } from "@/interfaces/interfaces";
 
 interface dataInterface {
   name: string;
@@ -19,7 +20,7 @@ const useAddArea = (): useAddAreaReturnType => {
   const [error, setError] = useState<string | null>(null);
   useAuth();
 
-  const addData = async (data: dataInterface) => {
+  const addData = async (data: AreaInterface) => {
     SetIsLoading(true);
     setError(null);
     try {

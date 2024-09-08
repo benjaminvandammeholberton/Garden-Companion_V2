@@ -8,18 +8,19 @@ import SeedlingsList from "./SeedlingsList";
 // assets
 import { addIcon, sortIcon, backIcon } from "../../../assets/assets-path";
 
-
 const SeedlingsModule = () => {
   const [isSortOpen, toggleSort, sortedBy, handleClickSort] =
-    useSort("date ascending");
+    useSort(localStorage.getItem("sort-seedlings") || ("created_at desc"));
   const [addOpen, handleClickAdd] = useAdd();
 
+
   const sortChoices = [
-    ["date d'ajout (ancien en tête)", "date ascending"],
-    ["date d'ajout (récent en tête)", "date descending"],
-    ["nom (a - z)", "name ascending"],
-    ["nom (z - a)", "name descending"],
+    ["date d'ajout (ancien en tête)", "created_at asc"],
+    ["date d'ajout (récent en tête)", "created_at desc"],
+    ["nom (a - z)", "name asc"],
+    ["nom (z - a)", "name desc"],
   ];
+
   return (
     <div>
       <div

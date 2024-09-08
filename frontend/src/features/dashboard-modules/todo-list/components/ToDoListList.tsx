@@ -3,7 +3,7 @@ import { ToDoInterface } from "../interfaces";
 
 // assets
 import priorityIcon from "../assets/priority.png";
-import deleteIcon from "../assets/delete.png";
+import deleteIcon from "../../../../assets/common/delete.png";
 
 // utils
 import {

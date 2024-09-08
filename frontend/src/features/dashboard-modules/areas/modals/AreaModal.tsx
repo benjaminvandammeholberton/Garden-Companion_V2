@@ -6,6 +6,7 @@ import { useContext, useEffect, useState } from "react";
 
 // assets
 import { greenhouse } from "../../../../assets/assets-path";
+import settingsIcon from "../../../../assets/common/settings.png";
 
 // components
 import Diary from "../../../diary/Diary";
@@ -14,14 +15,19 @@ import AreasContext from "@/contexts/AreasContext";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
 import { AreaInterface } from "@/interfaces/interfaces";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 
 interface AreaModalProps {
   isOpen: boolean;
   onClose: () => void;
-  areaId: string;
+  area: AreaInterface | undefined;
 }
 
-const AreaModal: React.FC<AreaModalProps> = ({ isOpen, onClose, areaId }) => {
+const AreaModal: React.FC<AreaModalProps> = ({ isOpen, onClose, area }) => {
   const areasContext = useContext(AreasContext);
   if (!areasContext) {
     throw new Error("AreasContext must be used within an AreasProvider");
@@ -30,8 +36,8 @@ const AreaModal: React.FC<AreaModalProps> = ({ isOpen, onClose, areaId }) => {
 
   const { toast } = useToast();
 
-  const [diaryOpen, setDiaryOpen] = useState(true);
-  const [tableOpen, setTableOpen] = useState(false);
+  const [diaryOpen, setDiaryOpen] = useState(false);
+  const [tableOpen, setTableOpen] = useState(true);
 
   const tableDisplay = () => {
     if (!tableOpen) {
@@ -47,22 +53,22 @@ const AreaModal: React.FC<AreaModalProps> = ({ isOpen, onClose, areaId }) => {
     }
   };
 
-  useEffect(() => {
-    const handleOutsideClick = (event: MouseEvent) => {
-      const target = event.target as HTMLElement;
-      if (!target.closest(".area-modal-content") && isOpen) {
-        onClose();
-      }
-    };
+  // useEffect(() => {
+  //   const handleOutsideClick = (event: MouseEvent) => {
+  //     const target = event.target as HTMLElement;
+  //     if (!target.closest(".area-modal-content") && isOpen) {
+  //       onClose();
+  //     }
+  //   };
 
-    if (isOpen) {
-      document.addEventListener("mousedown", handleOutsideClick);
-    }
+  //   if (isOpen) {
+  //     document.addEventListener("mousedown", handleOutsideClick);
+  //   }
 
-    return () => {
-      document.removeEventListener("mousedown", handleOutsideClick);
-    };
-  }, [isOpen, onClose]);
+  //   return () => {
+  //     document.removeEventListener("mousedown", handleOutsideClick);
+  //   };
+  // }, [isOpen, onClose]);
 
   const handleDelete = (areaId: string) => {
     onClose();
@@ -97,41 +103,60 @@ const AreaModal: React.FC<AreaModalProps> = ({ isOpen, onClose, areaId }) => {
         flex-col
         w-full md:w-5/6 
         h-full md:h-5/6
+        space-y-3
         "
       >
-        <div
-          className="absolute cursor-pointer top-5 right-5"
-          onClick={onClose}
-        >
-          <span className="p-2 text-4xl md:text-2xl">&times;</span>
-        </div>
-        <div className="flex gap-3  p-5 items-center justify-center ">
-          <img className="" src={greenhouse} alt="" />
-          <span className="text-2xl font-thin ">Serre - Gauche</span>
-        </div>
-        <Button onClick={() => handleDelete(areaId)}>Supprimer</Button>
-        <div className="">
-          <ul className="flex justify-center gap-36 p-2 text-lg ">
-            <li
-              onClick={diaryDisplay}
-              className={`cursor-pointer ${
-                diaryOpen ? "border-b border-black" : ""
-              }  px-2 h-full w-full text-center`}
-            >
-              Journal
-            </li>
+        <div className="space-y-5">
+          <div
+            className="absolute cursor-pointer top-5 right-5"
+            onClick={onClose}
+          >
+            <span className="p-2 text-4xl md:text-2xl">&times;</span>
+          </div>
+          <div className="flex gap-3 items-end justify-center">
+            <img className="w-10 h-10" src={greenhouse} alt="" />
+            <div className="flex items-center gap-2">
+              <span className="text-3xl">{area?.name}</span>
+              <Popover>
+                <PopoverTrigger>
+                  <img
+                    className="w-4 h-4 cursor-pointer"
+                    src={settingsIcon}
+                    alt=""
+                  />
+                </PopoverTrigger>
+                <PopoverContent>
+                  <div className="flex justify-center gap-5">
+                    <Button>Modifier</Button>
+                    <Button variant={"destructive"} onClick={() => handleDelete(area?.area_id ?? "")}>
+                      Supprimer
+                    </Button>
+                  </div>
+                </PopoverContent>
+              </Popover>
+            </div>
+          </div>
+          <ul className="flex justify-center text-lg">
             <li
               onClick={tableDisplay}
               className={`cursor-pointer ${
-                tableOpen ? "border-b border-black" : ""
+                tableOpen ? "border-b-2 border-black" : ""
               }  px-2 h-full w-full text-center`}
             >
               Tableau de production
             </li>
+            <li
+              onClick={diaryDisplay}
+              className={`cursor-pointer ${
+                diaryOpen ? "border-b-2 border-black" : ""
+              }  px-2 h-full w-full text-center`}
+            >
+              Journal
+            </li>
           </ul>
         </div>
         <div className="w-full h-full overflow-scroll px-5 mr-10">
-          {diaryOpen ? <Diary /> : <TableProduction />}
+          {diaryOpen ? <Diary area={area} /> : <TableProduction />}
         </div>
       </div>
     </div>,

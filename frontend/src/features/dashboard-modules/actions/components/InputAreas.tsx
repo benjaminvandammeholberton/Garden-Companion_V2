@@ -5,19 +5,18 @@ import areaMaps from "../../../../maps/areaEnvironnementsIconsMaps";
 
 import useGetAreas from "../../../../hooks/useGetAreas";
 import useCompletion from "../../../../hooks/useCompletion";
-import { Dispatch, SetStateAction, useEffect } from "react";
+import { useEffect, useState } from "react";
+import { FormControl, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
 
 interface InputUserAreasInterface {
-  setInput: Dispatch<SetStateAction<string>>;
-  inputErrorMessage: string | null;
-  setInputErrorMessage: Dispatch<SetStateAction<string | null>>;
+  setInput: (value: string) => void;
 }
 
 const InputUserAreas: React.FC<InputUserAreasInterface> = ({
   setInput,
-  inputErrorMessage,
-  setInputErrorMessage,
 }) => {
+  const [inputErrorMessage, setInputErrorMessage] = useState<string | null>(null)
   const [areas] = useGetAreas();
   const [
     isAreaFocus,
@@ -31,14 +30,14 @@ const InputUserAreas: React.FC<InputUserAreasInterface> = ({
   useEffect(() => {
     const areaSelected = areas.find((area) => area.name === areaInput);
     if (areaSelected) {
-      setInput(areaSelected.area_id);
+      setInput(areaSelected.area_id ?? "");
       setInputErrorMessage(null);
     } else {
       if (areaInput.length > 0)
         setInputErrorMessage("Zone de culture invalide");
       setInput("");
     }
-  });
+  }, [areas, areaInput, setInput]);
 
   const areaObject = areas.find((area) => area.name === areaInput);
 
@@ -49,11 +48,9 @@ const InputUserAreas: React.FC<InputUserAreasInterface> = ({
     : unknowIcon;
 
   return (
-    <div className="flex flex-col items-center">
-      <label htmlFor="" className="text-lg">
-        Zone de culture **
-      </label>
-      <div className="relative">
+    <FormItem className="flex flex-col items-center">
+      <FormLabel>Zone de culture</FormLabel>
+      <div className="relative w-full">
         {areaInput.length > 0 && (
           <img
             className="absolute top-[9px] left-2 w-5"
@@ -61,7 +58,8 @@ const InputUserAreas: React.FC<InputUserAreasInterface> = ({
             alt=""
           />
         )}
-        <input
+        <FormControl>
+        <Input
           value={areaInput}
           onChange={handleAreaInputChange}
           onFocus={() => {
@@ -70,19 +68,13 @@ const InputUserAreas: React.FC<InputUserAreasInterface> = ({
           onBlur={() => {
             setIsAreaFocus(false);
           }}
-          className={`
-          border 
-          border-zinc-400 
-          outline-gray-200 
-          px-2 
-          w-64 
-          h-10 
-          pl-9
-          rounded-xl
+          className={`pl-9
           ${isAreaFocus ? "" : "cursor-pointer"}
           ${inputErrorMessage ? "border-red-500" : ""}
           `}
         />
+        </FormControl>
+        <FormMessage />
         {inputErrorMessage && (
           <div className="text-red-500 ml-10">{inputErrorMessage}</div>
         )}
@@ -136,7 +128,7 @@ const InputUserAreas: React.FC<InputUserAreasInterface> = ({
           </ul>
         </div>
       </div>
-    </div>
+    </FormItem>
   );
 };
 

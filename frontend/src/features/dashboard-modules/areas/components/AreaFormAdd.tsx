@@ -59,6 +59,7 @@ const AreaFormAdd: React.FC<AreaFormAddProps> = ({ handleClickAdd }) => {
       sowing_area: false,
       created_at: new Date().toISOString(),
       updated_at: new Date().toISOString(),
+      vegetables: []
     };
     await createArea(newArea);
     setFormData({

@@ -6,7 +6,8 @@ type DataRecord = Record<string, any>;
 const useCompletion = (
   data: DataRecord[],
   completeBy: string | string[],
-  attribute: string
+  attribute: string,
+  defaultValue?: string
 ): [
   boolean,
   React.Dispatch<React.SetStateAction<boolean>>,
@@ -21,7 +22,7 @@ const useCompletion = (
   );
 
   const [isFocus, setIsFocus] = useState<boolean>(false);
-  const [input, setInput] = useState<string>("");
+  const [input, setInput] = useState<string>(defaultValue ?? "");
   const [choicesFiltered, setChoicesFiltered] =
     useState<DataRecord[]>(dataSorted);
 

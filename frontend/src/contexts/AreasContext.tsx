@@ -1,6 +1,6 @@
 import { createAreaApi, getAllAreas } from "@/api/api-services/areas";
 import { AreaInterface } from "@/interfaces/interfaces";
-import { createContext, ReactNode, useEffect, useState } from "react";
+import { createContext, Dispatch, ReactNode, SetStateAction, useEffect, useState } from "react";
 
 interface AreaContextType {
   areas: AreaInterface[];
@@ -9,6 +9,7 @@ interface AreaContextType {
   createArea: (newArea: Omit<AreaInterface, "id">) => Promise<void>;
   updateArea: (id: string, updatedArea: Omit<AreaInterface, "id">) => void;
   deleteArea: (id: string) => void;
+  setAreas: Dispatch<SetStateAction<AreaInterface[]>>;
 }
 const AreasContext = createContext<AreaContextType | undefined>(undefined);
 
@@ -26,8 +27,8 @@ export const AreasProvider: React.FC<{ children: ReactNode }> = ({
         const fetchedAreas = await getAllAreas();
         setAreas(fetchedAreas);
       } catch (error) {
-        console.error("Error fetching areas", error);
-        setError("Issue when fetching the areas");
+        console.error("Error when fetching areas", error);
+        setError("Issue when fetching areas");
       } finally {
         setIsLoading(false);
       }
@@ -62,7 +63,7 @@ export const AreasProvider: React.FC<{ children: ReactNode }> = ({
 
   return (
     <AreasContext.Provider
-      value={{ areas, isLoading, error, createArea, updateArea, deleteArea }}
+      value={{ areas, setAreas, isLoading, error, createArea, updateArea, deleteArea }}
     >
       {children}
     </AreasContext.Provider>

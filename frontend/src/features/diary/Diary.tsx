@@ -13,7 +13,7 @@ import fertilizeIcon from "../../assets/actions-icons/fertilize.png";
 import placeHolderImage from "../../assets/placeholder-image.jpeg";
 import placeHolderImage2 from "../../assets/placeholder-image-2.jpeg";
 import { ActionInterface, AreaInterface } from "@/interfaces/interfaces";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import actionsData from "@/dumb-data/actionsData";
 import { Button } from "@/components/ui/button";
@@ -22,6 +22,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
+import axiosInstance from "@/api/axios";
 
 interface DiaryItemGeneralProps {
   action: ActionInterface;
@@ -270,8 +271,22 @@ interface DiarayProps {
   area: AreaInterface | undefined;
 }
 const Diary: React.FC<DiarayProps> = ({ area }) => {
-  const actions = actionsData;
+  // const actions = actionsData;
   const [allSelect, SetAllSelect] = useState(true)
+  const [actions, setActions] = useState([])
+
+  useEffect(() => {
+    const getActions = async () => {
+      try {
+        const response = await axiosInstance.get("/api/v1/action/");
+        setActions(response.data);
+      } catch (error) {
+        console.error(error);
+        throw new Error("Can't fetch areas from the server");
+      }
+    }
+    getActions()
+}, [])
 
   return (
     <div className="w-full flex flex-col gap-5 p-4 items-center">

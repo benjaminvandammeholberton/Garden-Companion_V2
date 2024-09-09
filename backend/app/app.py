@@ -1,6 +1,7 @@
 """
 This is the entry point for the Garden Companion backend application.
 """
+from pathlib import Path
 from beanie import init_beanie
 from contextlib import asynccontextmanager
 from fastapi.middleware.cors import CORSMiddleware
@@ -15,6 +16,7 @@ from app.models.user_model import User
 from app.models.vegetable_info_model import VegetableInfo
 from app.models.vegetable_manager_model import VegetableManager
 from app.models.seedling_model import Seedling
+from app.models.action_model import Action
 
 
 @asynccontextmanager
@@ -39,7 +41,8 @@ async def lifespan(app: FastAPI):
             VegetableInfo,
             Area,
             VegetableManager,
-            Seedling
+            Seedling,
+            Action
         ]
     )
     app.include_router(router, prefix=settings.API_V1_STR)
@@ -50,6 +53,9 @@ app = FastAPI(
     openapi_url=f"{settings.API_V1_STR}/openapi.json",
     lifespan=lifespan
 )
+
+UPLOAD_FOLDER = Path("./uploads")
+UPLOAD_FOLDER.mkdir(parents=True, exist_ok=True)
 
 app.add_middleware(
     CORSMiddleware,

@@ -1,4 +1,5 @@
 // import WeedForm from "@/features/dashboard-modules/actions/WeedForm";
+import WateringForm from "@/features/dashboard-modules/actions/WateringForm";
 import DirectSowingForm from "../features/dashboard-modules/actions/DirectSowingForm";
 // import HarvestForm from "../features/dashboard-modules/actions/HarvestForm";
 // import IndirectSowingForm from "../features/dashboard-modules/actions/IndirectSowingForm";
@@ -37,8 +38,8 @@ const RenderPlantManagerModalContent: React.FC<
     //   return <TreatForm onClose={onClose} />;
     // case "fertilize":
     //   return <FertilizeForm onClose={onClose} />;
-    // case "water":
-    //   return <WaterForm onClose={onClose} />;
+    case "water":
+      return <WateringForm onClose={onClose} />;
     default:
       return null;
   }

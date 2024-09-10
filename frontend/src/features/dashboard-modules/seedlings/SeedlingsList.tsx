@@ -82,7 +82,6 @@ const SeedlingsList: React.FC<SeedlingsListProps> = ({ sortedBy }) => {
   const handleDelete = async (seedling: SeedlingInterface) => {
     try {
       await deleteSeedling(seedling.seedling_id);
-      console.log(seedlings);
       const newSeedlingsList = seedlings.filter((seedlingItem) => {
         return seedlingItem.seedling_id !== seedling.seedling_id;
       });

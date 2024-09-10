@@ -61,7 +61,6 @@ const PlantManagerModal: React.FC<PlantManagerModalProps> = ({
       flex
       items-center
       plant-manager-modal-content 
-      bg-white 
       fixed md:absolute 
       left-1/2 
       top-1/2 
@@ -69,12 +68,11 @@ const PlantManagerModal: React.FC<PlantManagerModalProps> = ({
       -translate-x-1/2
       -translate-y-1/2
       p-5
-      w-full md:w-[500px]
-      h-full md:h-[700px]
       "
       >
-        <CloseModal {...{ onClose }} />
-        <Card className="flex flex-col justify-center items-center w-3/4 px-5 py-5 mx-auto">
+        
+        <Card className="flex flex-col justify-center items-center w-[400px] p-10 mx-auto relative">
+          <CloseModal {...{ onClose }} />
           <RenderPlantManagerModalContent
             content={actionName}
             onClose={onClose}

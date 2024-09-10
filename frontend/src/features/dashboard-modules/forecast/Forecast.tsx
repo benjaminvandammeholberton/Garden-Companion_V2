@@ -9,7 +9,6 @@ const Forecast = () => {
   const [userLocation, setUserLocation] = useState<string | null>("");
 
   const location = localStorage.getItem("location")
-  console.log(userLocation)
   if (location) {
     setUserLocation(location)
   }

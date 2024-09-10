@@ -9,6 +9,7 @@ from pydantic import BaseModel
 from app.schemas.area_schema import AreaOut
 from app.schemas.vegetable_manager_schema import VegetableManagerOut
 
+
 class ActionType(str, Enum):
     sowing = "Semer"
     planting = "Planter"
@@ -28,7 +29,7 @@ class ActionCreate(BaseModel):
     note: str | None = None
     vegetable: UUID | None = None
     area: UUID | None = None
-    photo: str | None = None
+    # photo: str | None = None
 
 
 class ActionOut(BaseModel):
@@ -40,6 +41,7 @@ class ActionOut(BaseModel):
     created_at: datetime
     updated_at: datetime
     photo: str | None = None
+
 
 class ActionUpdate(BaseModel):
     type: ActionType | None = None

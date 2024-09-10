@@ -32,9 +32,9 @@
 }
 
 @layer base {
-  html {
+  /* html {
     font-family: "Roboto", sans-serif;
-  }
+  } */
   :root {
     --background: 0 0% 100%;
     --foreground: 222.2 84% 4.9%;
@@ -117,14 +117,14 @@
   animation: dots 3s ease-in-out infinite;
 }
 
-::-webkit-scrollbar {
+/* ::-webkit-scrollbar {
   width: 7px;
-}
+} */
 
-::-webkit-scrollbar-thumb {
+/* ::-webkit-scrollbar-thumb {
   background: lightblue;
   border-radius: 100%;
-}
+}  */
 
 @layer base {
   * {

@@ -128,7 +128,10 @@ const AreaModal: React.FC<AreaModalProps> = ({ isOpen, onClose, area }) => {
                 <PopoverContent>
                   <div className="flex justify-center gap-5">
                     <Button>Modifier</Button>
-                    <Button variant={"destructive"} onClick={() => handleDelete(area?.area_id ?? "")}>
+                    <Button
+                      variant={"destructive"}
+                      onClick={() => handleDelete(area?.area_id ?? "")}
+                    >
                       Supprimer
                     </Button>
                   </div>

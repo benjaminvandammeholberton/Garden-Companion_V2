@@ -31,7 +31,7 @@ class ActionService:
         """
         Create a new action for the current user
         """
-        action = Action(**data.model_dump(), owner=user.user_id)
+        action = Action(**data.model_dump(), owner=user.user_id, photo="test")
         return await action.create()
 
     @staticmethod
@@ -44,7 +44,7 @@ class ActionService:
         Retrieve a specific action for the current user
         """
         action = await Action.find_one(Action.action_id == action_id,
-                                   Action.owner == current_user.user_id)
+                                       Action.owner == current_user.user_id)
         return action
 
     @staticmethod

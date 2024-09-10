@@ -1,6 +1,4 @@
 import carrotIcon from "../../assets/vegetables-icons/carrot.png";
-import lettuceIcon from "../../assets/vegetables-icons/lettuce.png";
-import bokChoiIcon from "../../assets/vegetables-icons/bok-choy.png";
 import directSowingIcon from "../../assets/actions-icons/direct-sowing.png";
 import plantingIcon from "../../assets/actions-icons/planting.png";
 import harvestIcon from "../../assets/actions-icons/harvest.png";
@@ -23,6 +21,7 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import axiosInstance from "@/api/axios";
+import vegetableIconsMaps from "@/maps/vegetableMaps";
 
 interface DiaryItemGeneralProps {
   action: ActionInterface;
@@ -30,30 +29,35 @@ interface DiaryItemGeneralProps {
 
 ("use client");
 
-export const ActionFilterSelect = ({ icon, text, localStorageName}) => {
-  const state = localStorage.getItem(localStorageName)
-  const [isSelected, setIsSelected] = useState(true)
-
+export const ActionFilterSelect = ({ icon, text, localStorageName }) => {
+  const state = localStorage.getItem(localStorageName);
+  const [isSelected, setIsSelected] = useState(true);
 
   const handleChange = () => {
-    setIsSelected(!isSelected)
+    setIsSelected(!isSelected);
     if (isSelected) {
-      localStorage.removeItem(localStorageName)
+      localStorage.removeItem(localStorageName);
     } else {
-      localStorage.setItem(localStorageName, "selected")
+      localStorage.setItem(localStorageName, "selected");
     }
-  }
-
+  };
 
   return (
     <div className="mx-auto">
-      <div 
-      className="flex flex-col items-center justify-between gap-2 cursor-pointer"
-      onClick={handleChange}
+      <div
+        className="flex flex-col items-center justify-between gap-2 cursor-pointer"
+        onClick={handleChange}
       >
-        <img src={icon} alt="" className="w-10" style={{filter: isSelected ? "" : "grayscale(100%" }} />
+        <img
+          src={icon}
+          alt=""
+          className="w-10"
+          style={{ filter: isSelected ? "" : "grayscale(100%" }}
+        />
         <span
-          className= {`text-sm text-center font-medium leading-none ${isSelected ? "font-medium" : "font-thin"} `}
+          className={`text-sm text-center font-medium leading-none ${
+            isSelected ? "font-medium" : "font-thin"
+          } `}
         >
           {text}
         </span>
@@ -63,13 +67,19 @@ export const ActionFilterSelect = ({ icon, text, localStorageName}) => {
 };
 
 const DiaryItemDirectSowing = ({ action }) => {
+  const vegetableAsset = vegetableIconsMaps.find(
+    (asset) => asset.name.fr === action.vegetable.name.toLowerCase()
+  );
   return (
     <>
       <div className="flex gap-2 lg:gap-5">
         <img className="w-12 h-12" src={directSowingIcon} alt="" />
-        <img className="w-12 h-12" src={carrotIcon} alt="" />
+        <img className="w-12 h-12" src={vegetableAsset?.assets} alt="" />
       </div>
-      <div className="cursor-pointer">4 rangées de Carotte - Nantaise </div>
+      <div className="cursor-pointer">
+        {action.vegetable.name} ({action.vegetable.variety}) :{" "}
+        {action.vegetable.quantity} {action.vegetable.quantity_unit}
+      </div>
       <p className="text-justify">
         <span className="font-semibold">Notes : </span>
         {action.note}
@@ -188,7 +198,10 @@ const DiaryItemMulching = ({ action }) => {
         <img className="w-12 h-12" src={directSowingIcon} alt="" />
         <img className="w-12 h-12" src={carrotIcon} alt="" />
       </div>
-      <div className="cursor-pointer">4 rangées de Carotte - Nantaise </div>
+      <div className="cursor-pointer">
+        {action.vegetable.quantity} {action.vegetable.quantity_unit} de{" "}
+        {action.vegetable.quantity_unit}- Nantaise{" "}
+      </div>
       <p className="text-justify">
         <span className="font-semibold">Notes : </span>
         {action.note}
@@ -238,30 +251,32 @@ interface DiaryItemGeneralProps {
 
 const DiaryItemGeneral: React.FC<DiaryItemGeneralProps> = ({ action }) => {
   const actionComponentMap = {
-    SOWING: [<DiaryItemDirectSowing action={action} />, "Semis"],
-    PLANTING: [<DiaryItemPlanting action={action} />, "Plantation"],
-    WATERING: [<DiaryItemWatering action={action} />, "Arrosage"],
-    FERTELIZING: [<DiaryItemFertilizing action={action} />, "Fertilisation"],
-    TREATING: [<DiaryItemTreating action={action} />, "Traîter"],
-    HARVESTING: [<DiaryItemHarvesting action={action} />, "Récolte"],
-    WEEDING: [<DiaryItemWeeding action={action} />, "Désherbage"],
-    MULCHING: [<DiaryItemMulching action={action} />, "Paillage"],
-    REMOVING: [<DiaryItemRemoving action={action} />, "Fin de culture"],
-    CREATING: [<DiaryItemCreating action={action} />, "Création"],
+    Semer: [<DiaryItemDirectSowing action={action} />, "Semis"],
+    Planter: [<DiaryItemPlanting action={action} />, "Plantation"],
+    Arroser: [<DiaryItemWatering action={action} />, "Arrosage"],
+    Fertiliser: [<DiaryItemFertilizing action={action} />, "Fertilisation"],
+    Traîter: [<DiaryItemTreating action={action} />, "Traîtement"],
+    Récolter: [<DiaryItemHarvesting action={action} />, "Récolte"],
+    Désherber: [<DiaryItemWeeding action={action} />, "Désherbage"],
+    Pailler: [<DiaryItemMulching action={action} />, "Paillage"],
+    "Fin de culture": [<DiaryItemRemoving action={action} />, "Fin de culture"],
+    Création: [<DiaryItemCreating action={action} />, "Création"],
   };
 
   return (
     <Card className="bg-lime-50 w-full">
       <CardHeader>
         <div className="flex justify-between">
-          <span className="text-sm">{action.date}</span>
+          <span className="text-sm">
+            {new Date(action.created_at).toLocaleDateString("fr-FR")}
+          </span>
           <span className="text-sm font-semibold">
-            {actionComponentMap[action.name][1]}
+            {actionComponentMap[action.type][1]}
           </span>
         </div>
       </CardHeader>
       <CardContent className="flex flex-col justify-center items-center gap-4">
-        {actionComponentMap[action.name][0]}
+        {actionComponentMap[action.type][0]}
       </CardContent>
     </Card>
   );
@@ -272,31 +287,34 @@ interface DiarayProps {
 }
 const Diary: React.FC<DiarayProps> = ({ area }) => {
   // const actions = actionsData;
-  const [allSelect, SetAllSelect] = useState(true)
-  const [actions, setActions] = useState([])
+  const [allSelect, SetAllSelect] = useState(true);
+  const [actions, setActions] = useState([]);
 
   useEffect(() => {
     const getActions = async () => {
       try {
         const response = await axiosInstance.get("/api/v1/action/");
+        console.log(response.data);
         setActions(response.data);
       } catch (error) {
         console.error(error);
         throw new Error("Can't fetch areas from the server");
       }
-    }
-    getActions()
-}, [])
+    };
+    getActions();
+  }, []);
 
   return (
     <div className="w-full flex flex-col gap-5 p-4 items-center">
       <Popover>
-        <PopoverTrigger>
-          <Button>Filtrer</Button>
-        </PopoverTrigger>
+        <PopoverTrigger>Filter</PopoverTrigger>
         <PopoverContent className="w-80 flex flex-col items-center gap-2">
           <div className="grid grid-cols-3 gap-8">
-            <ActionFilterSelect icon={directSowingIcon} text={"Semis"} localStorageName={"sowingFilterState"} />
+            <ActionFilterSelect
+              icon={directSowingIcon}
+              text={"Semis"}
+              localStorageName={"sowingFilterState"}
+            />
             <ActionFilterSelect icon={plantingIcon} text={"Plantation"} />
             <ActionFilterSelect icon={waterIcon} text={"Arrosage"} />
             <ActionFilterSelect icon={fertilizeIcon} text={"Fertilisation"} />

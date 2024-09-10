@@ -4,13 +4,12 @@ API router for handling Action-related operations.
 
 from app.services.action_service import ActionService
 from fastapi import APIRouter, Depends
-from typing import List
 from uuid import UUID
 
 from app.core.dependencies import get_current_user
 from app.models.user_model import User
 from app.schemas.action_schema import (
-    ActionOut, ActionCreate, ActionUpdate)
+    ActionCreate, ActionUpdate)
 
 # APIRouter instance for Action-related routes
 action_router = APIRouter()

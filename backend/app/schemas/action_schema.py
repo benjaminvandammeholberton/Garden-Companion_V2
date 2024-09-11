@@ -29,17 +29,18 @@ class SowingActionCreate(BaseModel):
     name: str
     quantity: int
     quantity_unit: str
+    variety: str
     note: str | None = None
     sowing_date: date
+    file_path: str | None = None
 
 
 class ActionCreate(BaseModel):
-    action_id: UUID
     type: ActionType
     note: str | None = None
     vegetable: UUID | None = None
     area: UUID | None = None
-    # photo: str | None = None
+    photo: str | None = None
 
 
 class ActionOut(BaseModel):

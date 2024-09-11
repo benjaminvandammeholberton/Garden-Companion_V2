@@ -98,64 +98,60 @@ const DirectSowingForm: React.FC<DirectSowingFormInterface> = ({ onClose }) => {
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     // Extract file from values and prepare the data
-    const { file, ...rest } = values; // Destructure file from other form values
+    const { file, ...rest } = values;
 
-    // Format the data to match the required format
-    const data = JSON.stringify({
+    const data = {
       ...rest,
       sowing_date: rest.sowing_date.toISOString().slice(0, 10),
       type: "Semer",
-    });
+    };
 
-    // Create a new FormData object
-    const formData = new FormData();
-    formData.append("data", data);
-    // Append the file if it exists
     if (file && file.length > 0) {
-      formData.append("file", file[0]); // Append the first file from FileList
+      const formData = new FormData();
+      formData.append("file", file[0]);
+      try {
+        const response = await axiosInstanceFile.post(
+          "/upload",
+          formData
+        );
+        data['file_path'] = response.data
+      } catch (error) {
+        console.error("Error submitting the file:", error);
+      }
     }
 
     try {
-      // Send the form data with the file using axios
-      const response = await axiosInstanceFile.post(
-        "/api/v1/action/sowing",
-        formData
+      let selected_area: AreaInterface | undefined;
+      const response = await axiosInstance.post(
+        "/api/v1/action/",
+        data
       );
-
-      // Handle the successful response
-      console.log("Form submitted successfully:", response.data);
+      const newVegetable = response.data
+      if (newVegetable) {
+        const newAreas = areas.map((area) => {
+          if (area.area_id === newVegetable?.area) {
+            selected_area = area;
+            return {
+              ...area,
+              vegetables: [...area.vegetables, newVegetable],
+            };
+          }
+          return area;
+        });
+        setAreas(newAreas);
+        toast({
+          title: "Nouveau semis 👍",
+          description:
+            `${newVegetable?.name} - ` +
+            `${newVegetable?.variety} ` +
+            `(${newVegetable?.quantity} ${newVegetable?.quantity_unit}) ` +
+            `dans votre espace: ${selected_area?.name ?? ""}`,
+        });
+      }
+      onClose();
     } catch (error) {
-      // Handle errors
-      console.error("Error submitting the form:", error);
+      console.error(error);
     }
-    // try {
-    //   let selected_area: AreaInterface | undefined;
-    //   const newVegetable = await createVegetable(data);
-    //   if (newVegetable) {
-    //     const newAreas = areas.map((area) => {
-    //       if (area.area_id === newVegetable?.area) {
-    //         selected_area = area;
-    //         return {
-    //           ...area,
-    //           vegetables: [...area.vegetables, newVegetable],
-    //         };
-    //       }
-    //       return area;
-    //     });
-    //     setAreas(newAreas);
-    //     toast({
-    //       title: "Nouveau semis 👍",
-    //       description:
-    //         `${newVegetable?.name} - ` +
-    //         `${newVegetable?.variety} ` +
-    //         `${newVegetable?.quantity} ` +
-    //         `dans votre espace: ${selected_area?.name ?? ""}`,
-    //     });
-    //   }
-    //   onClose();
-    // } catch (error) {
-    //   console.error(error);
-    // }
   };
 
   return (
@@ -291,7 +287,7 @@ const DirectSowingForm: React.FC<DirectSowingFormInterface> = ({ onClose }) => {
                 <FormItem className="flex flex-col items-center">
                   <FormLabel>Photo</FormLabel>
                   <FormControl>
-                    <Input type="file" {...fileRef} />
+                    <Input type="file" {...fileRef} className="cursor-pointer" />
                   </FormControl>
                   <FormMessage />
                 </FormItem>

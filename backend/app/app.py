@@ -1,11 +1,13 @@
 """
 This is the entry point for the Garden Companion backend application.
 """
+import os
 from pathlib import Path
+from uuid import uuid4
 from beanie import init_beanie
 from contextlib import asynccontextmanager
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi import FastAPI
+from fastapi import FastAPI, UploadFile, HTTPException
 from motor.motor_asyncio import AsyncIOMotorClient
 
 from app.api.api_v1.router import router
@@ -72,3 +74,25 @@ def test_server():
     This function is a test endpoint for checking if the server is running.
     """
     return {'message': 'server is running'}
+
+
+@app.post('/upload', summary="Upload file", tags=["upload"])
+async def upload_file( file: UploadFile | None = None):
+    if file:
+        try:
+            extension = file.filename.split('.')[1]
+            file_path = os.path.join(UPLOAD_FOLDER, f"{uuid4()}.{extension}")
+            with open(file_path, "wb") as f:
+                f.write(await file.read())
+                return file_path
+
+        except Exception:
+            raise HTTPException(
+            status_code=500,
+            detail="Error when uploading the file"
+        )
+    else: 
+        raise HTTPException(
+            status_code=404,
+            detail="No file provided"
+        )

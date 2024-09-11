@@ -6,6 +6,7 @@ from datetime import date
 import json
 from pydantic import BaseModel
 from app.services.action_service import ActionService
+from app.schemas.vegetable_manager_schema import VegetableManagerOut
 from fastapi import APIRouter, Depends, File, Form, UploadFile
 from uuid import UUID
 
@@ -33,20 +34,16 @@ async def list(current_user: User = Depends(get_current_user)):
 
 
 @action_router.post(
-    '/sowing', summary="Create sowing action")
-async def create_sowing_action(
-    data: str = Form(...),
+    '/', summary="Create sowing action", response_model=VegetableManagerOut)
+async def create_action(
+    data: SowingActionCreate,
     current_user: User = Depends(get_current_user),
-    file: UploadFile | None = None
 ):
     """
     Endpoint to create a new action for the current user.
     This action create a vegetable and a sowing action.
     """
-    data_dict = json.loads(data)
-    data_parsed = SowingActionCreate(**data_dict)
-    print(data_parsed)
-    # return await ActionService.create_action(current_user, data, file)
+    return await ActionService.create_action(current_user, data)
 
 
 @action_router.get(

@@ -61,7 +61,7 @@ class VegetableManagerCreate(BaseModel):
     sowing_date: date | None = None
     planting_date: date | None = None
     note: list[NoteType] | None = None
-    area: str | None = Field(max_length=50, min_length=1)
+    area: UUID
 
 
 class VegetableManagerUpdate(BaseModel):

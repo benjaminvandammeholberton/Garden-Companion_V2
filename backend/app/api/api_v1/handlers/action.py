@@ -2,14 +2,17 @@
 API router for handling Action-related operations.
 """
 
+from datetime import date
+import json
+from pydantic import BaseModel
 from app.services.action_service import ActionService
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, File, Form, UploadFile
 from uuid import UUID
 
 from app.core.dependencies import get_current_user
 from app.models.user_model import User
 from app.schemas.action_schema import (
-    ActionCreate, ActionUpdate)
+    ActionCreate, ActionType, ActionUpdate, SowingActionCreate)
 
 # APIRouter instance for Action-related routes
 action_router = APIRouter()
@@ -30,19 +33,20 @@ async def list(current_user: User = Depends(get_current_user)):
 
 
 @action_router.post(
-    '/create', summary="Create Action")
-async def create_action(
-    data: ActionCreate,
-    current_user: User = Depends(get_current_user)
+    '/sowing', summary="Create sowing action")
+async def create_sowing_action(
+    data: str = Form(...),
+    current_user: User = Depends(get_current_user),
+    file: UploadFile | None = None
 ):
     """
     Endpoint to create a new action for the current user.
-
-    :param data: Data for creating a new action.
-    :param current_user: The authenticated user.
-    :return: Created action.
+    This action create a vegetable and a sowing action.
     """
-    return await ActionService.create_action(current_user, data)
+    data_dict = json.loads(data)
+    data_parsed = SowingActionCreate(**data_dict)
+    print(data_parsed)
+    # return await ActionService.create_action(current_user, data, file)
 
 
 @action_router.get(

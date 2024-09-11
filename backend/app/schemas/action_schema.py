@@ -1,7 +1,7 @@
 """
 """
 
-from datetime import datetime
+from datetime import date, datetime
 from enum import Enum
 from uuid import UUID
 from pydantic import BaseModel
@@ -21,6 +21,16 @@ class ActionType(str, Enum):
     weeding = "Désherber"
     mulching = "Pailler"
     creating = "Création"
+
+
+class SowingActionCreate(BaseModel):
+    type: ActionType
+    area: UUID
+    name: str
+    quantity: int
+    quantity_unit: str
+    note: str | None = None
+    sowing_date: date
 
 
 class ActionCreate(BaseModel):

@@ -41,6 +41,8 @@ import { cn } from "@/lib/utils";
 import { Calendar } from "@/components/ui/calendar";
 import { AreaInterface } from "@/interfaces/interfaces";
 import { Textarea } from "@/components/ui/textarea";
+import axiosInstance, { axiosInstanceFile } from "@/api/axios";
+import axios from "axios";
 
 interface DirectSowingFormInterface {
   onClose: () => void;
@@ -95,38 +97,65 @@ const DirectSowingForm: React.FC<DirectSowingFormInterface> = ({ onClose }) => {
   const fileRef = form.register("file");
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
-    const data = {
-      ...values,
-      sowing_date: values.sowing_date.toISOString().slice(0, 10),
-    };
-    try {
-      let selected_area: AreaInterface | undefined;
-      const newVegetable = await createVegetable(data);
-      if (newVegetable) {
-        const newAreas = areas.map((area) => {
-          if (area.area_id === newVegetable?.area) {
-            selected_area = area;
-            return {
-              ...area,
-              vegetables: [...area.vegetables, newVegetable],
-            };
-          }
-          return area;
-        });
-        setAreas(newAreas);
-        toast({
-          title: "Nouveau semis 👍",
-          description:
-            `${newVegetable?.name} - ` +
-            `${newVegetable?.variety} ` +
-            `${newVegetable?.quantity} ` +
-            `dans votre espace: ${selected_area?.name ?? ""}`,
-        });
-      }
-      onClose();
-    } catch (error) {
-      console.error(error);
+    // Extract file from values and prepare the data
+    const { file, ...rest } = values; // Destructure file from other form values
+
+    // Format the data to match the required format
+    const data = JSON.stringify({
+      ...rest,
+      sowing_date: rest.sowing_date.toISOString().slice(0, 10),
+      type: "Semer",
+    });
+
+    // Create a new FormData object
+    const formData = new FormData();
+    formData.append("data", data);
+    // Append the file if it exists
+    if (file && file.length > 0) {
+      formData.append("file", file[0]); // Append the first file from FileList
     }
+
+    try {
+      // Send the form data with the file using axios
+      const response = await axiosInstanceFile.post(
+        "/api/v1/action/sowing",
+        formData
+      );
+
+      // Handle the successful response
+      console.log("Form submitted successfully:", response.data);
+    } catch (error) {
+      // Handle errors
+      console.error("Error submitting the form:", error);
+    }
+    // try {
+    //   let selected_area: AreaInterface | undefined;
+    //   const newVegetable = await createVegetable(data);
+    //   if (newVegetable) {
+    //     const newAreas = areas.map((area) => {
+    //       if (area.area_id === newVegetable?.area) {
+    //         selected_area = area;
+    //         return {
+    //           ...area,
+    //           vegetables: [...area.vegetables, newVegetable],
+    //         };
+    //       }
+    //       return area;
+    //     });
+    //     setAreas(newAreas);
+    //     toast({
+    //       title: "Nouveau semis 👍",
+    //       description:
+    //         `${newVegetable?.name} - ` +
+    //         `${newVegetable?.variety} ` +
+    //         `${newVegetable?.quantity} ` +
+    //         `dans votre espace: ${selected_area?.name ?? ""}`,
+    //     });
+    //   }
+    //   onClose();
+    // } catch (error) {
+    //   console.error(error);
+    // }
   };
 
   return (

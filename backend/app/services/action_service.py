@@ -2,14 +2,29 @@
 ActionService module for handling CRUD operations on Action objects.
 """
 
+import os
 from uuid import UUID
+
+from fastapi import File, UploadFile
 
 from app.models.action_model import Action
 from app.models.user_model import User
 from app.schemas.action_schema import (
-    ActionCreate, ActionUpdate
+    ActionCreate, ActionUpdate, SowingActionCreate
 )
 from app.services.vegetable_manager_service import VegetableManagerService
+
+
+UPLOAD_DIR = "uploads"
+os.makedirs(UPLOAD_DIR, exist_ok=True)
+
+
+async def save_file(file: UploadFile) -> str:
+    file_path = os.path.join(UPLOAD_DIR, file.filename)
+    with open(file_path, "wb") as f:
+        f.write(await file.read())
+        print(f"File saved to {file_path}")
+        return file_path
 
 
 class ActionService:
@@ -27,11 +42,9 @@ class ActionService:
         return actions
 
     @staticmethod
-    async def create_action(user: User, data: ActionCreate) -> Action:
-        """
-        Create a new action for the current user
-        """
-        action = Action(**data.model_dump(), owner=user.user_id, photo="test")
+    async def create_sowing_action(user: User, data: SowingActionCreate, file: UploadFile = File(None)):
+
+        action = Action(**data.model_dump(), owner=user.user_id, photo=file)
         return await action.create()
 
     @staticmethod

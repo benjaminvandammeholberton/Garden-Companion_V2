@@ -125,7 +125,7 @@ const AreaModal: React.FC<AreaModalProps> = ({ isOpen, onClose, area }) => {
                     alt=""
                   />
                 </PopoverTrigger>
-                <PopoverContent>
+                <PopoverContent asChild>
                   <div className="flex justify-center gap-5">
                     <Button>Modifier</Button>
                     <Button

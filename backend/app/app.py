@@ -8,6 +8,7 @@ from beanie import init_beanie
 from contextlib import asynccontextmanager
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi import FastAPI, UploadFile, HTTPException
+from fastapi.staticfiles import StaticFiles
 from motor.motor_asyncio import AsyncIOMotorClient
 
 from app.api.api_v1.router import router
@@ -59,6 +60,8 @@ app = FastAPI(
 UPLOAD_FOLDER = Path("./uploads")
 UPLOAD_FOLDER.mkdir(parents=True, exist_ok=True)
 
+app.mount("/uploads", StaticFiles(directory=UPLOAD_FOLDER), name="uploads")
+
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -77,7 +80,7 @@ def test_server():
 
 
 @app.post('/upload', summary="Upload file", tags=["upload"])
-async def upload_file( file: UploadFile | None = None):
+async def upload_file(file: UploadFile | None = None):
     if file:
         try:
             extension = file.filename.split('.')[1]
@@ -88,10 +91,10 @@ async def upload_file( file: UploadFile | None = None):
 
         except Exception:
             raise HTTPException(
-            status_code=500,
-            detail="Error when uploading the file"
-        )
-    else: 
+                status_code=500,
+                detail="Error when uploading the file"
+            )
+    else:
         raise HTTPException(
             status_code=404,
             detail="No file provided"

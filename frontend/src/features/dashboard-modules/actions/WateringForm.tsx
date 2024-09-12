@@ -102,13 +102,13 @@ const WateringForm: React.FC<WateringFormInterface> = ({ onClose }) => {
     try {
       let selected_area: AreaInterface | undefined;
       const newVegetable = await createVegetable(data);
-      if (newVegetable){
+      if (newVegetable) {
         const newAreas = areas.map((area) => {
           if (area.area_id === newVegetable?.area) {
             selected_area = area;
             return {
               ...area,
-              vegetables: [...(area.vegetables), newVegetable],
+              vegetables: [...area.vegetables, newVegetable],
             };
           }
           return area;
@@ -116,11 +116,11 @@ const WateringForm: React.FC<WateringFormInterface> = ({ onClose }) => {
         setAreas(newAreas);
         toast({
           title: "Arrosage enregistré 👍",
-          description: (
-          `${newVegetable?.name} - `+
-          `${newVegetable?.variety} `+
-          `${newVegetable?.quantity} `+
-          `dans votre espace: ${selected_area?.name ?? ""}`),
+          description:
+            `${newVegetable?.name} - ` +
+            `${newVegetable?.variety} ` +
+            `${newVegetable?.quantity} ` +
+            `dans votre espace: ${selected_area?.name ?? ""}`,
         });
       }
       onClose();
@@ -222,6 +222,7 @@ const WateringForm: React.FC<WateringFormInterface> = ({ onClose }) => {
                   <PopoverContent
                     className="w-auto p-0 bg-white border"
                     align="center"
+                    asChild
                   >
                     <Calendar
                       mode="single"
@@ -236,7 +237,7 @@ const WateringForm: React.FC<WateringFormInterface> = ({ onClose }) => {
               </FormItem>
             )}
           />
-                    <FormField
+          <FormField
             control={form.control}
             name="note"
             render={({ field }) => (
@@ -254,7 +255,7 @@ const WateringForm: React.FC<WateringFormInterface> = ({ onClose }) => {
               </FormItem>
             )}
           />
-          <FormField 
+          <FormField
             control={form.control}
             name="file"
             render={() => {
@@ -262,12 +263,11 @@ const WateringForm: React.FC<WateringFormInterface> = ({ onClose }) => {
                 <FormItem className="flex flex-col items-center">
                   <FormLabel>Photo</FormLabel>
                   <FormControl>
-                    <Input type="file" {...fileRef} 
-                    />
+                    <Input type="file" {...fileRef} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
-              )
+              );
             }}
           />
           <Button type="submit">Semer</Button>

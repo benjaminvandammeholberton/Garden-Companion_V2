@@ -9,10 +9,10 @@ import SeedlingsList from "./SeedlingsList";
 import { addIcon, sortIcon, backIcon } from "../../../assets/assets-path";
 
 const SeedlingsModule = () => {
-  const [isSortOpen, toggleSort, sortedBy, handleClickSort] =
-    useSort(localStorage.getItem("sort-seedlings") || ("created_at desc"));
+  const [isSortOpen, toggleSort, sortedBy, handleClickSort] = useSort(
+    localStorage.getItem("sort-seedlings") || "created_at desc"
+  );
   const [addOpen, handleClickAdd] = useAdd();
-
 
   const sortChoices = [
     ["date d'ajout (ancien en tête)", "created_at asc"],

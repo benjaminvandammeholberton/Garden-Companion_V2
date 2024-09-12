@@ -70,6 +70,10 @@ const DiaryItemDirectSowing = ({ action }) => {
   const vegetableAsset = vegetableIconsMaps.find(
     (asset) => asset.name.fr === action.vegetable.name.toLowerCase()
   );
+  let file_path;
+  if (action.photo) {
+    file_path = "http://127.0.0.1:8001/" + action.photo;
+  }
   return (
     <>
       <div className="flex gap-2 lg:gap-5">
@@ -84,7 +88,13 @@ const DiaryItemDirectSowing = ({ action }) => {
         <span className="font-semibold">Notes : </span>
         {action.note}
       </p>
-      <img className="w-3/4 rounded-sm" src={placeHolderImage} alt="" />
+      {file_path && (
+        <img
+          className="w-3/4 max-h-72 object-cover rounded-sm"
+          src={file_path}
+          alt=""
+        />
+      )}
     </>
   );
 };
@@ -308,7 +318,10 @@ const Diary: React.FC<DiarayProps> = ({ area }) => {
     <div className="w-full flex flex-col gap-5 p-4 items-center">
       <Popover>
         <PopoverTrigger>Filter</PopoverTrigger>
-        <PopoverContent className="w-80 flex flex-col items-center gap-2">
+        <PopoverContent
+          asChild
+          className="w-80 flex flex-col items-center gap-2"
+        >
           <div className="grid grid-cols-3 gap-8">
             <ActionFilterSelect
               icon={directSowingIcon}
@@ -327,112 +340,9 @@ const Diary: React.FC<DiarayProps> = ({ area }) => {
         </PopoverContent>
       </Popover>
       {actions.map((action) => {
-        return <DiaryItemGeneral action={action} key={action.action_id} />;
+        if (action.area === area.area_id)
+          return <DiaryItemGeneral action={action} key={action.action_id} />;
       })}
-
-      {/* <Card className="bg-lime-50 w-full">
-        <CardHeader>
-          <div className="flex justify-between">
-            <span className="text-sm">Hier</span>
-            <span className="text-sm font-semibold">Semi</span>
-          </div>
-        </CardHeader>
-        <CardContent className="flex flex-col justify-center items-center gap-4">
-          <div className="flex gap-2 lg:gap-5">
-            <img className="w-12 h-12" src={directSowingIcon} alt="" />
-            <img className="w-12 h-12" src={carrotIcon} alt="" />
-          </div>
-          <div className="cursor-pointer">4 rangées de Carotte - Nantaise </div>
-          <div className="text-justify">
-            <span className="font-semibold">Notes : </span>Lorem ipsum dolor sit
-            amet consectetur adipisicing elit. Temporibus harum sit laboriosam
-            ullam dolorem sapiente aut sunt, tempora ducimus, ad aliquid fuga
-            incidunt reprehenderit molestias dolore dolorum maiores impedit
-            eaque.
-          </div>
-          <img className="w-3/4 rounded-sm" src={placeHolderImage} alt="" />
-        </CardContent>
-      </Card>
-
-      <Card className="bg-lime-50 w-full">
-        <CardHeader>
-          <div className="flex justify-between">
-            <span className="text-sm">15/03/22</span>
-            <span className="text-sm font-semibold">Plantation</span>
-          </div>
-        </CardHeader>
-        <CardContent className="flex flex-col justify-center items-center gap-2">
-          <div className="flex gap-2 lg:gap-5">
-            <img className="w-12 h-12" src={plantingIcon} alt="" />
-            <img className="w-12 h-12" src={lettuceIcon} alt="" />
-          </div>
-          <div className="flex flex-col items-center">
-            <span>
-              Plantation :{" "}
-              <span className="cursor-pointer">
-                Laitue Merveille des 4 saisons
-              </span>
-            </span>
-            <span>Quantité: 5 lignes</span>
-          </div>
-          <img className="w-3/4 rounded-3xl" src={placeHolderImage} alt="" />
-        </CardContent>
-      </Card>
-
-      <div className="bg-blue-100 w-full border-2 rounded-3xl flex flex-col gap-4 ">
-        <div className="flex items-center justify-between border-b px-4 py-2">
-          <span className="cursor-pointer">Jardin - Devant</span>
-          <span className="text-sm">15/03/2024</span>
-        </div>
-        <div className="flex flex-col justify-center items-center gap-2">
-          <div className="flex gap-2 lg:gap-5">
-            <img
-              className="w-6 lg:w-12 h-6 lg:h-12"
-              src={plantingIcon}
-              alt=""
-            />
-            <img className="w-6 lg:w-12 h-6 lg:h-12" src={lettuceIcon} alt="" />
-          </div>
-          <div className="flex flex-col items-center">
-            <span>
-              Plantation :{" "}
-              <span className="cursor-pointer">
-                Laitue Merveille des 4 saisons
-              </span>
-            </span>
-            <span>Quantité: 5 lignes</span>
-          </div>
-          <img className="w-3/4 rounded-3xl" src={placeHolderImage} alt="" />
-        </div>
-
-        <div className="flex justify-around border-t">
-          <span>J'aime</span>
-          <span>Commenter</span>
-        </div>
-      </div>
-
-      <div className="bg-blue-100 w-full border-2 rounded-3xl flex flex-col gap-4 ">
-        <div className="flex items-center justify-between border-b px-4 py-2">
-          <span className="cursor-pointer">Jardin - Devant</span>
-          <span className="text-sm">15/03/2024</span>
-        </div>
-        <div className="flex flex-col justify-center items-center gap-2">
-          <div className="flex gap-2 lg:gap-5">
-            <img className="w-6 lg:w-12 h-6 lg:h-12" src={harvestIcon} alt="" />
-            <img className="w-6 lg:w-12 h-6 lg:h-12" src={bokChoiIcon} alt="" />
-          </div>
-          <span>
-            Récolte :{" "}
-            <span className="cursor-pointer">Chou chinois Pak Choï</span>
-          </span>
-          <span>Quantité: 2 pièces</span>
-          <img className="w-3/4 rounded-3xl" src={placeHolderImage2} alt="" />
-        </div>
-        <div className="flex justify-around border-t">
-          <span>J'aime</span>
-          <span>Commenter</span>
-        </div>
-      </div> */}
     </div>
   );
 };

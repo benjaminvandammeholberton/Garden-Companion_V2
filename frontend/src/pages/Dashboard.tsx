@@ -20,50 +20,50 @@ const Dashboard = () => {
 
   return (
     <VegetablesProvider>
-    <AreasProvider>
-      <div>
-        <div className="grid lg:grid-cols-2 xl:grid-cols-3 gap-5 w-full">
-          <Card className="h-[350px] w-[370px] relative overflow-hidden">
-            <ModuleHeader title={"Zones de Culture"} />
-            <CardContent>
-              <AreasModule
-                {...{ areas, isLoadingAreas, errorGetAreas, setAreas }}
-              />
-            </CardContent>
-          </Card>
-          <Card className="h-[350px] w-[370px] relative overflow-hidden">
-            <ModuleHeader title={"Nouvelle action"} />
-            <CardContent>
-              <ActionsModule />
-            </CardContent>
-          </Card>
-          <Card className="h-[350px] w-[370px] relative overflow-hidden">
-            <ModuleHeader title={"Semis en pot"} />
-            <CardContent className="">
-              <SeedlingsModule />
-            </CardContent>
-          </Card>
-          <Card className="h-[350px] w-[370px] relative overflow-hidden">
-            <ModuleHeader title={"Liste de tâches"} />
-            <CardContent>
-              <ToDoListModule />
-            </CardContent>
-          </Card>
-          <Card className="h-[350px] w-[370px] relative overflow-hidden">
-            <ModuleHeader title={"Prévisions météo"} />
-            <CardContent>
-              <Forecast />
-            </CardContent>
-          </Card>
-          <Card className="h-[350px] w-[370px] relative overflow-hidden">
-            <ModuleHeader title={"Prêt à semer !"} />
-            <CardContent>
-              <Recommandations />
-            </CardContent>
-          </Card>
+      <AreasProvider>
+        <div>
+          <div className="grid lg:grid-cols-2 xl:grid-cols-3 gap-5 w-full">
+            <Card className="h-[350px] w-[370px] relative overflow-hidden">
+              <ModuleHeader title={"Zones de Culture"} />
+              <CardContent>
+                <AreasModule
+                  {...{ areas, isLoadingAreas, errorGetAreas, setAreas }}
+                />
+              </CardContent>
+            </Card>
+            <Card className="h-[350px] w-[370px] relative overflow-hidden">
+              <ModuleHeader title={"Nouvelle action"} />
+              <CardContent>
+                <ActionsModule />
+              </CardContent>
+            </Card>
+            <Card className="h-[350px] w-[370px] relative overflow-hidden">
+              <ModuleHeader title={"Semis en pot"} />
+              <CardContent className="">
+                <SeedlingsModule />
+              </CardContent>
+            </Card>
+            <Card className="h-[350px] w-[370px] relative overflow-hidden">
+              <ModuleHeader title={"Liste de tâches"} />
+              <CardContent>
+                <ToDoListModule />
+              </CardContent>
+            </Card>
+            <Card className="h-[350px] w-[370px] relative overflow-hidden">
+              <ModuleHeader title={"Prévisions météo"} />
+              <CardContent>
+                <Forecast />
+              </CardContent>
+            </Card>
+            <Card className="h-[350px] w-[370px] relative overflow-hidden">
+              <ModuleHeader title={"Prêt à semer !"} />
+              <CardContent>
+                <Recommandations />
+              </CardContent>
+            </Card>
+          </div>
         </div>
-      </div>
-    </AreasProvider>
+      </AreasProvider>
     </VegetablesProvider>
   );
 };

@@ -53,7 +53,10 @@ const SeedlingsList: React.FC<SeedlingsListProps> = ({ sortedBy }) => {
     setIsModalOpen(true);
   };
 
-  const handleChangeQuantity = async (seedling: SeedlingInterface, e:React.ChangeEvent<HTMLInputElement>) => {
+  const handleChangeQuantity = async (
+    seedling: SeedlingInterface,
+    e: React.ChangeEvent<HTMLInputElement>
+  ) => {
     const newQuantity = parseInt(e.target.value);
     setSeedlingInputQuantity(newQuantity);
     if (newQuantity > 0) {
@@ -144,55 +147,40 @@ const SeedlingsList: React.FC<SeedlingsListProps> = ({ sortedBy }) => {
                   src={vegetableIcon(vegetable.name)}
                   alt=""
                 />
-                <TooltipProvider delayDuration={100}>
-                  <Tooltip>
-                    <TooltipTrigger className="overflow-hidden text-left">
-                      <Popover>
-                        <PopoverTrigger
-                          onClick={() =>
-                            setSeedlingInputQuantity(vegetable.quantity)
-                          }
-                        >
-                          {capitalize(vegetable.name)} -
-                          {capitalize(vegetable.variety)} ({vegetable.quantity})
-                        </PopoverTrigger>
-                        <PopoverContent className="bg-white border rounded-lg p-5 w-96">
-                          <div className="flex justify-between items-end">
-                            <Button
-                              onClick={() => openPlantingModal(vegetable)}
-                            >
-                              Planter
-                            </Button>
-                            <Button
-                              onClick={() => handleDelete(vegetable)}
-                              variant={"destructive"}
-                            >
-                              Supprimer
-                            </Button>
-                            <div>
-                              <label className="text-xs">Quantity</label>
-                              <Input
-                                min={1}
-                                type="number"
-                                className="w-20"
-                                value={seedlingInputQuantity}
-                                onChange={(e) => {
-                                  handleChangeQuantity(vegetable, e);
-                                }}
-                              />
-                            </div>
-                          </div>
-                        </PopoverContent>
-                      </Popover>
-                    </TooltipTrigger>
-                    <TooltipContent>
-                      <p className="overflow-hidden">
-                        {capitalize(vegetable.name)} -{" "}
-                        {capitalize(vegetable.variety)} ({vegetable.quantity})
-                      </p>
-                    </TooltipContent>
-                  </Tooltip>
-                </TooltipProvider>
+
+                <Popover>
+                  <PopoverTrigger
+                    onClick={() => setSeedlingInputQuantity(vegetable.quantity)}
+                  >
+                    {capitalize(vegetable.name)} -
+                    {capitalize(vegetable.variety)} ({vegetable.quantity})
+                  </PopoverTrigger>
+                  <PopoverContent className="bg-white border rounded-lg p-5 w-96">
+                    <div className="flex justify-between items-end">
+                      <Button onClick={() => openPlantingModal(vegetable)}>
+                        Planter
+                      </Button>
+                      <Button
+                        onClick={() => handleDelete(vegetable)}
+                        variant={"destructive"}
+                      >
+                        Supprimer
+                      </Button>
+                      <div>
+                        <label className="text-xs">Quantity</label>
+                        <Input
+                          min={1}
+                          type="number"
+                          className="w-20"
+                          value={seedlingInputQuantity}
+                          onChange={(e) => {
+                            handleChangeQuantity(vegetable, e);
+                          }}
+                        />
+                      </div>
+                    </div>
+                  </PopoverContent>
+                </Popover>
               </div>
               <TooltipProvider delayDuration={100}>
                 <Tooltip>

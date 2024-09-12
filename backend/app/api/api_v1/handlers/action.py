@@ -2,18 +2,15 @@
 API router for handling Action-related operations.
 """
 
-from datetime import date
-import json
-from pydantic import BaseModel
 from app.services.action_service import ActionService
 from app.schemas.vegetable_manager_schema import VegetableManagerOut
-from fastapi import APIRouter, Depends, File, Form, UploadFile
+from fastapi import APIRouter, Depends
 from uuid import UUID
 
 from app.core.dependencies import get_current_user
 from app.models.user_model import User
 from app.schemas.action_schema import (
-    ActionCreate, ActionType, ActionUpdate, SowingActionCreate)
+    ActionUpdate, SowingActionCreate)
 
 # APIRouter instance for Action-related routes
 action_router = APIRouter()

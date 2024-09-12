@@ -76,7 +76,7 @@ const DirectSowingForm: React.FC<DirectSowingFormInterface> = ({ onClose }) => {
       .positive(),
     quantity_unit: z.string().min(2).max(50),
     area: z.string(),
-    sowing_date: z.date({}),
+    sowing_date: z.date(),
     note: z.string().max(500).optional(),
     file: z.instanceof(FileList).optional(),
   });
@@ -97,7 +97,6 @@ const DirectSowingForm: React.FC<DirectSowingFormInterface> = ({ onClose }) => {
   const fileRef = form.register("file");
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
-    // Extract file from values and prepare the data
     const { file, ...rest } = values;
 
     const data = {
@@ -110,30 +109,23 @@ const DirectSowingForm: React.FC<DirectSowingFormInterface> = ({ onClose }) => {
       const formData = new FormData();
       formData.append("file", file[0]);
       try {
-        const response = await axiosInstanceFile.post(
-          "/upload",
-          formData
-        );
-        data['file_path'] = response.data
+        const response = await axiosInstanceFile.post("/upload", formData);
+        data["file_path"] = response.data;
       } catch (error) {
         console.error("Error submitting the file:", error);
       }
     }
-
     try {
       let selected_area: AreaInterface | undefined;
-      const response = await axiosInstance.post(
-        "/api/v1/action/",
-        data
-      );
-      const newVegetable = response.data
+      const response = await axiosInstance.post("/api/v1/action/", data);
+      const newVegetable = response.data;
       if (newVegetable) {
         const newAreas = areas.map((area) => {
           if (area.area_id === newVegetable?.area) {
             selected_area = area;
             return {
               ...area,
-              vegetables: [...area.vegetables, newVegetable],
+              vegetables: [...(area.vegetables || []), newVegetable],
             };
           }
           return area;
@@ -234,7 +226,7 @@ const DirectSowingForm: React.FC<DirectSowingFormInterface> = ({ onClose }) => {
                       <Button
                         variant={"outline"}
                         className={cn(
-                          "w-full pl-3 text-left font-normal",
+                          "w-full pl-3 text-left font-normal border-slate-700",
                           !field.value && "text-muted-foreground"
                         )}
                       >
@@ -287,7 +279,11 @@ const DirectSowingForm: React.FC<DirectSowingFormInterface> = ({ onClose }) => {
                 <FormItem className="flex flex-col items-center">
                   <FormLabel>Photo</FormLabel>
                   <FormControl>
-                    <Input type="file" {...fileRef} className="cursor-pointer" />
+                    <Input
+                      type="file"
+                      {...fileRef}
+                      className="cursor-pointer"
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>

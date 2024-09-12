@@ -47,7 +47,7 @@ class ActionOut(BaseModel):
     action_id: UUID
     type: ActionType
     note: str | None = None
-    vegetable: list[VegetableManagerOut] | None = None
+    vegetable: VegetableManagerOut | None = None
     area: AreaOut | None = None
     created_at: datetime
     updated_at: datetime

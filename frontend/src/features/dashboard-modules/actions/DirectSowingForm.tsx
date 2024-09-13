@@ -42,7 +42,6 @@ import { Calendar } from "@/components/ui/calendar";
 import { AreaInterface } from "@/interfaces/interfaces";
 import { Textarea } from "@/components/ui/textarea";
 import axiosInstance, { axiosInstanceFile } from "@/api/axios";
-import axios from "axios";
 
 interface DirectSowingFormInterface {
   onClose: () => void;

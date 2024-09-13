@@ -19,6 +19,8 @@ import {
 
 // api
 import { deleteToDoApi, updateToDoApi } from "../utils/todosApi";
+import { CircleAlert, Trash2 } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 interface ToDoListListProps {
   sortedBy: string;
@@ -114,7 +116,7 @@ const ToDoListList: React.FC<ToDoListListProps> = ({
           return (
             <li
               key={todo.todo_id}
-              className="flex gap-2 w-full justify-between items-center "
+              className="flex gap-2 w-full justify-between items-center"
             >
               <div className="cursor-pointer flex gap-3 items-center">
                 <div className="flex items-center gap-2">
@@ -127,7 +129,8 @@ const ToDoListList: React.FC<ToDoListListProps> = ({
                   />
                 </div>
                 {todo.priority && (
-                  <img className="w-5 h-5" src={priorityIcon} alt="" />
+                  <CircleAlert color="red" />
+                  // <img className="w-5 h-5" src={priorityIcon} alt="" />
                 )}
                 <p
                   onClick={() => handleClickEdit(todo.todo_id)}
@@ -136,13 +139,14 @@ const ToDoListList: React.FC<ToDoListListProps> = ({
                   {todo.title}
                 </p>
               </div>
-              <img
-                className="w-5 h-5 cursor-pointer"
-                src={deleteIcon}
-                alt=""
+              <Button
+                variant={"ghost"}
+                size={"sm"}
                 onClick={deleteTodo}
                 data-todo-id={todo.todo_id}
-              />
+              >
+                <Trash2 size={"20"} />
+              </Button>
             </li>
           );
         })}

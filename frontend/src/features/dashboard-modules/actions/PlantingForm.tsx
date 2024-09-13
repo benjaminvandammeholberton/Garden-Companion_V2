@@ -41,6 +41,7 @@ import { cn } from "@/lib/utils";
 import { Calendar } from "@/components/ui/calendar";
 import { AreaInterface } from "@/interfaces/interfaces";
 import { Textarea } from "@/components/ui/textarea";
+import axiosInstance, { axiosInstanceFile } from "@/api/axios";
 
 interface PlantingFormInterface {
   onClose: () => void;
@@ -98,29 +99,47 @@ const PlantingForm: React.FC<PlantingFormInterface> = ({
   const fileRef = form.register("file");
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
+    const { file, ...rest } = values;
+
     const data = {
-      ...values,
+      ...rest,
       planting_date: values.planting_date.toISOString().slice(0, 10),
+      type: "Planter",
     };
+
+    if (file && file.length > 0) {
+      const formData = new FormData();
+      formData.append("file", file[0]);
+      try {
+        const response = await axiosInstanceFile.post("/upload", formData);
+        data["file_path"] = response.data;
+      } catch (error) {
+        console.error("Error submitting the file:", error);
+      }
+    }
+    console.log(data)
     try {
-      let selected_area: AreaInterface | undefined = undefined;
-      const newVegetable = await createVegetable(data);
-      const newAreas = areas.map((area) => {
-        if (area.area_id === newVegetable?.area) {
-          selected_area = area;
-          return {
-            ...area,
-            vegetables: [...(area.vegetables ?? []), newVegetable],
-          };
-        }
-        return area;
-      });
-      setAreas(newAreas);
-      toast({
-        title: "Nouvelle plantation 👍",
-        description: `${newVegetable?.name} - ${newVegetable?.variety} (${newVegetable?.quantity}) dans votre espace: ${selected_area?.name}`,
-      });
-      onClose();
+      let selected_area: AreaInterface | undefined;
+      const response = await axiosInstance.post("/api/v1/action/", data);
+      const newVegetable = response.data;
+      if (newVegetable) {
+        const newAreas = areas.map((area) => {
+          if (area.area_id === newVegetable?.area) {
+            selected_area = area;
+            return {
+              ...area,
+              vegetables: [...(area.vegetables || []), newVegetable],
+            };
+          }
+          return area;
+        });
+        setAreas(newAreas);
+        toast({
+          title: "Nouvelle plantation 👍",
+          description: `${newVegetable?.name} - ${newVegetable?.variety} (${newVegetable?.quantity}) dans votre espace: ${selected_area?.name}`,
+        });
+        onClose();
+      }
     } catch (error) {
       console.error(error);
     }

@@ -18,9 +18,9 @@ import filterIcon from "../../../assets/vegetables-icons/filter.png";
 const Recommandations = () => {
   return (
     <div>
-      <div className="absolute top-4 left-4 cursor-pointer">
+      {/* <div className="absolute top-4 left-4 cursor-pointer">
         <img className="w-6 h-6" src={filterIcon} alt="" />
-      </div>
+      </div> */}
       <div className="grid grid-cols-4 gap-6 mt-2 h-[270px] mr-1 px-3 pb-1 overflow-scroll ">
         <div className="flex flex-col items-center">
           <img className="w-10" src={cauliflowerIcon} alt="" />

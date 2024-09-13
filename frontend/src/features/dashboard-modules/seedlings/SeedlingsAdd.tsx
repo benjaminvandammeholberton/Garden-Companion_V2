@@ -101,7 +101,6 @@ const SeedlingsAdd: React.FC<SeedlingsAddProps> = ({
               <FormControl>
                 <Input type="number" {...field} className="h-8" />
               </FormControl>
-              <FormMessage />
             </FormItem>
           )}
         />

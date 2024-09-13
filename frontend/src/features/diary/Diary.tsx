@@ -84,10 +84,12 @@ const DiaryItemDirectSowing = ({ action }) => {
         {action.vegetable.name} ({action.vegetable.variety}) :{" "}
         {action.vegetable.quantity} {action.vegetable.quantity_unit}
       </div>
-      <p className="text-justify">
-        <span className="font-semibold">Notes : </span>
-        {action.note}
-      </p>
+      {action.note && (
+        <p className="text-justify">
+          <span className="font-semibold">Notes : </span>
+          {action.note}
+        </p>
+      )}
       {file_path && (
         <img
           className="w-3/4 max-h-72 object-cover rounded-sm"
@@ -100,18 +102,36 @@ const DiaryItemDirectSowing = ({ action }) => {
 };
 
 const DiaryItemPlanting = ({ action }) => {
+  const vegetableAsset = vegetableIconsMaps.find(
+    (asset) => asset.name.fr === action.vegetable.name.toLowerCase()
+  );
+  let file_path;
+  if (action.photo) {
+    file_path = "http://127.0.0.1:8001/" + action.photo;
+  }
   return (
     <>
       <div className="flex gap-2 lg:gap-5">
-        <img className="w-12 h-12" src={directSowingIcon} alt="" />
-        <img className="w-12 h-12" src={carrotIcon} alt="" />
+        <img className="w-12 h-12" src={plantingIcon} alt="" />
+        <img className="w-12 h-12" src={vegetableAsset?.assets} alt="" />
       </div>
-      <div className="cursor-pointer">4 rangées de Carotte - Nantaise </div>
-      <p className="text-justify">
-        <span className="font-semibold">Notes : </span>
-        {action.note}
-      </p>
-      <img className="w-3/4 rounded-sm" src={placeHolderImage} alt="" />
+      <div className="cursor-pointer">
+        {action.vegetable.name} ({action.vegetable.variety}) :{" "}
+        {action.vegetable.quantity} {action.vegetable.quantity_unit}
+      </div>
+      {action.note && (
+        <p className="text-justify">
+          <span className="font-semibold">Notes : </span>
+          {action.note}
+        </p>
+      )}
+      {file_path && (
+        <img
+          className="w-3/4 max-h-72 object-cover rounded-sm"
+          src={file_path}
+          alt=""
+        />
+      )}
     </>
   );
 };

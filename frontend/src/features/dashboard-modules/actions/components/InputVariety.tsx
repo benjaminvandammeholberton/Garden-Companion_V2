@@ -22,7 +22,6 @@ const InputVariety: React.FC<InputVarietyInterface> = ({ setInput, field }) => {
       <FormControl>
         <Input onChange={setVariety} {...field} />
       </FormControl>
-      <FormMessage />
     </FormItem>
   );
 };

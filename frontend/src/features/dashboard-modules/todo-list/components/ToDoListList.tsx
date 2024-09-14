@@ -98,60 +98,58 @@ const ToDoListList: React.FC<ToDoListListProps> = ({
   }
 
   return (
-    <div>
-      <ul
-        className="
+    <ul
+      className="
         flex 
         flex-col 
         gap-2 
         text-xl 
         font-thin 
-        overflow-scroll 
-        h-[290px] 
-        m-2 
-        pr-2
+        overflow-auto
+        scrollbar-thin scrollbar-thumb-slate-600 scrollbar-track-gray-100 dark:scrollbar-thumb-gray-100 dark:scrollbar-track-slate-900
+        h-[280px] 
+        px-2
         "
-      >
-        {toDoSorted.map((todo) => {
-          return (
-            <li
-              key={todo.todo_id}
-              className="flex gap-2 w-full justify-between items-center"
-            >
-              <div className="cursor-pointer flex gap-3 items-center">
-                <div className="flex items-center gap-2">
-                  <input
-                    className="cursor-pointer"
-                    type="checkbox"
-                    checked={todo.status}
-                    onChange={updateStatus}
-                    data-todo-id={todo.todo_id}
-                  />
-                </div>
-                {todo.priority && (
-                  <CircleAlert color="red" />
-                  // <img className="w-5 h-5" src={priorityIcon} alt="" />
-                )}
-                <p
-                  onClick={() => handleClickEdit(todo.todo_id)}
-                  className="text-lg leading-none cursor-pointer"
-                >
-                  {todo.title}
-                </p>
+    >
+      {toDoSorted.map((todo) => {
+        return (
+          <li
+            key={todo.todo_id}
+            className="flex gap-2 w-full justify-between items-center"
+          >
+            <div className="cursor-pointer flex gap-3 items-center">
+              <div className="flex items-center gap-2">
+                <input
+                  className="cursor-pointer"
+                  type="checkbox"
+                  checked={todo.status}
+                  onChange={updateStatus}
+                  data-todo-id={todo.todo_id}
+                />
               </div>
-              <Button
-                variant={"ghost"}
-                size={"sm"}
-                onClick={deleteTodo}
-                data-todo-id={todo.todo_id}
+              {todo.priority && (
+                <CircleAlert color="red" />
+                // <img className="w-5 h-5" src={priorityIcon} alt="" />
+              )}
+              <p
+                onClick={() => handleClickEdit(todo.todo_id)}
+                className="text-lg leading-none cursor-pointer"
               >
-                <Trash2 size={"20"} />
-              </Button>
-            </li>
-          );
-        })}
-      </ul>
-    </div>
+                {todo.title}
+              </p>
+            </div>
+            <Button
+              variant={"ghost"}
+              size={null}
+              onClick={deleteTodo}
+              data-todo-id={todo.todo_id}
+            >
+              <Trash2 size={"20"} />
+            </Button>
+          </li>
+        );
+      })}
+    </ul>
   );
 };
 

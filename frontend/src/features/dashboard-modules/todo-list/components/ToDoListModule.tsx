@@ -43,24 +43,30 @@ const ToDoListModule = () => {
   ];
 
   return (
-    <div className="w-[340px]">
+    <div>
       <div>
-      <Button
-      variant={"ghost"}
-      size={"icon"}
-        onClick={toggleAddEdit}
-        className={`absolute top-3 right-3`}
-      >
-        {addOpen || editOpen ? <Undo2 size={"30"} /> : <CirclePlus size={"30"} strokeWidth={1.5} />}
-      </Button>
-      <Button variant={"ghost"} size={"icon"}
-        className={`absolute top-3 left-3 ${
-          addOpen || editOpen ? "hidden" : "visible"
-        }`}
-        onClick={toggleSort}
-      >
-        <ArrowDownNarrowWide size={"30"} strokeWidth={1.5}/>
-      </Button>
+        <Button
+          variant={"ghost"}
+          size={"icon"}
+          onClick={toggleAddEdit}
+          className={`absolute top-3 right-3`}
+        >
+          {addOpen || editOpen ? (
+            <Undo2 size={"30"} />
+          ) : (
+            <CirclePlus size={"30"} strokeWidth={1.5} />
+          )}
+        </Button>
+        <Button
+          variant={"ghost"}
+          size={"icon"}
+          className={`absolute top-3 left-3 ${
+            addOpen || editOpen ? "hidden" : "visible"
+          }`}
+          onClick={toggleSort}
+        >
+          <ArrowDownNarrowWide size={"30"} strokeWidth={1.5} />
+        </Button>
       </div>
       <div
         className={`ml-3 ${

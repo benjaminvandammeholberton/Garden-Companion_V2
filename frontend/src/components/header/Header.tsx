@@ -58,7 +58,7 @@ const Header = () => {
           <Button variant={"ghost"} size={"icon"}>
             <NotebookPen size={"20"} />
           </Button>
-          <ModeToggle size={"20"} />
+          <ModeToggle />
         </div>
       </div>
       <HeaderModal

@@ -8,7 +8,13 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -34,9 +40,11 @@ const LocationForm = () => {
   };
 
   return (
-
-      <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col items-center gap-5">
+    <Form {...form}>
+      <form
+        onSubmit={form.handleSubmit(onSubmit)}
+        className="flex flex-col items-center gap-5"
+      >
         <FormField
           control={form.control}
           name="country"
@@ -44,8 +52,8 @@ const LocationForm = () => {
             <FormItem className="flex flex-col items-center w-3/5">
               <FormLabel>Pays</FormLabel>
               <Select onValueChange={field.onChange} defaultValue={field.value}>
-              <FormControl>
-              <SelectTrigger className="border-slate-700 h-9">
+                <FormControl>
+                  <SelectTrigger className="border-slate-700 h-9">
                     <SelectValue />
                   </SelectTrigger>
                 </FormControl>
@@ -65,7 +73,12 @@ const LocationForm = () => {
             <FormItem className="flex flex-col items-center w-3/5">
               <FormLabel>Code Postal</FormLabel>
               <FormControl>
-                <Input type="text" {...field} disabled={form.getValues()["country"] === "" } className="h-9" />
+                <Input
+                  type="text"
+                  {...field}
+                  disabled={form.getValues()["country"] === ""}
+                  className="h-9"
+                />
               </FormControl>
             </FormItem>
           )}
@@ -76,22 +89,36 @@ const LocationForm = () => {
           render={({ field }) => (
             <FormItem className="flex flex-col items-center w-3/5">
               <FormLabel>Ville</FormLabel>
-              <Select onValueChange={field.onChange} defaultValue={field.value} disabled={form.getValues()["country"] === "" || form.getValues()["post_code"] === ""}>
-              <FormControl>
-              <SelectTrigger className="border-slate-700 h-9">
+              <Select
+                onValueChange={field.onChange}
+                defaultValue={field.value}
+                disabled={
+                  form.getValues()["country"] === "" ||
+                  form.getValues()["post_code"] === ""
+                }
+              >
+                <FormControl>
+                  <SelectTrigger className="border-slate-700 h-9">
                     <SelectValue />
                   </SelectTrigger>
                 </FormControl>
-                <SelectContent>
-                </SelectContent>
+                <SelectContent></SelectContent>
               </Select>
             </FormItem>
           )}
         />
-        <Button type="submit" disabled={form.getValues()["country"] === "" || form.getValues()["post_code"] === "" || form.getValues()["city"] === ""}>Valider</Button>
-        </form>
-      </Form>
-
+        <Button
+          type="submit"
+          disabled={
+            form.getValues()["country"] === "" ||
+            form.getValues()["post_code"] === "" ||
+            form.getValues()["city"] === ""
+          }
+        >
+          Valider
+        </Button>
+      </form>
+    </Form>
   );
 };
 

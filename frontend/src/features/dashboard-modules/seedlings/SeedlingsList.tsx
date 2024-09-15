@@ -133,7 +133,7 @@ const SeedlingsList: React.FC<SeedlingsListProps> = ({ sortedBy }) => {
   };
 
   return (
-    <div className="h-[280px] overflow-auto scrollbar-thin scrollbar-thumb-slate-600 scrollbar-track-gray-100 dark:scrollbar-thumb-gray-100 dark:scrollbar-track-slate-900">
+    <div className="h-[280px] overflow-auto scrollbar-thin scrollbar-thumb-rounded-full scrollbar-track-rounded-full scrollbar-thumb-slate-400 scrollbar-track-gray-100 dark:scrollbar-thumb-gray-100 dark:scrollbar-track-slate-900">
       <ul className="text-lg font-thin h-5/6 p-2 cursor-default">
         {sortedData.map((vegetable) => {
           return (

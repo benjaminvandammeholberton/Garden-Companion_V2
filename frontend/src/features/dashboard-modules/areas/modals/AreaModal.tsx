@@ -20,6 +20,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
+import { Card } from "@/components/ui/card";
 
 interface AreaModalProps {
   isOpen: boolean;
@@ -87,7 +88,7 @@ const AreaModal: React.FC<AreaModalProps> = ({ isOpen, onClose, area }) => {
   return ReactDOM.createPortal(
     <div className="fixed inset-0 flex justify-center z-50">
       <div className="absolute inset-0 bg-gray-900 opacity-50 "></div>
-      <div
+      <Card
         className="
         area-modal-content 
         px-5 
@@ -101,7 +102,7 @@ const AreaModal: React.FC<AreaModalProps> = ({ isOpen, onClose, area }) => {
         md:rounded-sm 
         flex 
         flex-col
-        w-full md:w-[700px] 
+        w-full md:w-5/6 
         h-full md:h-5/6
         space-y-3
         "
@@ -161,7 +162,7 @@ const AreaModal: React.FC<AreaModalProps> = ({ isOpen, onClose, area }) => {
         <div className="w-full h-full overflow-scroll px-5 mr-10">
           {diaryOpen ? <Diary area={area} /> : <TableProduction />}
         </div>
-      </div>
+      </Card>
     </div>,
     document.getElementById("portal")!
   );

@@ -16,7 +16,7 @@ import garlicIcon from "../../../assets/vegetables-icons/garlic.png";
 
 const Recommandations = () => {
   return (
-    <div className="grid grid-cols-4 gap-6 px-2 h-[280px] overflow-auto scrollbar-thin scrollbar-thumb-slate-600 scrollbar-track-gray-100 dark:scrollbar-thumb-gray-100 dark:scrollbar-track-slate-900">
+    <div className="grid grid-cols-4 gap-6 px-2 h-[280px] overflow-auto scrollbar-thin scrollbar-thumb-rounded-full scrollbar-track-rounded-full scrollbar-thumb-slate-400 scrollbar-track-gray-100 dark:scrollbar-thumb-gray-100 dark:scrollbar-track-slate-900">
       <div className="flex flex-col items-center">
         <img className="w-10" src={cauliflowerIcon} alt="" />
         <span className="text-xs">Chou-fleur</span>

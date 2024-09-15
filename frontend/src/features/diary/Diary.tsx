@@ -294,7 +294,7 @@ const DiaryItemGeneral: React.FC<DiaryItemGeneralProps> = ({ action }) => {
   };
 
   return (
-    <Card className="bg-lime-50 w-full">
+    <Card className="bg-lime-50 w-full lg:w-[800px]">
       <CardHeader>
         <div className="flex justify-between">
           <span className="text-sm">
@@ -324,7 +324,6 @@ const Diary: React.FC<DiarayProps> = ({ area }) => {
     const getActions = async () => {
       try {
         const response = await axiosInstance.get("/api/v1/action/");
-        console.log(response.data);
         setActions(response.data);
       } catch (error) {
         console.error(error);
@@ -337,7 +336,9 @@ const Diary: React.FC<DiarayProps> = ({ area }) => {
   return (
     <div className="w-full flex flex-col gap-5 p-4 items-center">
       <Popover>
-        <PopoverTrigger>Filter</PopoverTrigger>
+        <PopoverTrigger asChild>
+          <Button>Filter</Button>
+        </PopoverTrigger>
         <PopoverContent
           asChild
           className="w-80 flex flex-col items-center gap-2"

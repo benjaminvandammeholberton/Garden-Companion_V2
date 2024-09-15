@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 import dashboardScreenshot from "../assets/landing/screenshots/dashboard.png";
 import forecastScreenshot from "../assets/landing/screenshots/forecast.png";
@@ -22,7 +22,10 @@ import useAuth from "../hooks/useAuth";
 
 const Landing = () => {
   const [, isLoading] = useAuth();
+  const navigate = useNavigate();
   if (isLoading) return <div>Chargement</div>;
+
+  navigate("/auth/login");
 
   return (
     <div className="background text-zinc-900 p-5 md:pt-14 mx-auto">

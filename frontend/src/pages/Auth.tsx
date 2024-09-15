@@ -28,7 +28,7 @@ const Auth = () => {
   };
 
   return (
-    <div className="w-full min-h-screen flex flex-col gap-5 items-center justify-center main-background pb-10">
+    <div className="w-full min-h-screen flex flex-col gap-5 items-center justify-center bg-green-100 dark:bg-slate-600 pb-10">
       <HeaderLogin />
       {isRegister ? (
         <Register toggleAuth={toggleAuth} />

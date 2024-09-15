@@ -18,15 +18,14 @@ const Header = () => {
   };
 
   return (
-    <div className="w-full fixed top-0 z-50 bg-white border-b">
-      <div className=" bg-white opacity-95 flex items-center  w-full border-b px-10 py-2">
+    <div className="w-full fixed top-0 z-50 bg-white dark:bg-slate-800 ">
+      <div className="  opacity-95 flex items-center  w-full border-b px-10 py-2">
         <div className="flex flex-col">
-          <h1 className="text-2xl lg:text-3xl  ">
-          🥕 Garden Companion <span className="text-sm lg:text-xl ">Beta</span>
+          <h1 className="text-2xl lg:text-3xl font-thin ">
+            Garden Companion <span className="text-sm lg:text-xl ">Beta</span>
           </h1>
         </div>
-        <div className="flex gap-5 items-center">
-        </div>
+        <div className="flex gap-5 items-center"></div>
       </div>
       <HeaderModal
         isOpen={isModalOpen}

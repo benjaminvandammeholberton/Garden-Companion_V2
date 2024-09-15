@@ -22,9 +22,16 @@ const useGetForecast = (): useGetForecastReturnType => {
     const fetchForecast = async () => {
       try {
         setIsLoading(true);
-        const data: ForecastDailyInterface[] = await getForecast();
-        localStorage.setItem("forecastData", JSON.stringify(data));
-        setForecastData(data);
+        const latitude = localStorage.getItem("latitude");
+        const longitude = localStorage.getItem("longitude");
+        if (latitude && longitude) {
+          const data: ForecastDailyInterface[] = await getForecast(
+            parseFloat(latitude),
+            parseFloat(longitude)
+          );
+          localStorage.setItem("forecastData", JSON.stringify(data));
+          setForecastData(data);
+        }
       } catch (error) {
         setError(error as string);
         console.error(error);

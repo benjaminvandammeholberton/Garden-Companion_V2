@@ -42,20 +42,25 @@ const AreasModule: React.FC<AreasModuleProps> = ({
         </div>
       )}
       <Button
-      variant={"ghost"} size={"icon"}
+        variant={"ghost"}
+        size={"icon"}
         onClick={handleClickAdd}
         className={`absolute top-3 
         right-3`}
       >
-        {addOpen ? <Undo2 size={"30"} strokeWidth={1.5} />  : <CirclePlus size={"30"} strokeWidth={1.5} />}
+        {addOpen ? (
+          <Undo2 size={"30"} strokeWidth={1.5} />
+        ) : (
+          <CirclePlus size={"30"} strokeWidth={1.5} />
+        )}
       </Button>
-      <Button variant={"ghost"} size={"icon"}
-        className={`absolute top-3 left-3 ${
-          addOpen ? "hidden" : "visible"
-        }`}
+      <Button
+        variant={"ghost"}
+        size={"icon"}
+        className={`absolute top-3 left-3 ${addOpen ? "hidden" : "visible"}`}
         onClick={toggleSort}
       >
-        <ArrowDownNarrowWide size={"30"} strokeWidth={1.5}/>
+        <ArrowDownNarrowWide size={"30"} strokeWidth={1.5} />
       </Button>
       <div className={`ml-3 ${isSortOpen && !addOpen ? "visible" : "hidden"}`}>
         Trier par :

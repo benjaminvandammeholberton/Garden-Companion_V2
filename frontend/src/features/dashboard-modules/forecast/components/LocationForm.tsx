@@ -1,3 +1,4 @@
+import axiosInstance from "@/api/axios";
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -5,7 +6,6 @@ import {
   FormField,
   FormItem,
   FormLabel,
-  FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import {
@@ -16,14 +16,17 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
-const LocationForm = () => {
+const LocationForm = ({ setUserLocation }) => {
+  const [cities, setCities] = useState([]);
+
   const formSchema = z.object({
     country: z.string().min(2).max(50),
     post_code: z.string().min(1).max(10),
-    city: z.string().min(2).max(50),
+    city: z.string().min(2).max(100),
   });
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -35,8 +38,21 @@ const LocationForm = () => {
     },
   });
 
+  const handleChangePostalCode = async (postalCode: string) => {
+    if (postalCode.length === 5) {
+      const response = await axiosInstance.get(
+        `/api/v1/forecast/get_cities/${postalCode}`
+      );
+      setCities(response.data);
+    }
+  };
+
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
-    return;
+    const { latitude, longitude } = JSON.parse(values.city);
+    localStorage.setItem("longitude", longitude);
+    localStorage.setItem("latitude", latitude);
+    localStorage.setItem("location", "true");
+    setUserLocation(true);
   };
 
   return (
@@ -59,8 +75,6 @@ const LocationForm = () => {
                 </FormControl>
                 <SelectContent>
                   <SelectItem value="France">France</SelectItem>
-                  <SelectItem value="Belgique">Belgique</SelectItem>
-                  <SelectItem value="Suisse">Suisse</SelectItem>
                 </SelectContent>
               </Select>
             </FormItem>
@@ -78,6 +92,10 @@ const LocationForm = () => {
                   {...field}
                   disabled={form.getValues()["country"] === ""}
                   className="h-9"
+                  onChange={(e) => {
+                    field.onChange(e);
+                    handleChangePostalCode(e.target.value);
+                  }}
                 />
               </FormControl>
             </FormItem>
@@ -102,7 +120,15 @@ const LocationForm = () => {
                     <SelectValue />
                   </SelectTrigger>
                 </FormControl>
-                <SelectContent></SelectContent>
+                <SelectContent>
+                  {cities.map((city, index) => {
+                    return (
+                      <SelectItem key={index} value={JSON.stringify(city)}>
+                        {city.name}
+                      </SelectItem>
+                    );
+                  })}
+                </SelectContent>
               </Select>
             </FormItem>
           )}

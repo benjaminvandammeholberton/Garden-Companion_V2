@@ -1,6 +1,7 @@
 import { SubmitHandler, useForm } from "react-hook-form";
 import { ToDoInterface } from "../interfaces";
 import { createToDoApi } from "../utils/todosApi";
+import { Input } from "@/components/ui/input";
 
 interface ToDoListFormAddProps {
   setToDo: React.Dispatch<React.SetStateAction<ToDoInterface[]>>;
@@ -46,7 +47,7 @@ const ToDoListFormAdd: React.FC<ToDoListFormAddProps> = ({
         <div className="flex justify-around gap-5">
           <div className="flex flex-col ">
             <label htmlFor="title">Quelle tâche voulez-vous ajouter ?</label>
-            <input
+            <Input
               {...register("title", {
                 required: "Veuillez remplir ce champs.",
                 maxLength: {

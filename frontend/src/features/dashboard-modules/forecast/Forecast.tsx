@@ -1,33 +1,62 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import ForecastDailyItem from "./components/ForecastdailyItem";
 import SkeletonForecast from "./components/SkeletonForecast";
 import useGetForecast from "./useGetForecast";
 import LocationForm from "./components/LocationForm";
+import { Button } from "@/components/ui/button";
+import { ArrowDownNarrowWide, MapPinOff } from "lucide-react";
 
 const Forecast = () => {
-  // const [foreacastData, isLoading, error] = useGetForecast();
-  const [userLocation, setUserLocation] = useState<string | null>("");
+  const [foreacastData, isLoading, error] = useGetForecast();
+  const [userLocation, setUserLocation] = useState<boolean>(false);
 
-  const location = localStorage.getItem("location")
-  if (location) {
-    setUserLocation(location)
-  }
+  useEffect(() => {
+    const location = localStorage.getItem("location");
+    if (location) {
+      setUserLocation(true);
+    }
+  }, []);
+
+  const removeLocation = () => {
+    const itemsToDelete = ["location", "latitude", "longitude"];
+    for (const item of itemsToDelete) {
+      localStorage.removeItem(item);
+    }
+    setUserLocation(false);
+  };
 
   return (
     <div>
       {!userLocation ? (
-        <LocationForm />
+        <LocationForm setUserLocation={setUserLocation} />
       ) : (
         <>
-          {/* {isLoading && <SkeletonForecast />}
+          {isLoading && <SkeletonForecast />}
           {error && <p>error</p>}
+
           {!isLoading && (
-            <ul className="gap-2 flex flex-col text-xl font-thin overflow-y-scroll p-2">
-              {foreacastData.map((dailyForecast, index) => (
-                <ForecastDailyItem key={index} dailyForecast={dailyForecast} />
-              ))}
-            </ul>
-          )} */}
+            <>
+              <Button
+                variant={"ghost"}
+                size={"icon"}
+                className={`absolute top-3 left-3`}
+              >
+                <MapPinOff
+                  size={"30"}
+                  strokeWidth={1.5}
+                  onClick={removeLocation}
+                />
+              </Button>
+              <ul className="gap-2 flex flex-col text-xl font-thin mt-1">
+                {foreacastData.map((dailyForecast, index) => (
+                  <ForecastDailyItem
+                    key={index}
+                    dailyForecast={dailyForecast}
+                  />
+                ))}
+              </ul>
+            </>
+          )}
         </>
       )}
     </div>

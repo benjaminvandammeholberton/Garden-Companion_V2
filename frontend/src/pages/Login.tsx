@@ -110,7 +110,7 @@ const Login: React.FC<LoginProps> = ({ toggleAuth }) => {
                 <FormItem>
                   <FormLabel>Email</FormLabel>
                   <FormControl>
-                    <Input placeholder="jardinierdu53@gmail.fr" {...field} />
+                    <Input {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>

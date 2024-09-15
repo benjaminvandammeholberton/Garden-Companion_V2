@@ -6,6 +6,171 @@ import { useNavigate } from "react-router-dom";
 import NavbarMobile from "../navbar/NavbarMobile";
 import { ModeToggle } from "./ToogleTheme";
 import { Button } from "../ui/button";
+import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
+import { useToast } from "../ui/use-toast";
+import { z } from "zod";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "../ui/form";
+import { Input } from "../ui/input";
+import axiosInstance from "@/api/axios";
+
+const UpdatePassword = () => {
+  const { toast } = useToast();
+  const [isWrongPassword, setIsWrongPassword] = useState(false);
+
+  const formSchema = z
+    .object({
+      password: z
+        .string()
+        .min(8, {
+          message: "Votre mot de passe doit contenir 8 caractères minimum",
+        })
+        .regex(/[0-9]/, {
+          message: "Votre mot de passe doit contenir au moins un chiffre",
+        })
+        .regex(/[!@#$%^&*(),.?":{}|<>]/, {
+          message:
+            "Votre mot de passe doit contenir au moins un caractère spécial",
+        }),
+      newPassword: z
+        .string()
+        .min(8, {
+          message: "Votre mot de passe doit contenir 8 caractères minimum",
+        })
+        .regex(/[0-9]/, {
+          message: "Votre mot de passe doit contenir au moins un chiffre",
+        })
+        .regex(/[!@#$%^&*(),.?":{}|<>]/, {
+          message:
+            "Votre mot de passe doit contenir au moins un caractère spécial",
+        }),
+      passwordConfirm: z.string(),
+    })
+    .superRefine(({ newPassword, passwordConfirm, password }, ctx) => {
+      if (newPassword !== passwordConfirm) {
+        ctx.addIssue({
+          code: "custom",
+          message: "Les mots de passe ne correspondent pas",
+          path: ["passwordConfirm"],
+        });
+        if (newPassword === password) {
+          ctx.addIssue({
+            code: "custom",
+            message:
+              "Le nouveau mot de passe doit être différent du mot de passe actuel",
+            path: ["newPassword"],
+          });
+        }
+      }
+    });
+
+  const form = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
+    mode: "onChange",
+    defaultValues: {
+      password: "",
+      newPassword: "",
+      passwordConfirm: "",
+    },
+  });
+
+  const submitForm = async (values: z.infer<typeof formSchema>) => {
+    try {
+      const data = {
+        password: values.password,
+        new_password: values.newPassword,
+      };
+      const response = await axiosInstance.put(
+        "/api/v1/users/update_password",
+        data
+      );
+      form.reset();
+      toast({
+        title: "Votre mot de passe été changé avec succès 👍",
+        description:
+          "Vous pouvez vous connecter avec votre nouveau mot de passe",
+      });
+      setIsWrongPassword(false);
+    } catch (err) {
+      if (err.response.status === 401) {
+        form.reset();
+        setIsWrongPassword(true);
+      } else {
+        toast({
+          title: "Votre mot de passe n'a pas pu être changé ❌",
+          description: "Veuillez réesayer ultérieurement",
+        });
+        console.error("Login failed", err);
+      }
+    }
+  };
+
+  return (
+    <div>
+      {isWrongPassword && (
+        <p className="text-red-600">Mot de passe actuel incorrect</p>
+      )}
+      <Form {...form}>
+        <form onSubmit={form.handleSubmit(submitForm)} className="space-y-4">
+          <FormField
+            control={form.control}
+            name="password"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Mot de passe actuel</FormLabel>
+                <FormControl>
+                  <Input type="password" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="newPassword"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Nouveau mot de passe</FormLabel>
+                <FormControl>
+                  <Input type="password" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="passwordConfirm"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Confirmer le mot de passe</FormLabel>
+                <FormControl>
+                  <Input type="password" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <Button
+            className="mx-auto w-full"
+            type="submit"
+            disabled={!form.formState.isValid}
+          >
+            Valider
+          </Button>
+        </form>
+      </Form>
+    </div>
+  );
+};
 
 const Header = () => {
   const navigate = useNavigate();
@@ -32,7 +197,7 @@ const Header = () => {
 
   const handleLogout = () => {
     localStorage.removeItem("JWTGP");
-    navigate("/");
+    navigate("/auth/login");
   };
   return (
     <div className="w-full fixed top-0 z-50 border-b">
@@ -42,9 +207,16 @@ const Header = () => {
             <LogOut size={"20"} />
             <span className="sr-only">Logout</span>
           </Button>
-          <Button variant={"ghost"} size={"icon"}>
-            <KeyRound size={"20"} />
-          </Button>
+          <Popover>
+            <PopoverTrigger asChild>
+              <Button variant={"ghost"} size={"icon"}>
+                <KeyRound size={"20"} />
+              </Button>
+            </PopoverTrigger>
+            <PopoverContent className="bg-white ml-6">
+              <UpdatePassword />
+            </PopoverContent>
+          </Popover>
         </div>
         <div className="flex flex-col items-center">
           <h1 className="text-2xl lg:text-3xl font-thin ">

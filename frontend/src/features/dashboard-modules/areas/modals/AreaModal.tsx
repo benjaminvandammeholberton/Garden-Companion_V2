@@ -21,6 +21,8 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { Card } from "@/components/ui/card";
+import { deleteAreaApi } from "@/api/api-services/areas";
+import AreaFormModify from "../components/AreaFormModify";
 
 interface AreaModalProps {
   isOpen: boolean;
@@ -71,18 +73,6 @@ const AreaModal: React.FC<AreaModalProps> = ({ isOpen, onClose, area }) => {
   //   };
   // }, [isOpen, onClose]);
 
-  const handleDelete = (areaId: string) => {
-    onClose();
-    const deletedArea = areas.filter(
-      (area: AreaInterface) => area.area_id === areaId
-    );
-    toast({
-      title: "Zone de culture suprimée 👍",
-      description: `${deletedArea[0].name}`,
-    });
-    deleteArea(areaId);
-  };
-
   if (!isOpen) return null;
 
   return ReactDOM.createPortal(
@@ -127,14 +117,12 @@ const AreaModal: React.FC<AreaModalProps> = ({ isOpen, onClose, area }) => {
                   />
                 </PopoverTrigger>
                 <PopoverContent asChild>
-                  <div className="flex justify-center gap-5">
-                    <Button>Modifier</Button>
-                    <Button
-                      variant={"destructive"}
-                      onClick={() => handleDelete(area?.area_id ?? "")}
-                    >
-                      Supprimer
-                    </Button>
+                  <div className="flex flex-col justify-center items-center gap-5 w-96 mt-2">
+                    <AreaFormModify
+                      area={area}
+                      onClose={onClose}
+                      deleteArea={deleteArea}
+                    />
                   </div>
                 </PopoverContent>
               </Popover>

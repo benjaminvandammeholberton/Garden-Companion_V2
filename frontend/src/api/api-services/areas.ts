@@ -26,3 +26,11 @@ export const createAreaApi = async (data: Omit<AreaInterface, "id">) => {
     throw new Error("An error occured when creating the area");
   }
 };
+
+export const deleteAreaApi = async (id: string) => {
+  try {
+    await axiosInstance.delete(`api/v1/area/${id}`);
+  } catch (error) {
+    console.error(error);
+  }
+};

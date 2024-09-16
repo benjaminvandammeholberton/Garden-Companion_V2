@@ -27,11 +27,21 @@ interface DiaryItemGeneralProps {
   action: ActionInterface;
 }
 
-("use client");
-
-export const ActionFilterSelect = ({ icon, text, localStorageName }) => {
+export const ActionFilterSelect = ({
+  icon,
+  text,
+  localStorageName,
+  type,
+  actionTypes,
+  setActionTypes,
+}) => {
   const state = localStorage.getItem(localStorageName);
   const [isSelected, setIsSelected] = useState(true);
+
+  useEffect(() => {
+    console.log(actionTypes.includes(type));
+    setIsSelected(actionTypes.includes(type));
+  }, []);
 
   const handleChange = () => {
     setIsSelected(!isSelected);
@@ -42,17 +52,28 @@ export const ActionFilterSelect = ({ icon, text, localStorageName }) => {
     }
   };
 
+  const handleClick = () => {
+    if (actionTypes.includes(type)) {
+      setActionTypes((prev) =>
+        prev.filter((actionType) => actionType !== type)
+      );
+    } else {
+      setActionTypes((prev) => [...prev, type]);
+    }
+    setIsSelected(!isSelected);
+  };
+
   return (
     <div className="mx-auto">
       <div
         className="flex flex-col items-center justify-between gap-2 cursor-pointer"
-        onClick={handleChange}
+        onClick={handleClick}
       >
         <img
           src={icon}
           alt=""
           className="w-10"
-          style={{ filter: isSelected ? "" : "grayscale(100%" }}
+          style={{ filter: isSelected ? "" : "grayscale(100%)" }}
         />
         <span
           className={`text-sm text-center font-medium leading-none ${
@@ -316,9 +337,20 @@ interface DiarayProps {
   area: AreaInterface | undefined;
 }
 const Diary: React.FC<DiarayProps> = ({ area }) => {
-  // const actions = actionsData;
+  const actionType = [
+    "Semer",
+    "Planter",
+    "Fin de culture",
+    "Récolter",
+    "Arroser",
+    "Fertiliser",
+    "Traîter",
+    "Désherber",
+    "Pailler",
+  ];
   const [allSelect, SetAllSelect] = useState(true);
   const [actions, setActions] = useState([]);
+  const [actionTypes, setActionTypes] = useState(actionType);
 
   useEffect(() => {
     const getActions = async () => {
@@ -348,20 +380,71 @@ const Diary: React.FC<DiarayProps> = ({ area }) => {
               icon={directSowingIcon}
               text={"Semis"}
               localStorageName={"sowingFilterState"}
+              type="Semer"
+              actionTypes={actionTypes}
+              setActionTypes={setActionTypes}
             />
-            <ActionFilterSelect icon={plantingIcon} text={"Plantation"} />
-            <ActionFilterSelect icon={waterIcon} text={"Arrosage"} />
-            <ActionFilterSelect icon={fertilizeIcon} text={"Fertilisation"} />
-            <ActionFilterSelect icon={treatIcon} text={"Traitement"} />
-            <ActionFilterSelect icon={harvestIcon} text={"Récolte"} />
-            <ActionFilterSelect icon={removeIcon} text={"Fin de culture"} />
-            <ActionFilterSelect icon={weedIcon} text={"Désherbage"} />
-            <ActionFilterSelect icon={mulchIcon} text={"Paillage"} />
+            <ActionFilterSelect
+              icon={plantingIcon}
+              text={"Plantation"}
+              type="Planter"
+              actionTypes={actionTypes}
+              setActionTypes={setActionTypes}
+            />
+            <ActionFilterSelect
+              icon={waterIcon}
+              text={"Arrosage"}
+              type="Arroser"
+              actionTypes={actionTypes}
+              setActionTypes={setActionTypes}
+            />
+            <ActionFilterSelect
+              icon={fertilizeIcon}
+              text={"Fertilisation"}
+              type="Fertiliser"
+              actionTypes={actionTypes}
+              setActionTypes={setActionTypes}
+            />
+            <ActionFilterSelect
+              icon={treatIcon}
+              text={"Traitement"}
+              type="Traîter"
+              actionTypes={actionTypes}
+              setActionTypes={setActionTypes}
+            />
+            <ActionFilterSelect
+              icon={harvestIcon}
+              text={"Récolte"}
+              type="Récolter"
+              actionTypes={actionTypes}
+              setActionTypes={setActionTypes}
+            />
+            <ActionFilterSelect
+              icon={removeIcon}
+              text={"Fin de culture"}
+              type="Fin de culture"
+              actionTypes={actionTypes}
+              setActionTypes={setActionTypes}
+            />
+            <ActionFilterSelect
+              icon={weedIcon}
+              text={"Désherbage"}
+              type="Désherber"
+              actionTypes={actionTypes}
+              setActionTypes={setActionTypes}
+            />
+            <ActionFilterSelect
+              icon={mulchIcon}
+              text={"Paillage"}
+              type="Pailler"
+              actionTypes={actionTypes}
+              setActionTypes={setActionTypes}
+            />
           </div>
         </PopoverContent>
       </Popover>
       {actions.map((action) => {
-        if (action.area === area.area_id)
+        if (action.area === area.area_id && actionTypes.includes(action.type))
           return <DiaryItemGeneral action={action} key={action.action_id} />;
       })}
     </div>

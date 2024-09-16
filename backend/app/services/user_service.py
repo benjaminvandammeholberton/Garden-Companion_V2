@@ -88,9 +88,9 @@ class UserService:
         return user
 
     @staticmethod
-    async def update_user_password(data: dict, current_user: User) -> dict:
+    async def update_user_password(new_password: str, current_user: User) -> dict:
         """ """
-        hashed_password = get_password(data['new_password'])
+        hashed_password = get_password(new_password)
         current_user.hashed_password = hashed_password
         await current_user.save()
         new_access_token = create_access_token(current_user.user_id)

@@ -80,6 +80,16 @@ class AreaService:
         if area:
             await area.update({"$set": data.model_dump(exclude_unset=True)})
             await area.save()
+        from app.services.vegetable_manager_service import (
+            VegetableManagerService)
+        list_vegetable = []
+        for vegetable_id in area.vegetables:
+            vegetable = await VegetableManagerService.retrieve_vegetable(
+                current_user,
+                vegetable_id
+            )
+            list_vegetable.append(vegetable)
+            area.vegetables = list_vegetable
         return area
 
     @staticmethod

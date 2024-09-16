@@ -101,7 +101,7 @@ async def retrieve(
 @area_router.patch(
     '/{area_id}',
     summary="Update area by area_id",
-    response_model=AreaOutWithoutVegetablesData
+    response_model=AreaOutWithVegetablesData
 )
 async def update(
     area_id: Annotated[UUID, Path(description="The ID of the area to update")],

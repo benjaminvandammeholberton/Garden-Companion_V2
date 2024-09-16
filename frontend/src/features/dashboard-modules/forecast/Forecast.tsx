@@ -24,7 +24,6 @@ const Forecast = () => {
     }
     setUserLocation(false);
   };
-
   return (
     <div>
       {!userLocation ? (

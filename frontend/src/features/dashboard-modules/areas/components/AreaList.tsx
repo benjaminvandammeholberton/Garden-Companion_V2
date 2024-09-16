@@ -1,5 +1,5 @@
 // hooks
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 
 // assets
 import { greenhouse, outdoor, indoor } from "../../../../assets/assets-path";

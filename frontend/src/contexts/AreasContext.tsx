@@ -1,4 +1,4 @@
-import { createAreaApi, getAllAreas } from "@/api/api-services/areas";
+import { createAreaApi, getAllAreas, updateAreaApi } from "@/api/api-services/areas";
 import { AreaInterface } from "@/interfaces/interfaces";
 import { createContext, Dispatch, ReactNode, SetStateAction, useEffect, useState } from "react";
 
@@ -55,10 +55,19 @@ export const AreasProvider: React.FC<{ children: ReactNode }> = ({
     setAreas((prevAreas) => prevAreas.filter((area) => area.area_id !== id));
   };
 
-  const updateArea = (id: string, updatedArea: AreaInterface) => {
-    setAreas((prevAreas) =>
-      prevAreas.map((area) => (area.area_id === id ? updatedArea : area))
-    );
+  const updateArea = async (id: string, data: AreaInterface) => {
+    try {
+      setIsLoading(true);
+      const updated_area = await updateAreaApi(id, data)
+      setAreas((prevAreas) =>
+        prevAreas.map((area) => (area.area_id === id ? updated_area : area))
+      );
+    } catch (error) {
+      console.error(error)
+    } finally {
+      setIsLoading(false);
+    }
+
   };
 
   return (

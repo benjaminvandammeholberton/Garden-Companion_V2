@@ -34,6 +34,17 @@ class SowingActionCreate(BaseModel):
     sowing_date: date
     file_path: str | None = None
 
+class PlantingActionCreate(BaseModel):
+    type: ActionType
+    area: UUID
+    name: str
+    quantity: int
+    quantity_unit: str
+    variety: str
+    note: str | None = None
+    planting_date: date
+    file_path: str | None = None
+
 
 class ActionCreate(BaseModel):
     type: ActionType

@@ -11,7 +11,7 @@ from fastapi import File, UploadFile
 from app.models.action_model import Action
 from app.models.user_model import User
 from app.schemas.action_schema import (
-    ActionCreate, ActionType, ActionUpdate, SowingActionCreate
+    ActionCreate, ActionType, ActionUpdate, SowingActionCreate, PlantingActionCreate
 )
 from app.services.vegetable_manager_service import VegetableManagerService
 
@@ -31,18 +31,22 @@ class ActionService:
         return actions
 
     @staticmethod
-    async def create_action(user: User, data: SowingActionCreate):
+    async def create_action(user: User, data: SowingActionCreate | PlantingActionCreate):
 
+        new_vegetable_data = VegetableManagerCreate(
+            area=data.area,
+            name=data.name,
+            variety=data.variety,
+            quantity=data.quantity,
+            quantity_unit=data.quantity_unit,
+        )
         if data.type == ActionType.sowing:
-            new_vegetable_data = VegetableManagerCreate(
-                area=data.area,
-                name=data.name,
-                variety=data.variety,
-                quantity=data.quantity,
-                quantity_unit=data.quantity_unit,
-                sowing_date=data.sowing_date
-            )
-            new_vegetable = await VegetableManagerService.create_vegetable(user, new_vegetable_data)
+            new_vegetable_data.sowing_date = data.sowing_date
+        if data.type == ActionType.planting:
+            new_vegetable_data.planting_date = data.planting_date
+            
+        new_vegetable = await VegetableManagerService.create_vegetable(user, new_vegetable_data)
+        
         action_data = ActionCreate(
             type=data.type,
             note=data.note,

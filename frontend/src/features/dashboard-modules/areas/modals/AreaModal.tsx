@@ -5,8 +5,8 @@ import ReactDOM from "react-dom";
 import { useContext, useEffect, useState } from "react";
 
 // assets
-import { greenhouse } from "../../../../assets/assets-path";
-import settingsIcon from "../../../../assets/common/settings.png";
+import { greenhouse, outdoor, indoor } from "../../../../assets/assets-path";
+
 
 // components
 import Diary from "../../../diary/Diary";
@@ -23,6 +23,7 @@ import {
 import { Card } from "@/components/ui/card";
 import { deleteAreaApi } from "@/api/api-services/areas";
 import AreaFormModify from "../components/AreaFormModify";
+import { Settings } from "lucide-react";
 
 interface AreaModalProps {
   isOpen: boolean;
@@ -30,14 +31,22 @@ interface AreaModalProps {
   area: AreaInterface | undefined;
 }
 
-const AreaModal: React.FC<AreaModalProps> = ({ isOpen, onClose, area }) => {
-  const areasContext = useContext(AreasContext);
-  if (!areasContext) {
-    throw new Error("AreasContext must be used within an AreasProvider");
-  }
-  const { areas, deleteArea } = areasContext;
+  // function to get the right area icon based of the environnement
+  const getAreaIcon = (env: string) => {
+    let areaIcon: string | undefined;
+    if (env === "indoor") areaIcon = indoor;
+    if (env === "greenhouse") areaIcon = greenhouse;
+    if (env === "outdoor") areaIcon = outdoor;
+    return areaIcon;
+  };
 
-  const { toast } = useToast();
+const AreaModal: React.FC<AreaModalProps> = ({ isOpen, onClose, area }) => {
+
+  const [ currentArea, setCurrentArea ] = useState()
+
+  useEffect(() => {
+  setCurrentArea(area)
+  },[area])
 
   const [diaryOpen, setDiaryOpen] = useState(false);
   const [tableOpen, setTableOpen] = useState(true);
@@ -55,23 +64,6 @@ const AreaModal: React.FC<AreaModalProps> = ({ isOpen, onClose, area }) => {
       setTableOpen(false);
     }
   };
-
-  // useEffect(() => {
-  //   const handleOutsideClick = (event: MouseEvent) => {
-  //     const target = event.target as HTMLElement;
-  //     if (!target.closest(".area-modal-content") && isOpen) {
-  //       onClose();
-  //     }
-  //   };
-
-  //   if (isOpen) {
-  //     document.addEventListener("mousedown", handleOutsideClick);
-  //   }
-
-  //   return () => {
-  //     document.removeEventListener("mousedown", handleOutsideClick);
-  //   };
-  // }, [isOpen, onClose]);
 
   if (!isOpen) return null;
 
@@ -104,24 +96,20 @@ const AreaModal: React.FC<AreaModalProps> = ({ isOpen, onClose, area }) => {
           >
             <span className="p-2 text-4xl md:text-2xl">&times;</span>
           </div>
-          <div className="flex gap-3 items-end justify-center">
-            <img className="w-10 h-10" src={greenhouse} alt="" />
+          <div className="flex gap-3 items-center justify-center">
+            <img className="w-8 h-8" src={getAreaIcon(currentArea?.environnement)} alt="" />
             <div className="flex items-center gap-2">
-              <span className="text-3xl">{area?.name}</span>
+              <span className="text-3xl">{currentArea?.name}</span>
               <Popover>
                 <PopoverTrigger>
-                  <img
-                    className="w-4 h-4 cursor-pointer"
-                    src={settingsIcon}
-                    alt=""
-                  />
+                <Settings size={20}/>
                 </PopoverTrigger>
                 <PopoverContent asChild>
-                  <div className="flex flex-col justify-center items-center gap-5 w-96 mt-2">
+                  <div className="flex flex-col justify-center items-center gap-5 w-96 mt-2 mr-30">
                     <AreaFormModify
-                      area={area}
+                      area={currentArea}
+                      setArea={setCurrentArea}
                       onClose={onClose}
-                      deleteArea={deleteArea}
                     />
                   </div>
                 </PopoverContent>

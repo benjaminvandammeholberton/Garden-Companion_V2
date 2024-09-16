@@ -34,3 +34,12 @@ export const deleteAreaApi = async (id: string) => {
     console.error(error);
   }
 };
+
+export const updateAreaApi = async (id: string, data) => {
+  try {
+    const response = await axiosInstance.patch(`api/v1/area/${id}`, data);
+    return response.data
+  } catch (error) {
+    console.error(error);
+  }
+};

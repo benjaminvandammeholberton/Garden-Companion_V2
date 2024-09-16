@@ -18,3 +18,12 @@ class Action(Document):
     area: UUID | None = None
     photo: str | None = None
     owner: UUID
+
+    class Settings:
+        """
+        Settings class for the Area model.
+
+        Attributes:
+        - name (str): The name of the collection in the database.
+        """
+        name = "actions"

@@ -24,12 +24,12 @@ interface FormDataInterface {
   surface: number;
 }
 
-const AreaFormModify = ({ area, onClose, deleteArea }) => {
+const AreaFormModify = ({ area, onClose, setArea }) => {
   const areasContext = useContext(AreasContext);
   if (!areasContext) {
     throw new Error("AreasContext must be used within an AreasProvider");
   }
-  const { createArea } = areasContext;
+  const { deleteArea, updateArea } = areasContext;
   const [formData, setFormData] = useState<FormDataInterface>({
     name: area.name,
     environnement: area.environnement,
@@ -48,25 +48,21 @@ const AreaFormModify = ({ area, onClose, deleteArea }) => {
 
   const submitForm = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const newArea = {
+    const updatedArea = {
       name: capitalize(formData.name),
       surface: formData.surface,
       environnement: formData.environnement,
-      area_id: uuidv4(),
-      sowing_area: false,
-      created_at: new Date().toISOString(),
-      updated_at: new Date().toISOString(),
-      vegetables: [],
     };
-    await createArea(newArea);
-    setFormData({
-      name: "",
-      environnement: "",
-      surface: 0,
-    });
+    await updateArea(area.area_id, updatedArea);
+    setArea((prev) => ({
+      ...prev,
+      name: updatedArea.name,
+      surface: updatedArea.surface,
+      environnement: updatedArea.environnement
+    }))
     toast({
       title: "Zone de culture modifiée avec succès 👍",
-      description: `${newArea.name}`,
+      description: `${updatedArea.name}`,
     });
   };
 

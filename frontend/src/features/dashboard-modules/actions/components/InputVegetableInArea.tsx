@@ -16,11 +16,12 @@ import {
 
 interface InputVegetablesInAreaInterface {
   setInput: (value: string) => void;
-  defaultValue?: string
+  defaultValue?: string;
 }
 
 const InputVegetablesInArea: React.FC<InputVegetablesInAreaInterface> = ({
-  setInput, defaultValue
+  setInput,
+  defaultValue,
 }) => {
   const [
     isNameFocus,
@@ -29,7 +30,12 @@ const InputVegetablesInArea: React.FC<InputVegetablesInAreaInterface> = ({
     vegetableChoices,
     handleNameClickOnChoice,
     handleNameInputChange,
-  ] = useCompletion(vegetableIconsMaps, ["name", "fr"], "data-name", defaultValue);
+  ] = useCompletion(
+    vegetableIconsMaps,
+    ["name", "fr"],
+    "data-name",
+    defaultValue
+  );
 
   useEffect(() => {
     setInput(nameInput);

@@ -78,7 +78,7 @@ const PlantingForm: React.FC<PlantingFormInterface> = ({
       .positive(),
     quantity_unit: z.string().min(2).max(50),
     area: z.string(),
-    planting_date: z.date({}),
+    date: z.date({}),
     note: z.string().max(500).optional(),
     file: z.instanceof(FileList).optional(),
   });
@@ -91,7 +91,7 @@ const PlantingForm: React.FC<PlantingFormInterface> = ({
       quantity: defaultValues?.planting?.quantity ?? 0,
       quantity_unit: "",
       area: "",
-      planting_date: new Date(),
+      date: new Date(),
       note: "",
     },
   });
@@ -103,7 +103,7 @@ const PlantingForm: React.FC<PlantingFormInterface> = ({
 
     const data = {
       ...rest,
-      planting_date: values.planting_date.toISOString().slice(0, 10),
+      date: values.date.toISOString().slice(0, 10),
       type: "Planter",
     };
 
@@ -112,12 +112,12 @@ const PlantingForm: React.FC<PlantingFormInterface> = ({
       formData.append("file", file[0]);
       try {
         const response = await axiosInstanceFile.post("/upload", formData);
-        data["file_path"] = response.data;
+        data["photo"] = response.data;
       } catch (error) {
         console.error("Error submitting the file:", error);
       }
     }
-    console.log(data)
+
     try {
       let selected_area: AreaInterface | undefined;
       const response = await axiosInstance.post("/api/v1/action/", data);
@@ -217,7 +217,7 @@ const PlantingForm: React.FC<PlantingFormInterface> = ({
           />
           <FormField
             control={form.control}
-            name="planting_date"
+            name="date"
             render={({ field }) => (
               <FormItem className="flex flex-col items-center">
                 <FormLabel>Date</FormLabel>

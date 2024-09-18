@@ -23,35 +23,17 @@ class ActionType(str, Enum):
     creating = "Création"
 
 
-class SowingActionCreate(BaseModel):
-    type: ActionType
-    area: UUID
-    name: str
-    quantity: int
-    quantity_unit: str
-    variety: str
-    note: str | None = None
-    sowing_date: date
-    file_path: str | None = None
-
-class PlantingActionCreate(BaseModel):
-    type: ActionType
-    area: UUID
-    name: str
-    quantity: int
-    quantity_unit: str
-    variety: str
-    note: str | None = None
-    planting_date: date
-    file_path: str | None = None
-
-
 class ActionCreate(BaseModel):
     type: ActionType
     note: str | None = None
     vegetable: UUID | None = None
     area: UUID | None = None
     photo: str | None = None
+    date: date
+    name: str | None = None
+    quantity: int | None = None
+    quantity_unit: str | None = None
+    variety: str | None = None
 
 
 class ActionOut(BaseModel):

@@ -75,7 +75,7 @@ const DirectSowingForm: React.FC<DirectSowingFormInterface> = ({ onClose }) => {
       .positive(),
     quantity_unit: z.string().min(2).max(50),
     area: z.string(),
-    sowing_date: z.date(),
+    date: z.date(),
     note: z.string().max(500).optional(),
     file: z.instanceof(FileList).optional(),
   });
@@ -88,7 +88,7 @@ const DirectSowingForm: React.FC<DirectSowingFormInterface> = ({ onClose }) => {
       quantity: 0,
       quantity_unit: "",
       area: "",
-      sowing_date: new Date(),
+      date: new Date(),
       note: "",
     },
   });
@@ -100,7 +100,7 @@ const DirectSowingForm: React.FC<DirectSowingFormInterface> = ({ onClose }) => {
 
     const data = {
       ...rest,
-      sowing_date: rest.sowing_date.toISOString().slice(0, 10),
+      date: rest.date.toISOString().slice(0, 10),
       type: "Semer",
     };
 
@@ -109,7 +109,7 @@ const DirectSowingForm: React.FC<DirectSowingFormInterface> = ({ onClose }) => {
       formData.append("file", file[0]);
       try {
         const response = await axiosInstanceFile.post("/upload", formData);
-        data["file_path"] = response.data;
+        data["photo"] = response.data;
       } catch (error) {
         console.error("Error submitting the file:", error);
       }
@@ -215,7 +215,7 @@ const DirectSowingForm: React.FC<DirectSowingFormInterface> = ({ onClose }) => {
           />
           <FormField
             control={form.control}
-            name="sowing_date"
+            name="date"
             render={({ field }) => (
               <FormItem className="flex flex-col items-center">
                 <FormLabel>Date</FormLabel>

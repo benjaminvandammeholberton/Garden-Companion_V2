@@ -10,7 +10,7 @@ from uuid import UUID
 from app.core.dependencies import get_current_user
 from app.models.user_model import User
 from app.schemas.action_schema import (
-    ActionUpdate, PlantingActionCreate, SowingActionCreate)
+    ActionCreate, ActionUpdate)
 
 # APIRouter instance for Action-related routes
 action_router = APIRouter()
@@ -31,14 +31,13 @@ async def list(current_user: User = Depends(get_current_user)):
 
 
 @action_router.post(
-    '/', summary="Create sowing action", response_model=VegetableManagerOut)
+    '/', summary="Create sowing action")
 async def create_action(
-    data: SowingActionCreate | PlantingActionCreate,
+    data: ActionCreate,
     current_user: User = Depends(get_current_user),
 ):
     """
-    Endpoint to create a new action for the current user.
-    This action create a vegetable and a sowing action.
+    Endpoint to create a new action for the current userr
     """
     return await ActionService.create_action(current_user, data)
 

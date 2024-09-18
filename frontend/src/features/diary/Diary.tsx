@@ -9,11 +9,11 @@ import mulchIcon from "../../assets/actions-icons/mulch.png";
 import weedIcon from "../../assets/actions-icons/weed.png";
 import fertilizeIcon from "../../assets/actions-icons/fertilize.png";
 import placeHolderImage from "../../assets/placeholder-image.jpeg";
-import placeHolderImage2 from "../../assets/placeholder-image-2.jpeg";
+
 import { ActionInterface, AreaInterface } from "@/interfaces/interfaces";
 import React, { useEffect, useState } from "react";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
-import actionsData from "@/dumb-data/actionsData";
+
 import { Button } from "@/components/ui/button";
 import {
   Popover,
@@ -39,7 +39,6 @@ export const ActionFilterSelect = ({
   const [isSelected, setIsSelected] = useState(true);
 
   useEffect(() => {
-    console.log(actionTypes.includes(type));
     setIsSelected(actionTypes.includes(type));
   }, []);
 
@@ -226,18 +225,35 @@ const DiaryItemFertilizing = ({ action }) => {
 };
 
 const DiaryItemRemoving = ({ action }) => {
+  const vegetableAsset = vegetableIconsMaps.find(
+    (asset) => asset.name.fr === action.vegetable.name.toLowerCase()
+  );
+  let file_path;
+  if (action.photo) {
+    file_path = "http://127.0.0.1:8001/" + action.photo;
+  }
   return (
     <>
       <div className="flex gap-2 lg:gap-5">
-        <img className="w-12 h-12" src={directSowingIcon} alt="" />
-        <img className="w-12 h-12" src={carrotIcon} alt="" />
+        <img className="w-12 h-12" src={removeIcon} alt="" />
+        <img className="w-12 h-12" src={vegetableAsset?.assets} alt="" />
       </div>
-      <div className="cursor-pointer">4 rangées de Carotte - Nantaise </div>
-      <p className="text-justify">
-        <span className="font-semibold">Notes : </span>
-        {action.note}
-      </p>
-      <img className="w-3/4 rounded-sm" src={placeHolderImage} alt="" />
+      <div className="cursor-pointer">
+        {action.vegetable.name} ({action.vegetable.variety})
+      </div>
+      {action.note && (
+        <p className="text-justify">
+          <span className="font-semibold">Notes : </span>
+          {action.note}
+        </p>
+      )}
+      {file_path && (
+        <img
+          className="w-3/4 max-h-72 object-cover rounded-sm"
+          src={file_path}
+          alt=""
+        />
+      )}
     </>
   );
 };

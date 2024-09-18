@@ -1,5 +1,3 @@
-import { v4 as uuidv4 } from "uuid";
-
 // assets
 import { greenhouse, outdoor, indoor } from "../../../../assets/assets-path";
 
@@ -24,7 +22,7 @@ interface FormDataInterface {
   surface: number;
 }
 
-const AreaFormModify = ({ area, onClose, setArea }) => {
+const AreaFormModify = ({ area, onClose, setArea, onModify }) => {
   const areasContext = useContext(AreasContext);
   if (!areasContext) {
     throw new Error("AreasContext must be used within an AreasProvider");
@@ -58,8 +56,9 @@ const AreaFormModify = ({ area, onClose, setArea }) => {
       ...prev,
       name: updatedArea.name,
       surface: updatedArea.surface,
-      environnement: updatedArea.environnement
-    }))
+      environnement: updatedArea.environnement,
+    }));
+    onModify(false);
     toast({
       title: "Zone de culture modifiée avec succès 👍",
       description: `${updatedArea.name}`,

@@ -2,18 +2,14 @@
 import ReactDOM from "react-dom";
 
 // hooks
-import { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 
 // assets
 import { greenhouse, outdoor, indoor } from "../../../../assets/assets-path";
 
-
 // components
 import Diary from "../../../diary/Diary";
 import TableProduction from "../../../../components/table-production/TableProduction";
-import AreasContext from "@/contexts/AreasContext";
-import { Button } from "@/components/ui/button";
-import { useToast } from "@/components/ui/use-toast";
 import { AreaInterface } from "@/interfaces/interfaces";
 import {
   Popover,
@@ -21,9 +17,10 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { Card } from "@/components/ui/card";
-import { deleteAreaApi } from "@/api/api-services/areas";
+
 import AreaFormModify from "../components/AreaFormModify";
 import { Settings } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 interface AreaModalProps {
   isOpen: boolean;
@@ -31,22 +28,22 @@ interface AreaModalProps {
   area: AreaInterface | undefined;
 }
 
-  // function to get the right area icon based of the environnement
-  const getAreaIcon = (env: string) => {
-    let areaIcon: string | undefined;
-    if (env === "indoor") areaIcon = indoor;
-    if (env === "greenhouse") areaIcon = greenhouse;
-    if (env === "outdoor") areaIcon = outdoor;
-    return areaIcon;
-  };
+// function to get the right area icon based of the environnement
+const getAreaIcon = (env: string) => {
+  let areaIcon: string | undefined;
+  if (env === "indoor") areaIcon = indoor;
+  if (env === "greenhouse") areaIcon = greenhouse;
+  if (env === "outdoor") areaIcon = outdoor;
+  return areaIcon;
+};
 
 const AreaModal: React.FC<AreaModalProps> = ({ isOpen, onClose, area }) => {
-
-  const [ currentArea, setCurrentArea ] = useState()
+  const [currentArea, setCurrentArea] = useState();
+  const [isPopoverOpen, setIsPopoverOpen] = useState(false);
 
   useEffect(() => {
-  setCurrentArea(area)
-  },[area])
+    setCurrentArea(area);
+  }, [area]);
 
   const [diaryOpen, setDiaryOpen] = useState(false);
   const [tableOpen, setTableOpen] = useState(true);
@@ -97,12 +94,18 @@ const AreaModal: React.FC<AreaModalProps> = ({ isOpen, onClose, area }) => {
             <span className="p-2 text-4xl md:text-2xl">&times;</span>
           </div>
           <div className="flex gap-3 items-center justify-center">
-            <img className="w-8 h-8" src={getAreaIcon(currentArea?.environnement)} alt="" />
+            <img
+              className="w-8 h-8"
+              src={getAreaIcon(currentArea?.environnement)}
+              alt=""
+            />
             <div className="flex items-center gap-2">
               <span className="text-3xl">{currentArea?.name}</span>
-              <Popover>
-                <PopoverTrigger>
-                <Settings size={20}/>
+              <Popover open={isPopoverOpen} onOpenChange={setIsPopoverOpen}>
+                <PopoverTrigger asChild>
+                  <Button variant={"ghost"} size={"icon"}>
+                    <Settings size={20} />
+                  </Button>
                 </PopoverTrigger>
                 <PopoverContent asChild>
                   <div className="flex flex-col justify-center items-center gap-5 w-96 mt-2 mr-30">
@@ -110,6 +113,7 @@ const AreaModal: React.FC<AreaModalProps> = ({ isOpen, onClose, area }) => {
                       area={currentArea}
                       setArea={setCurrentArea}
                       onClose={onClose}
+                      onModify={setIsPopoverOpen}
                     />
                   </div>
                 </PopoverContent>

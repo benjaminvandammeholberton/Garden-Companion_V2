@@ -152,8 +152,10 @@ const SeedlingsList: React.FC<SeedlingsListProps> = ({ sortedBy }) => {
                   <PopoverTrigger
                     onClick={() => setSeedlingInputQuantity(vegetable.quantity)}
                   >
-                    {capitalize(vegetable.name)} -
-                    {capitalize(vegetable.variety)} ({vegetable.quantity})
+                    <span>
+                      {capitalize(vegetable.name)} -{" "}
+                      {capitalize(vegetable.variety)} ({vegetable.quantity})
+                    </span>
                   </PopoverTrigger>
                   <PopoverContent className="bg-white border rounded-lg p-5 w-96">
                     <div className="flex justify-between items-end">

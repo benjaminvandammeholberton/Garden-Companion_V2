@@ -78,14 +78,15 @@ const AreaList: React.FC<AreaListProps> = ({ sortedBy, openModal }) => {
             .slice()
             .sort((a, b) => a.name.localeCompare(b.name))
             .map((area: AreaInterface, index: number) => {
-              return (
-                <AreaListItem
-                  key={index}
-                  area={area}
-                  openModal={openModal}
-                  areaIcon={getAreaIcon(area.environnement)}
-                />
-              );
+              if (area)
+                return (
+                  <AreaListItem
+                    key={index}
+                    area={area}
+                    openModal={openModal}
+                    areaIcon={getAreaIcon(area.environnement)}
+                  />
+                );
             })}
         </ul>
       )}

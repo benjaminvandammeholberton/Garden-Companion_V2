@@ -52,6 +52,7 @@ const PlantingForm: React.FC<PlantingFormInterface> = ({
   onClose,
   defaultValues,
 }) => {
+  console.log(defaultValues)
   const { toast } = useToast();
   const vegetablesContext = useContext(VegetablesContext);
   if (!vegetablesContext) {

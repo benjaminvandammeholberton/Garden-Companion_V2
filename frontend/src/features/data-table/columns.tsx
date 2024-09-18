@@ -1,4 +1,6 @@
+import { Button } from "@/components/ui/button";
 import { ColumnDef } from "@tanstack/react-table";
+import { ArrowUpDown } from "lucide-react"
 
 export type Vegetable = {
   vegetable_manager_id: string;
@@ -17,14 +19,28 @@ export type Vegetable = {
 export const columns: ColumnDef<Vegetable>[] = [
   {
     accessorKey: "name",
-    header: () => <div className="">Nom</div>,
+    header: ({ column }) => {
+    return (
+      <Button variant={"ghost"} onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
+        Nom
+        <ArrowUpDown className="ml-2 h-4 w-4" />
+      </Button>
+      )
+    },
     cell: ({ row }) => {
       return <div className="">{row.getValue("name")}</div>;
     },
   },
   {
     accessorKey: "variety",
-    header: () => <div className="">Variété</div>,
+    header: ({ column }) => {
+      return (
+        <Button variant={"ghost"} onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
+          Variété
+          <ArrowUpDown className="ml-2 h-4 w-4" />
+        </Button>
+        )
+      },
     cell: ({ row }) => {
       return (
         <div className=" whitespace-nowrap">{row.getValue("variety")}</div>
@@ -47,71 +63,64 @@ export const columns: ColumnDef<Vegetable>[] = [
   },
   {
     accessorKey: "sowing_date",
-    header: () => <div className="">Semis</div>,
+    header: ({ column }) => {
+      return (
+        <Button variant={"ghost"} onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
+          Semis
+          <ArrowUpDown className="ml-2 h-4 w-4" />
+        </Button>
+        )
+      },
     cell: ({ row }) => {
       const sowingDate = row.getValue("sowing_date");
-      const formatted =
-        sowingDate instanceof Date && !isNaN(sowingDate.getTime())
-          ? sowingDate.toLocaleDateString("fr-FR", {
-              day: "2-digit",
-              month: "2-digit",
-              year: "numeric",
-            })
-          : "-";
-      return <div className="">{formatted}</div>;
+      const formatted =  sowingDate !== null ? sowingDate : "-";
+      return <div className="whitespace-nowrap">{formatted}</div>;
     },
   },
   {
     accessorKey: "planting_date",
-    header: () => <div className="">Plantation</div>,
+    header: ({ column }) => {
+      return (
+        <Button variant={"ghost"} onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
+          Plantation
+          <ArrowUpDown className="ml-2 h-4 w-4" />
+        </Button>
+        )
+      },
     cell: ({ row }) => {
       const plantingDate = row.getValue("planting_date");
-      const formatted =
-        plantingDate instanceof Date && !isNaN(plantingDate.getTime())
-          ? plantingDate.toLocaleDateString("fr-FR", {
-              day: "2-digit",
-              month: "2-digit",
-              year: "numeric",
-            })
-          : "-";
-      return <div className="">{formatted}</div>;
-    },
-  },
-  {
-    accessorKey: "ready_to_harvest",
-    header: () => <div className="">À récolter</div>,
-    cell: ({ row }) => {
-      return <div className="">{row.getValue("ready_to_harvest")}</div>;
+      const formatted =  plantingDate !== null ? plantingDate : "-";
+      return <div className="whitespace-nowrap">{formatted}</div>;
     },
   },
   {
     accessorKey: "quantity_harvested",
-    header: () => <div className="">Quantité récoltée</div>,
+    header: () => <div className="">Récolté</div>,
     cell: ({ row }) => {
       return <div className="">{row.getValue("quantity_harvested")}</div>;
     },
   },
   {
     accessorKey: "harvest_unit",
-    header: () => <div className="">Quantité récoltée</div>,
+    header: () => <div className="">Unité</div>,
     cell: ({ row }) => {
       return <div className="">{row.getValue("harvest_unit")}</div>;
     },
   },
   {
     accessorKey: "remove_date",
-    header: () => <div className="">Fin de culture</div>,
+    header: ({ column }) => {
+      return (
+        <Button className="whitespace-nowrap" variant={"ghost"} onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
+          Fin de culture
+          <ArrowUpDown className="ml-2 h-4 w-4" />
+        </Button>
+        )
+      },
     cell: ({ row }) => {
       const removeDate = row.getValue("remove_date");
-      const formatted =
-        removeDate instanceof Date && !isNaN(removeDate.getTime())
-          ? removeDate.toLocaleDateString("fr-FR", {
-              day: "2-digit",
-              month: "2-digit",
-              year: "numeric",
-            })
-          : "-";
-      return <div className="">{formatted}</div>;
+      const formatted =  removeDate !== null ? removeDate : "-";
+      return <div className="whitespace-nowrap">{formatted}</div>;
     },
   },
 ];

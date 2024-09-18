@@ -140,7 +140,7 @@ const AreaModal: React.FC<AreaModalProps> = ({ isOpen, onClose, area }) => {
           </ul>
         </div>
         <div className="w-full h-full overflow-scroll px-5 mr-10">
-          {diaryOpen ? <Diary area={area} /> : <TableProduction />}
+          {diaryOpen ? <Diary area={area} /> : <TableProduction area={area} />}
         </div>
       </Card>
     </div>,

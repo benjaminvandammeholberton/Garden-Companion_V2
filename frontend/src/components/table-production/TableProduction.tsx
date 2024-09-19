@@ -4,9 +4,8 @@ import { DataTable } from "@/features/data-table/data-table";
 
 const TableProduction = ({ area }) => {
   const data = area.vegetables;
-console.log(area.vegetables)
   return (
-    <div className="">
+    <div>
       <DataTable columns={columns} data={data} />
     </div>
   );

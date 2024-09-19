@@ -22,6 +22,8 @@ import {
 } from "@/components/ui/popover";
 import axiosInstance from "@/api/axios";
 import vegetableIconsMaps from "@/maps/vegetableMaps";
+import DirectSowingForm from "../dashboard-modules/actions/DirectSowingForm";
+import { Filter } from "lucide-react";
 
 interface DiaryItemGeneralProps {
   action: ActionInterface;
@@ -30,26 +32,15 @@ interface DiaryItemGeneralProps {
 export const ActionFilterSelect = ({
   icon,
   text,
-  localStorageName,
   type,
   actionTypes,
   setActionTypes,
 }) => {
-  const state = localStorage.getItem(localStorageName);
   const [isSelected, setIsSelected] = useState(true);
 
   useEffect(() => {
     setIsSelected(actionTypes.includes(type));
   }, []);
-
-  const handleChange = () => {
-    setIsSelected(!isSelected);
-    if (isSelected) {
-      localStorage.removeItem(localStorageName);
-    } else {
-      localStorage.setItem(localStorageName, "selected");
-    }
-  };
 
   const handleClick = () => {
     if (actionTypes.includes(type)) {
@@ -331,11 +322,11 @@ const DiaryItemGeneral: React.FC<DiaryItemGeneralProps> = ({ action }) => {
   };
 
   return (
-    <Card className="bg-lime-50 w-full lg:w-[800px]">
+    <Card className="w-full lg:w-[800px]">
       <CardHeader>
         <div className="flex justify-between">
           <span className="text-sm">
-            {new Date(action.created_at).toLocaleDateString("fr-FR")}
+            {new Date(action.date).toLocaleDateString("fr-FR")}
           </span>
           <span className="text-sm font-semibold">
             {actionComponentMap[action.type][1]}
@@ -364,14 +355,15 @@ const Diary: React.FC<DiarayProps> = ({ area }) => {
     "Désherber",
     "Pailler",
   ];
-  const [allSelect, SetAllSelect] = useState(true);
   const [actions, setActions] = useState([]);
   const [actionTypes, setActionTypes] = useState(actionType);
 
   useEffect(() => {
     const getActions = async () => {
       try {
-        const response = await axiosInstance.get("/api/v1/action/");
+        const response = await axiosInstance.get(
+          `/api/v1/action/?area_id=${area?.area_id}`
+        );
         setActions(response.data);
       } catch (error) {
         console.error(error);
@@ -379,90 +371,56 @@ const Diary: React.FC<DiarayProps> = ({ area }) => {
       }
     };
     getActions();
-  }, []);
+  }, [area]);
+
+  const ActionFilterList = [
+    { icon: directSowingIcon, text: "Semis", type: "Semer" },
+    { icon: plantingIcon, text: "Plantation", type: "Planter" },
+    { icon: waterIcon, text: "Arrosage", type: "Arroser" },
+    { icon: fertilizeIcon, text: "Fertilisation", type: "Fertiliser" },
+    { icon: treatIcon, text: "Traitement", type: "Traîter" },
+    { icon: harvestIcon, text: "Récolte", type: "Récolter" },
+    { icon: removeIcon, text: "Fin de culture", type: "Fin de culture" },
+    { icon: weedIcon, text: "Désherbage", type: "Désherber" },
+    { icon: mulchIcon, text: "Paillage", type: "Pailler" },
+  ];
 
   return (
     <div className="w-full flex flex-col gap-5 p-4 items-center">
       <Popover>
-        <PopoverTrigger asChild>
-          <Button>Filter</Button>
+        <PopoverTrigger asChild className="gap-2">
+          <Button>
+            <Filter strokeWidth={1.5} />
+            Filter
+          </Button>
         </PopoverTrigger>
         <PopoverContent
           asChild
           className="w-80 flex flex-col items-center gap-2"
         >
           <div className="grid grid-cols-3 gap-8">
-            <ActionFilterSelect
-              icon={directSowingIcon}
-              text={"Semis"}
-              localStorageName={"sowingFilterState"}
-              type="Semer"
-              actionTypes={actionTypes}
-              setActionTypes={setActionTypes}
-            />
-            <ActionFilterSelect
-              icon={plantingIcon}
-              text={"Plantation"}
-              type="Planter"
-              actionTypes={actionTypes}
-              setActionTypes={setActionTypes}
-            />
-            <ActionFilterSelect
-              icon={waterIcon}
-              text={"Arrosage"}
-              type="Arroser"
-              actionTypes={actionTypes}
-              setActionTypes={setActionTypes}
-            />
-            <ActionFilterSelect
-              icon={fertilizeIcon}
-              text={"Fertilisation"}
-              type="Fertiliser"
-              actionTypes={actionTypes}
-              setActionTypes={setActionTypes}
-            />
-            <ActionFilterSelect
-              icon={treatIcon}
-              text={"Traitement"}
-              type="Traîter"
-              actionTypes={actionTypes}
-              setActionTypes={setActionTypes}
-            />
-            <ActionFilterSelect
-              icon={harvestIcon}
-              text={"Récolte"}
-              type="Récolter"
-              actionTypes={actionTypes}
-              setActionTypes={setActionTypes}
-            />
-            <ActionFilterSelect
-              icon={removeIcon}
-              text={"Fin de culture"}
-              type="Fin de culture"
-              actionTypes={actionTypes}
-              setActionTypes={setActionTypes}
-            />
-            <ActionFilterSelect
-              icon={weedIcon}
-              text={"Désherbage"}
-              type="Désherber"
-              actionTypes={actionTypes}
-              setActionTypes={setActionTypes}
-            />
-            <ActionFilterSelect
-              icon={mulchIcon}
-              text={"Paillage"}
-              type="Pailler"
-              actionTypes={actionTypes}
-              setActionTypes={setActionTypes}
-            />
+            {ActionFilterList.map((action) => (
+              <ActionFilterSelect
+                key={action.type}
+                icon={action.icon}
+                text={action.text}
+                type={action.type}
+                actionTypes={actionTypes}
+                setActionTypes={setActionTypes}
+              />
+            ))}
           </div>
         </PopoverContent>
       </Popover>
-      {actions.map((action) => {
-        if (action.area === area.area_id && actionTypes.includes(action.type))
-          return <DiaryItemGeneral action={action} key={action.action_id} />;
-      })}
+      {actions
+        .filter(
+          (action) =>
+            action.area === area.area_id && actionTypes.includes(action.type)
+        )
+        .sort((a, b) => new Date(b.date) - new Date(a.date))
+        .map((action) => (
+          <DiaryItemGeneral action={action} key={action.action_id} />
+        ))}
     </div>
   );
 };

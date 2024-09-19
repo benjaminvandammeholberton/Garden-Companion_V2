@@ -70,8 +70,7 @@ const AreaModal: React.FC<AreaModalProps> = ({ isOpen, onClose, area }) => {
       <Card
         className="
         area-modal-content 
-        px-5 
-        bg-white 
+        bg-green-50 dark:bg-slate-600 
         fixed 
         left-1/2
         top-1/2 
@@ -86,7 +85,7 @@ const AreaModal: React.FC<AreaModalProps> = ({ isOpen, onClose, area }) => {
         space-y-3
         "
       >
-        <div className="space-y-5">
+        <div className="space-y-5 bg-white dark:bg-slate-900 w-full">
           <div
             className="absolute cursor-pointer top-5 right-5"
             onClick={onClose}
@@ -139,7 +138,7 @@ const AreaModal: React.FC<AreaModalProps> = ({ isOpen, onClose, area }) => {
             </li>
           </ul>
         </div>
-        <div className="w-full h-full overflow-scroll px-5 mr-10">
+        <div className="w-full h-full overflow-auto px-5 mr-10 scrollbar-thin scrollbar-thumb-rounded-full scrollbar-track-rounded-full scrollbar-thumb-slate-400 scrollbar-track-gray-100 dark:scrollbar-thumb-gray-100 dark:scrollbar-track-slate-900">
           {diaryOpen ? <Diary area={area} /> : <TableProduction area={area} />}
         </div>
       </Card>

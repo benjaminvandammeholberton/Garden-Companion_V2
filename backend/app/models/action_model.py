@@ -12,6 +12,7 @@ class Action(Document):
     action_id: UUID = Field(default_factory=uuid4)
     created_at: datetime = Field(default_factory=datetime.now)
     updated_at: datetime = Field(default_factory=datetime.now)
+    date: datetime
     type: ActionType
     note: str = Field(None, max_length=500)
     vegetable: UUID | None = None

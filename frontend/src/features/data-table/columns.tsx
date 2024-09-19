@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { ColumnDef } from "@tanstack/react-table";
-import { ArrowUpDown } from "lucide-react"
+import { ArrowUpDown } from "lucide-react";
 
 export type Vegetable = {
   vegetable_manager_id: string;
@@ -20,12 +20,15 @@ export const columns: ColumnDef<Vegetable>[] = [
   {
     accessorKey: "name",
     header: ({ column }) => {
-    return (
-      <Button variant={"ghost"} onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
-        Nom
-        <ArrowUpDown className="ml-2 h-4 w-4" />
-      </Button>
-      )
+      return (
+        <Button
+          variant={"ghost"}
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Nom
+          <ArrowUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      );
     },
     cell: ({ row }) => {
       return <div className="">{row.getValue("name")}</div>;
@@ -35,12 +38,15 @@ export const columns: ColumnDef<Vegetable>[] = [
     accessorKey: "variety",
     header: ({ column }) => {
       return (
-        <Button variant={"ghost"} onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
+        <Button
+          variant={"ghost"}
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
           Variété
           <ArrowUpDown className="ml-2 h-4 w-4" />
         </Button>
-        )
-      },
+      );
+    },
     cell: ({ row }) => {
       return (
         <div className=" whitespace-nowrap">{row.getValue("variety")}</div>
@@ -65,15 +71,18 @@ export const columns: ColumnDef<Vegetable>[] = [
     accessorKey: "sowing_date",
     header: ({ column }) => {
       return (
-        <Button variant={"ghost"} onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
+        <Button
+          variant={"ghost"}
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
           Semis
           <ArrowUpDown className="ml-2 h-4 w-4" />
         </Button>
-        )
-      },
+      );
+    },
     cell: ({ row }) => {
       const sowingDate = row.getValue("sowing_date");
-      const formatted =  sowingDate !== null ? sowingDate : "-";
+      const formatted = sowingDate !== null ? sowingDate : "-";
       return <div className="whitespace-nowrap">{formatted}</div>;
     },
   },
@@ -81,15 +90,18 @@ export const columns: ColumnDef<Vegetable>[] = [
     accessorKey: "planting_date",
     header: ({ column }) => {
       return (
-        <Button variant={"ghost"} onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
+        <Button
+          variant={"ghost"}
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
           Plantation
           <ArrowUpDown className="ml-2 h-4 w-4" />
         </Button>
-        )
-      },
+      );
+    },
     cell: ({ row }) => {
       const plantingDate = row.getValue("planting_date");
-      const formatted =  plantingDate !== null ? plantingDate : "-";
+      const formatted = plantingDate !== null ? plantingDate : "-";
       return <div className="whitespace-nowrap">{formatted}</div>;
     },
   },
@@ -111,15 +123,19 @@ export const columns: ColumnDef<Vegetable>[] = [
     accessorKey: "remove_date",
     header: ({ column }) => {
       return (
-        <Button className="whitespace-nowrap" variant={"ghost"} onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
+        <Button
+          className="whitespace-nowrap"
+          variant={"ghost"}
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
           Fin de culture
           <ArrowUpDown className="ml-2 h-4 w-4" />
         </Button>
-        )
-      },
+      );
+    },
     cell: ({ row }) => {
       const removeDate = row.getValue("remove_date");
-      const formatted =  removeDate !== null ? removeDate : "-";
+      const formatted = removeDate !== null ? removeDate : "-";
       return <div className="whitespace-nowrap">{formatted}</div>;
     },
   },

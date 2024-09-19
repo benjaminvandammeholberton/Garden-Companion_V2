@@ -17,16 +17,18 @@ from app.services.vegetable_manager_service import VegetableManagerService
 
 class ActionService:
     @staticmethod
-    async def list_actions(user: User) -> list[Action]:
+    async def list_actions(area_id: UUID | None, user: User) -> list[Action]:
         """
         Retrieve a list of actions for a given user
         """
-        actions = await Action.find(
-            Action.owner == user.user_id
-        ).to_list()
+        query = {"owner": user.user_id}
+        if area_id:
+            query["area"] = area_id
+        actions = await Action.find(query).to_list()
         for action in actions:
             if action.vegetable:
-                vegetable = await VegetableManagerService.retrieve_vegetable(user, action.vegetable)
+                vegetable = await VegetableManagerService.retrieve_vegetable(
+                    user, action.vegetable)
                 action.vegetable = vegetable
         return actions
 
@@ -46,6 +48,8 @@ class ActionService:
                 new_vegetable_data.sowing_date = data.date
             if data.type == ActionType.planting:
                 new_vegetable_data.planting_date = data.date
+                if data.sowing_date:
+                    new_vegetable_data.sowing_date = data.sowing_date
 
             new_vegetable = await VegetableManagerService.create_vegetable(user, new_vegetable_data)
 

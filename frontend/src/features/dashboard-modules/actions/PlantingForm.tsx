@@ -52,7 +52,6 @@ const PlantingForm: React.FC<PlantingFormInterface> = ({
   onClose,
   defaultValues,
 }) => {
-  console.log(defaultValues)
   const { toast } = useToast();
   const vegetablesContext = useContext(VegetablesContext);
   if (!vegetablesContext) {
@@ -107,7 +106,9 @@ const PlantingForm: React.FC<PlantingFormInterface> = ({
       date: values.date.toISOString().slice(0, 10),
       type: "Planter",
     };
-
+    if (defaultValues.planting) {
+      data["sowing_date"] = defaultValues.planting.created_at.slice(0, 10);
+    }
     if (file && file.length > 0) {
       const formData = new FormData();
       formData.append("file", file[0]);

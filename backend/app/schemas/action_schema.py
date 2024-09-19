@@ -34,6 +34,7 @@ class ActionCreate(BaseModel):
     quantity: int | None = None
     quantity_unit: str | None = None
     variety: str | None = None
+    sowing_date: date | None = None
 
 
 class ActionOut(BaseModel):
@@ -45,6 +46,7 @@ class ActionOut(BaseModel):
     created_at: datetime
     updated_at: datetime
     photo: str | None = None
+    date: date
 
 
 class ActionUpdate(BaseModel):

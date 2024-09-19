@@ -3,7 +3,6 @@ API router for handling Action-related operations.
 """
 
 from app.services.action_service import ActionService
-from app.schemas.vegetable_manager_schema import VegetableManagerOut
 from fastapi import APIRouter, Depends
 from uuid import UUID
 
@@ -20,14 +19,14 @@ action_router = APIRouter()
     '/',
     summary='Get all actions of the user',
 )
-async def list(current_user: User = Depends(get_current_user)):
+async def list(area_id: UUID | None = None, current_user: User = Depends(get_current_user)):
     """
     Endpoint to retrieve all actions of the current user.
 
     :param current_user: The authenticated user.
     :return: List of actions.
     """
-    return await ActionService.list_actions(current_user)
+    return await ActionService.list_actions(area_id, current_user)
 
 
 @action_router.post(

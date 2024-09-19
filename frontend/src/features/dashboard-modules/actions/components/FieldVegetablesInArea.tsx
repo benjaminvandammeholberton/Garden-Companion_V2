@@ -26,6 +26,7 @@ interface FieldVegetablesInAreasInterface {
 const FieldVegetablesInAreas: React.FC<FieldVegetablesInAreasInterface> = ({
   form,
   selectedArea,
+  setCurrentQuantityUnit,
 }) => {
   const areasContext = useContext(AreasContext);
   if (!areasContext) {
@@ -54,6 +55,14 @@ const FieldVegetablesInAreas: React.FC<FieldVegetablesInAreasInterface> = ({
     }
   };
 
+  const handleVegetableChange = (onChange: (value: any) => void, value: any) => {
+    if (setCurrentQuantityUnit){
+      const vegetable = areas.find(((area) => area.area_id === selectedArea))?.vegetables.find((vegetable) => vegetable.vegetable_manager_id === value)
+        setCurrentQuantityUnit(vegetable?.harvest_unit || "")
+    }
+    onChange(value);
+  };
+
   return (
     <FormField
       control={form.control}
@@ -61,7 +70,7 @@ const FieldVegetablesInAreas: React.FC<FieldVegetablesInAreasInterface> = ({
       render={({ field }) => (
         <FormItem className="flex flex-col items-center w-full">
           <FormLabel>Sélectionner votre plante</FormLabel>
-          <Select onValueChange={field.onChange} defaultValue={field.value}>
+          <Select onValueChange={(value) => handleVegetableChange(field.onChange, value)} defaultValue={field.value}>
             <FormControl>
               <SelectTrigger className="border-slate-700 h-9">
                 <SelectValue />

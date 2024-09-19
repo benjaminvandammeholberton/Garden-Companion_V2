@@ -5,6 +5,7 @@ import DirectSowingForm from "../features/dashboard-modules/actions/DirectSowing
 // import IndirectSowingForm from "../features/dashboard-modules/actions/IndirectSowingForm";
 import PlantingForm from "../features/dashboard-modules/actions/PlantingForm";
 import RemoveForm from "@/features/dashboard-modules/actions/RemoveForm";
+import HarvestForm from "@/features/dashboard-modules/actions/HarvestForm";
 // import RemoveForm from "../features/dashboard-modules/actions/RemoveForm";
 // import MulchForm from "@/features/dashboard-modules/actions/MulchForm";
 // import TreatForm from "@/features/dashboard-modules/actions/TreatForm";
@@ -27,8 +28,8 @@ const RenderPlantManagerModalContent: React.FC<
     //   return <IndirectSowingForm />;
     case "planting":
       return <PlantingForm onClose={onClose} defaultValues={defaultValues} />;
-    // case "harvest":
-    //   return <HarvestForm onClose={onClose}/>;
+    case "harvest":
+      return <HarvestForm onClose={onClose}/>;
     case "remove":
       return <RemoveForm onClose={onClose} />;
     // case "weed":

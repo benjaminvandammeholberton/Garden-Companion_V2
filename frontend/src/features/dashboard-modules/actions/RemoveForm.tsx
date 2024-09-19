@@ -8,7 +8,6 @@ import removeIcon from "../../../assets/actions-icons/remove.png";
 
 // components
 import FormHeader from "./components/FormHeader";
-import InputAllVegetables from "./components/InputAllVegetables";
 import InputUserAreas from "./components/InputAreas";
 
 // contexts
@@ -28,7 +27,6 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import InputVariety from "./components/InputVariety";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import {
@@ -43,7 +41,7 @@ import { Calendar } from "@/components/ui/calendar";
 import { AreaInterface } from "@/interfaces/interfaces";
 import { Textarea } from "@/components/ui/textarea";
 import axiosInstance, { axiosInstanceFile } from "@/api/axios";
-import InputVegetablesInArea from "./components/InputVegetableInArea";
+
 import FieldVegetablesInArea from "./components/FieldVegetablesInArea";
 
 interface RemoveFormInterface {

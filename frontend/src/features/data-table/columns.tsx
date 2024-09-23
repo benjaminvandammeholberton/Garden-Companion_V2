@@ -82,7 +82,10 @@ export const columns: ColumnDef<Vegetable>[] = [
     },
     cell: ({ row }) => {
       const sowingDate = row.getValue("sowing_date");
-      const formatted = sowingDate !== null ? sowingDate : "-";
+      const formatted =
+        sowingDate !== null
+          ? new Date(sowingDate).toLocaleDateString("fr-FR")
+          : "-";
       return <div className="whitespace-nowrap">{formatted}</div>;
     },
   },
@@ -101,7 +104,10 @@ export const columns: ColumnDef<Vegetable>[] = [
     },
     cell: ({ row }) => {
       const plantingDate = row.getValue("planting_date");
-      const formatted = plantingDate !== null ? plantingDate : "-";
+      const formatted =
+        plantingDate !== null
+          ? new Date(plantingDate).toLocaleDateString("fr-FR")
+          : "-";
       return <div className="whitespace-nowrap">{formatted}</div>;
     },
   },
@@ -135,7 +141,10 @@ export const columns: ColumnDef<Vegetable>[] = [
     },
     cell: ({ row }) => {
       const removeDate = row.getValue("remove_date");
-      const formatted = removeDate !== null ? removeDate : "-";
+      const formatted =
+        removeDate !== null
+          ? new Date(removeDate).toLocaleDateString("fr-FR")
+          : "-";
       return <div className="whitespace-nowrap">{formatted}</div>;
     },
   },

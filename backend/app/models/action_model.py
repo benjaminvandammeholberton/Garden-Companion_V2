@@ -14,6 +14,16 @@ class Action(Document):
     updated_at: datetime = Field(default_factory=datetime.now)
     date: datetime
     type: ActionType
+    watering_quantity: float | None = None
+    watering_unit: str | None = None
+    harvest_quantity: float | None = None
+    harvest_unit: str | None = None
+    fertilizer_name: str | None = None
+    fertilizer_quantity: float | None = None
+    fertilizer_unit: str | None = None
+    treatment_name: str | None = None
+    treatment_quantity: float | None = None
+    treatment_unit: str | None = None
     note: str = Field(None, max_length=500)
     vegetable: UUID | None = None
     area: UUID | None = None

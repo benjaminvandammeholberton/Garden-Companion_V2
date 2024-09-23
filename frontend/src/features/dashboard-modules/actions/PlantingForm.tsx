@@ -106,7 +106,7 @@ const PlantingForm: React.FC<PlantingFormInterface> = ({
       date: values.date.toISOString().slice(0, 10),
       type: "Planter",
     };
-    if (defaultValues.planting) {
+    if (defaultValues?.planting) {
       data["sowing_date"] = defaultValues.planting.created_at.slice(0, 10);
     }
     if (file && file.length > 0) {

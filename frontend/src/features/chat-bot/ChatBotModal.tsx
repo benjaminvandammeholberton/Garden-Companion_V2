@@ -264,7 +264,11 @@ const ChatBotModal: React.FC<ChatBotModalProps> = ({ isOpen, onClose }) => {
               disabled={isLoading}
             />
             <Button variant={"ghost"} size={"icon"} onClick={sendChatBotRquest}>
-              <SendHorizontal size={30} strokeWidth={1.5} className="dark:text-black"/>
+              <SendHorizontal
+                size={30}
+                strokeWidth={1.5}
+                className="dark:text-black"
+              />
             </Button>
           </div>
         </Card>

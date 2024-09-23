@@ -56,8 +56,8 @@ const Dashboard = () => {
               </CardContent>
             </Card>
             <Card className="h-[350px] w-[370px] relative">
-              <ModuleHeader title={"Prêt à semer !"} />
-              <CardContent className="p-2">
+              <ModuleHeader title={"Guide"} />
+              <CardContent className="p-2 mt-[-10px]">
                 <Recommandations />
               </CardContent>
             </Card>

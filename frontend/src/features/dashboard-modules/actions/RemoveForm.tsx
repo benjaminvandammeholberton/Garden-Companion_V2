@@ -106,32 +106,39 @@ const RemoveForm: React.FC<RemoveFormInterface> = ({ onClose }) => {
     }
 
     try {
-      let selected_area: AreaInterface | undefined;
       await axiosInstance.post("/api/v1/action/", data);
-      const updatedArea = areas.filter((area) => (area.area_id = data.area))[0];
-      console.log(updatedArea);
-      // setAreas((prev) => (
+      const updatedArea = areas.find((area) => area.area_id === data.area);
+      const updatedVegetable = updatedArea?.vegetables.find(
+        (veg) => veg.vegetable_manager_id === data.vegetable
+      );
+      const updatedVegetables = updatedArea?.vegetables.map((veg) => {
+        if (veg.vegetable_manager_id !== data.vegetable) {
+          return veg;
+        } else {
+          return {
+            ...veg,
+            remove_date: data.date,
+          };
+        }
+      });
 
-      // ))
-      // const newVegetable = response.data;
-      // if (newVegetable) {
-      //   const newAreas = areas.map((area) => {
-      //     if (area.area_id === newVegetable?.area) {
-      //       selected_area = area;
-      //       return {
-      //         ...area,
-      //         vegetables: [...(area.vegetables || []), newVegetable],
-      //       };
-      //     }
-      //     return area;
-      //   });
-      //   setAreas(newAreas);
-      //   toast({
-      //     title: "Fn de culture enregistrée 👍",
-      //     description: `de votre espace: ${selected_area?.name ?? ""}`,
-      //   });
-      // }
-      // onClose();
+      setAreas((prev) =>
+        prev.map((area) => {
+          if (area.area_id !== updatedArea.area_id) {
+            return area;
+          } else {
+            return {
+              ...area,
+              vegetables: updatedVegetables,
+            };
+          }
+        })
+      );
+      toast({
+        title: "Fn de culture enregistrée 👍",
+        description: `${updatedVegetable.name} de ${updatedArea?.name ?? ""}`,
+      });
+      onClose();
     } catch (error) {
       console.error(error);
     }

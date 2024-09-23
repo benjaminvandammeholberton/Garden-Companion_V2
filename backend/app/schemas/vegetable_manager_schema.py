@@ -109,3 +109,4 @@ class VegetableManagerOut(BaseModel):
     note: list[NoteType] | None
     area: UUID | None
     harvest_unit: str | None
+    quantity_harvested: float | None

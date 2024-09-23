@@ -3,7 +3,7 @@ import { format } from "date-fns";
 import { fr } from "date-fns/locale";
 
 // assets
-import wateringIcon from "../../../assets/actions-icons/watering.png";
+import observationIcon from "../../../assets/actions-icons/camera.png";
 
 // components
 import FormHeader from "./components/FormHeader";
@@ -41,19 +41,17 @@ import axiosInstance, { axiosInstanceFile } from "@/api/axios";
 import FieldVegetablesInArea from "./components/FieldVegetablesInArea";
 import { useState } from "react";
 
-interface WateringFormInterface {
+interface ObservationFormInterface {
   onClose: () => void;
 }
 
-const WateringForm: React.FC<WateringFormInterface> = ({ onClose }) => {
+const ObservationForm: React.FC<ObservationFormInterface> = ({ onClose }) => {
   const [selectedArea, setSelectedArea] = useState("");
   const { toast } = useToast();
 
   const formSchema = z.object({
     vegetable: z.string().max(50).nullable().optional(),
     area: z.string().min(1),
-    watering_quantity: z.coerce.number().gte(0).optional(),
-    watering_unit: z.string().optional(),
     date: z.date(),
     note: z.string().max(500).optional(),
     file: z.instanceof(FileList).optional(),
@@ -64,8 +62,6 @@ const WateringForm: React.FC<WateringFormInterface> = ({ onClose }) => {
     defaultValues: {
       vegetable: null,
       area: "",
-      watering_quantity: 0,
-      watering_unit: "",
       date: new Date(),
       note: "",
     },
@@ -79,7 +75,7 @@ const WateringForm: React.FC<WateringFormInterface> = ({ onClose }) => {
     const data = {
       ...rest,
       date: rest.date.toISOString().slice(0, 10),
-      type: "Arroser",
+      type: "Observation",
     };
 
     if (file && file.length > 0) {
@@ -96,7 +92,7 @@ const WateringForm: React.FC<WateringFormInterface> = ({ onClose }) => {
     try {
       await axiosInstance.post("/api/v1/action/", data);
       toast({
-        title: "Arrosage enregistré 👍",
+        title: "Observation enregistrée 👍",
         description: ``,
       });
       onClose();
@@ -108,7 +104,7 @@ const WateringForm: React.FC<WateringFormInterface> = ({ onClose }) => {
   return (
     <div className="flex flex-col gap-10 w-4/5">
       <Form {...form}>
-        <FormHeader icon={wateringIcon} name="Arroser" />
+        <FormHeader icon={observationIcon} name="Observation" />
         <form
           onSubmit={form.handleSubmit(onSubmit)}
           className="flex flex-col gap-5"
@@ -126,39 +122,6 @@ const WateringForm: React.FC<WateringFormInterface> = ({ onClose }) => {
             )}
           />
           <FieldVegetablesInArea form={form} selectedArea={selectedArea} />
-          <div className="flex justify-between">
-            <FormField
-              control={form.control}
-              name="watering_quantity"
-              render={({ field }) => (
-                <FormItem className="flex flex-col items-center w-4/12">
-                  <FormLabel>Quantité</FormLabel>
-                  <FormControl>
-                    <Input type="number" {...field} className="h-8" />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="watering_unit"
-              render={({ field }) => (
-                <FormItem className="flex flex-col items-center w-3/6">
-                  <FormLabel>Unité</FormLabel>
-                  <FormControl>
-                    <Input
-                      placeholder="litres, minutes, ..."
-                      type="text"
-                      {...field}
-                      value={field.value}
-                      className="h-8"
-                    />
-                  </FormControl>
-                </FormItem>
-              )}
-            />
-          </div>
           <FormField
             control={form.control}
             name="date"
@@ -235,11 +198,11 @@ const WateringForm: React.FC<WateringFormInterface> = ({ onClose }) => {
               );
             }}
           />
-          <Button type="submit">Arroser</Button>
+          <Button type="submit">Enregistrer</Button>
         </form>
       </Form>
     </div>
   );
 };
 
-export default WateringForm;
+export default ObservationForm;

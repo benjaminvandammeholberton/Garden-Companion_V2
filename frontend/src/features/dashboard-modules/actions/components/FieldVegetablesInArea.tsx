@@ -1,7 +1,3 @@
-// assets
-import vegetableIconsMaps from "../../../../maps/vegetableMaps";
-import unknownVegetableIcon from "../../../../assets/vegetables-icons/unknown-vegetable.png";
-
 import {
   FormControl,
   FormField,
@@ -17,6 +13,7 @@ import {
 } from "@/components/ui/select";
 import AreasContext from "@/contexts/AreasContext";
 import { useContext, useEffect, useState } from "react";
+import getVegetableAsset from "@/utils/getVegetableAsset";
 
 interface FieldVegetablesInAreasInterface {
   setInput: (value: string) => void;
@@ -34,6 +31,7 @@ const FieldVegetablesInAreas: React.FC<FieldVegetablesInAreasInterface> = ({
   }
   const { areas, setAreas } = areasContext;
   const [vegetableInAreas, setVegetableInAreast] = useState([]);
+
   useEffect(() => {
     if (selectedArea) {
       const vegetables = areas.filter(
@@ -43,22 +41,17 @@ const FieldVegetablesInAreas: React.FC<FieldVegetablesInAreasInterface> = ({
     }
   }, [selectedArea, areas]);
 
-  const getVegetableAsset = (vegetableName) => {
-    if (vegetableName) {
-      return (
-        (
-          vegetableIconsMaps.filter((vegetable) => {
-            return vegetable.name.fr === vegetableName.toLowerCase();
-          })[0] || {}
-        ).assets || unknownVegetableIcon
-      );
-    }
-  };
-
-  const handleVegetableChange = (onChange: (value: any) => void, value: any) => {
-    if (setCurrentQuantityUnit){
-      const vegetable = areas.find(((area) => area.area_id === selectedArea))?.vegetables.find((vegetable) => vegetable.vegetable_manager_id === value)
-        setCurrentQuantityUnit(vegetable?.harvest_unit || "")
+  const handleVegetableChange = (
+    onChange: (value: any) => void,
+    value: any
+  ) => {
+    if (setCurrentQuantityUnit) {
+      const vegetable = areas
+        .find((area) => area.area_id === selectedArea)
+        ?.vegetables.find(
+          (vegetable) => vegetable.vegetable_manager_id === value
+        );
+      setCurrentQuantityUnit(vegetable?.harvest_unit || "");
     }
     onChange(value);
   };
@@ -70,13 +63,25 @@ const FieldVegetablesInAreas: React.FC<FieldVegetablesInAreasInterface> = ({
       render={({ field }) => (
         <FormItem className="flex flex-col items-center w-full">
           <FormLabel>Sélectionner votre plante</FormLabel>
-          <Select onValueChange={(value) => handleVegetableChange(field.onChange, value)} defaultValue={field.value}>
+          <Select
+            onValueChange={(value) =>
+              handleVegetableChange(field.onChange, value)
+            }
+            defaultValue={field.value}
+          >
             <FormControl>
               <SelectTrigger className="border-slate-700 h-9">
                 <SelectValue />
               </SelectTrigger>
             </FormControl>
             <SelectContent>
+              {!setCurrentQuantityUnit && (
+                <SelectItem value={null}>
+                  <div className="flex items-center gap-2">
+                    Toute la zone de culture
+                  </div>
+                </SelectItem>
+              )}
               {vegetableInAreas.map((vegetable) => {
                 if (!vegetable.remove_date) {
                   return (

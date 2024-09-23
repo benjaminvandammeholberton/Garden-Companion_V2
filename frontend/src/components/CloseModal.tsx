@@ -11,7 +11,7 @@ const CloseModal: React.FC<CloseModalProps> = ({ onClose }) => {
       variant={"ghost"}
       onClick={onClose}
       size={"icon"}
-      className="absolute top-2 right-2"
+      className="absolute right-4 top-4"
     >
       <CircleX />
     </Button>

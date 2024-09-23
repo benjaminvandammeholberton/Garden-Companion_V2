@@ -17,9 +17,9 @@ class ActionType(str, Enum):
     harvesting = "Récolter"
     watering = "Arroser"
     fertilizing = "Fertiliser"
-    treating = "Traîter"
+    treating = "Traiter"
     weeding = "Désherber"
-    mulching = "Pailler"
+    observation = "Observation"
     creating = "Création"
 
 
@@ -35,6 +35,16 @@ class ActionCreate(BaseModel):
     quantity_unit: str | None = None
     variety: str | None = None
     sowing_date: date | None = None
+    harvest_quantity: float | None = None
+    harvest_unit: str | None = None
+    watering_quantity: int | None = None
+    watering_unit: str | None = None
+    fertilizer_name: str | None = None
+    fertilizer_quantity: float | None = None
+    fertilizer_unit: str | None = None
+    treatment_name: str | None = None
+    treatment_quantity: float | None = None
+    treatment_unit: str | None = None
 
 
 class ActionOut(BaseModel):
@@ -47,6 +57,16 @@ class ActionOut(BaseModel):
     updated_at: datetime
     photo: str | None = None
     date: date
+    harvest_quantity: float | None = None
+    harvest_unit: str | None = None
+    watering_quantity: int | None = None
+    watering_unit: str | None = None
+    fertilizer_name: str | None = None
+    fertilizer_quantity: float | None = None
+    fertilizer_unit: str | None = None
+    treatment_name: str | None = None
+    treatment_quantity: float | None = None
+    treatment_unit: str | None = None
 
 
 class ActionUpdate(BaseModel):

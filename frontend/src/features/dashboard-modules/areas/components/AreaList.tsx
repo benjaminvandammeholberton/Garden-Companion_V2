@@ -13,6 +13,7 @@ import AreasContext from "@/contexts/AreasContext";
 
 // ui
 import { Skeleton } from "@/components/ui/skeleton";
+import { CirclePlus } from "lucide-react";
 
 interface AreaListProps {
   sortedBy: string;
@@ -35,6 +36,18 @@ const AreaList: React.FC<AreaListProps> = ({ sortedBy, openModal }) => {
     if (env === "outdoor") areaIcon = outdoor;
     return areaIcon;
   };
+
+  if (areas.length === 0) {
+    return (
+      <div className="text-lg w-full mx-auto text-center flex items-center mt-5 leading-8">
+        <span>
+          {" "}
+          Pour commencer, créez une zone de culture en cliquant sur{" "}
+          <CirclePlus className="inline" size={"25"} strokeWidth={1.5} />
+        </span>
+      </div>
+    );
+  }
 
   return (
     <div className="overflow-y-auto overflow-x-hidden h-[280px] px-2 font-thin text-xl scrollbar-thin scrollbar-thumb-rounded-full scrollbar-track-rounded-full scrollbar-thumb-slate-400 scrollbar-track-gray-100 dark:scrollbar-thumb-gray-100 dark:scrollbar-track-slate-900">

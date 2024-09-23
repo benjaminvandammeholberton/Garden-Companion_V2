@@ -1,6 +1,3 @@
-// assets
-import { addIcon, sortIcon, backIcon } from "../../../../assets/assets-path";
-
 // components
 import AreaList from "./AreaList";
 import AreaFormAdd from "./AreaFormAdd";

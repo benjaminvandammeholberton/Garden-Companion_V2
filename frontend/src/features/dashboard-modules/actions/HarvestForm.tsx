@@ -51,9 +51,8 @@ interface HarvestFormInterface {
 
 const HarvestForm: React.FC<HarvestFormInterface> = ({ onClose }) => {
   const [selectedArea, setSelectedArea] = useState("");
-  const [currentQuantityUnit, setCurrentQuantityUnit] = useState("")
+  const [currentQuantityUnit, setCurrentQuantityUnit] = useState("");
   const { toast } = useToast();
-
 
   const vegetablesContext = useContext(VegetablesContext);
   if (!vegetablesContext) {
@@ -71,7 +70,7 @@ const HarvestForm: React.FC<HarvestFormInterface> = ({ onClose }) => {
   const formSchema = z.object({
     vegetable: z.string().min(2).max(50),
     area: z.string(),
-    harvest_quantity: z.number().positive(),
+    harvest_quantity: z.coerce.number().positive(),
     harvest_unit: z.string(),
     date: z.date(),
     note: z.string().max(500).optional(),
@@ -98,7 +97,9 @@ const HarvestForm: React.FC<HarvestFormInterface> = ({ onClose }) => {
     const data = {
       ...rest,
       date: rest.date.toISOString().slice(0, 10),
-      type: "Fin de culture",
+      harvest_quantity: rest.harvest_quantity,
+      harvest_unit: rest.harvest_unit,
+      type: "Récolter",
     };
 
     if (file && file.length > 0) {
@@ -113,32 +114,36 @@ const HarvestForm: React.FC<HarvestFormInterface> = ({ onClose }) => {
     }
 
     try {
-      let selected_area: AreaInterface | undefined;
-      await axiosInstance.post("/api/v1/action/", data);
-      const updatedArea = areas.filter((area) => (area.area_id = data.area))[0];
-      console.log(updatedArea);
-      // setAreas((prev) => (
-
-      // ))
-      // const newVegetable = response.data;
-      // if (newVegetable) {
-      //   const newAreas = areas.map((area) => {
-      //     if (area.area_id === newVegetable?.area) {
-      //       selected_area = area;
-      //       return {
-      //         ...area,
-      //         vegetables: [...(area.vegetables || []), newVegetable],
-      //       };
-      //     }
-      //     return area;
-      //   });
-      //   setAreas(newAreas);
-      //   toast({
-      //     title: "Fn de culture enregistrée 👍",
-      //     description: `de votre espace: ${selected_area?.name ?? ""}`,
-      //   });
-      // }
-      // onClose();
+      const response = await axiosInstance.post("/api/v1/action/", data);
+      const updatedArea = areas.find((area) => area.area_id === data.area);
+      const updatedVegetables = updatedArea?.vegetables.map((veg) => {
+        if (veg.vegetable_manager_id !== data.vegetable) {
+          return veg;
+        } else {
+          return {
+            ...veg,
+            quantity_harvested: response.data.quantity_harvested,
+            harvest_unit: response.data.harvest_unit,
+          };
+        }
+      });
+      setAreas((prev) =>
+        prev.map((area) => {
+          if (area.area_id !== updatedArea?.area_id) {
+            return area;
+          } else {
+            return {
+              ...area,
+              vegetables: updatedVegetables,
+            };
+          }
+        })
+      );
+      toast({
+        title: "Récolte enregistrée 👍",
+        description: `${response.data.name} (${response.data.variety}) : + ${data.harvest_quantity} ${data.harvest_unit}`,
+      });
+      onClose();
     } catch (error) {
       console.error(error);
     }
@@ -164,7 +169,11 @@ const HarvestForm: React.FC<HarvestFormInterface> = ({ onClose }) => {
               />
             )}
           />
-          <FieldVegetablesInArea form={form} selectedArea={selectedArea} setCurrentQuantityUnit={setCurrentQuantityUnit}  />
+          <FieldVegetablesInArea
+            form={form}
+            selectedArea={selectedArea}
+            setCurrentQuantityUnit={setCurrentQuantityUnit}
+          />
           <div className="flex justify-between">
             <FormField
               control={form.control}
@@ -190,7 +199,11 @@ const HarvestForm: React.FC<HarvestFormInterface> = ({ onClose }) => {
                       placeholder="gramme, unité, ..."
                       type="text"
                       {...field}
-                      value={currentQuantityUnit !== "" ? currentQuantityUnit : field.value}
+                      value={
+                        currentQuantityUnit !== ""
+                          ? currentQuantityUnit
+                          : field.value
+                      }
                       className="h-8"
                       disabled={currentQuantityUnit != ""}
                     />
@@ -276,7 +289,7 @@ const HarvestForm: React.FC<HarvestFormInterface> = ({ onClose }) => {
               );
             }}
           />
-          <Button type="submit">Fin de culture</Button>
+          <Button type="submit">Récolter</Button>
         </form>
       </Form>
     </div>

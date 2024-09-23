@@ -6,7 +6,7 @@ import directSowingIcon from "../../../assets/actions-icons/direct-sowing.png";
 import harvestIcon from "../../../assets/actions-icons/harvest.png";
 import plantingIcon from "../../../assets/actions-icons/planting.png";
 import removeIcon from "../../../assets/actions-icons/remove.png";
-import mulchIcon from "../../../assets/actions-icons/mulch.png";
+import cameraIcon from "../../../assets/actions-icons/camera.png";
 import wateringIcon from "../../../assets/actions-icons/watering.png";
 import fertilizeIcon from "../../../assets/actions-icons/fertilize.png";
 import weedIcon from "../../../assets/actions-icons/weed.png";
@@ -84,7 +84,7 @@ const ActionsModule: React.FC<ActionsModuleProps> = () => {
           className="transition ease-in-out hover:scale-110 flex flex-col items-center cursor-pointer"
         >
           <img className="w-12" src={removeIcon} alt="" />
-          <p className="text-sm text-gray-500 dark:text-white">
+          <p className="text-sm text-gray-500 dark:text-white text-center">
             Fin de culture
           </p>
         </div>
@@ -98,11 +98,11 @@ const ActionsModule: React.FC<ActionsModuleProps> = () => {
         </div>
 
         <div
-          onClick={() => openModal("mulch")}
+          onClick={() => openModal("observation")}
           className="transition ease-in-out hover:scale-110 flex flex-col items-center cursor-pointer"
         >
-          <img className="w-12" src={mulchIcon} alt="" />
-          <p className="text-sm text-gray-500 dark:text-white">Pailler</p>
+          <img className="w-12" src={cameraIcon} alt="" />
+          <p className="text-sm text-gray-500 dark:text-white">Observation</p>
         </div>
       </div>
       {/* <div className="flex justify-center gap-20 mt-5">

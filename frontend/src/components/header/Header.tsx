@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { KeyRound, LogOut, NotebookPen } from "lucide-react";
+import { KeyRound, LogOut } from "lucide-react";
 
 import HeaderModal from "../../modal/HeaderModal";
 import { useNavigate } from "react-router-dom";
@@ -202,11 +202,16 @@ const Header = () => {
   return (
     <div className="w-full fixed top-0 z-50 border-b">
       <div className=" bg-white dark:bg-slate-800 opacity-95 flex items-center justify-between w-full border-b px-10 py-2">
-        <div className="flex gap-5 items-center">
-          <Button variant="ghost" size="icon" onClick={handleLogout}>
-            <LogOut size={"20"} />
-            <span className="sr-only">Logout</span>
-          </Button>
+        <div className="flex flex-col items-center">
+          <h1 className="text-xl lg:text-3xl font-thin ">
+            Garden Companion <span className="text-sm lg:text-xl ">Beta</span>
+          </h1>
+          <span className="text-xs font-thin lg:text-lg">
+            {today.toLocaleDateString("fr-FR", options)}
+          </span>
+        </div>
+        <div className="flex gap-1 md:gap-5 items-center">
+          <ModeToggle />
           <Popover>
             <PopoverTrigger asChild>
               <Button variant={"ghost"} size={"icon"}>
@@ -217,20 +222,13 @@ const Header = () => {
               <UpdatePassword />
             </PopoverContent>
           </Popover>
-        </div>
-        <div className="flex flex-col items-center">
-          <h1 className="text-2xl lg:text-3xl font-thin ">
-            Garden Companion <span className="text-sm lg:text-xl ">Beta</span>
-          </h1>
-          <span className="font-thin lg:text-md">
-            {today.toLocaleDateString("fr-FR", options)}
-          </span>
-        </div>
-        <div className="flex gap-5 items-center">
-          <Button variant={"ghost"} size={"icon"}>
+          {/* <Button variant={"ghost"} size={"icon"}>
             <NotebookPen size={"20"} />
+          </Button> */}
+          <Button variant="ghost" size="icon" onClick={handleLogout}>
+            <LogOut size={"20"} />
+            <span className="sr-only">Logout</span>
           </Button>
-          <ModeToggle />
         </div>
       </div>
       <HeaderModal
@@ -238,6 +236,7 @@ const Header = () => {
         content={modalContent}
         onClose={closeModal}
       />
+
       <NavbarMobile onClose={closeModalNavBar} isOpen={isModalNavBarOpen} />
     </div>
   );

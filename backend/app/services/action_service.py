@@ -74,16 +74,25 @@ class ActionService:
             )
             action = Action(**data.model_dump(), owner=user.user_id)
             await action.create()
+            return
 
         if data.type == ActionType.harvesting:
-            updated_vegetable = await VegetableManagerService.update_vegetable(
-                user,
-                data.vegetable_id,
-                data
-            )
-            action = Action(**action_data.model_dump(), owner=user.user_id)
+            updated_vegetable = await VegetableManagerService.retrieve_vegetable(user, data.vegetable)
+            initial_quantity = updated_vegetable.quantity_harvested
+            if not initial_quantity:
+                quantity = data.harvest_quantity
+            else:
+                quantity = initial_quantity + data.harvest_quantity
+            updated_vegetable.quantity_harvested = quantity
+            updated_vegetable.harvest_unit = data.harvest_unit
+            await updated_vegetable.save()
+            action = Action(**data.model_dump(), owner=user.user_id)
             await action.create()
             return updated_vegetable
+
+        action = Action(**data.model_dump(), owner=user.user_id)
+        await action.create()
+        return
 
     @staticmethod
     async def retrieve_action(

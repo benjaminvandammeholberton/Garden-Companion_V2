@@ -31,15 +31,21 @@ const ToDoListModule = () => {
     }
   };
 
+  // const sortChoices = [
+  //   ["priorité (élevée en tête)", "priority ascending"],
+  //   ["priorité (normale en tête)", "priority descending"],
+  //   ["complétée (non en tête)", "status ascending"],
+  //   ["complétée (oui en tête)", "status descending"],
+  //   ["date de creation (récent en tête)", "date descending"],
+  //   ["date de creation (ancien en tête)", "date ascending"],
+  //   ["nom (a - z)", "name ascending"],
+  //   ["nom (z - a)", "name descending"],
+  // ];
   const sortChoices = [
-    ["priorité (élevée en tête)", "priority ascending"],
-    ["priorité (normale en tête)", "priority descending"],
-    ["complétée (non en tête)", "status ascending"],
-    ["complétée (oui en tête)", "status descending"],
-    ["date de creation (récent en tête)", "date descending"],
-    ["date de creation (ancien en tête)", "date ascending"],
-    ["nom (a - z)", "name ascending"],
-    ["nom (z - a)", "name descending"],
+    ["priorité", "priority ascending"],
+    ["complétée", "status ascending"],
+    ["date de creation", "date descending"],
+    ["nom", "name ascending"],
   ];
 
   return (

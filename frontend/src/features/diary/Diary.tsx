@@ -5,7 +5,7 @@ import harvestIcon from "../../assets/actions-icons/harvest.png";
 import waterIcon from "../../assets/actions-icons/watering.png";
 import removeIcon from "../../assets/actions-icons/remove.png";
 import treatIcon from "../../assets/actions-icons/parasite.png";
-import mulchIcon from "../../assets/actions-icons/mulch.png";
+import cameraIcon from "../../assets/actions-icons/camera.png";
 import weedIcon from "../../assets/actions-icons/weed.png";
 import fertilizeIcon from "../../assets/actions-icons/fertilize.png";
 import placeHolderImage from "../../assets/placeholder-image.jpeg";
@@ -148,69 +148,167 @@ const DiaryItemPlanting = ({ action }) => {
 };
 
 const DiaryItemHarvesting = ({ action }) => {
+  let vegetableAsset;
+  if (action.vegetable) {
+    vegetableAsset = vegetableIconsMaps.find(
+      (asset) => asset.name.fr === action.vegetable.name.toLowerCase()
+    );
+  }
+  let file_path;
+  if (action.photo) {
+    file_path = "http://127.0.0.1:8001/" + action.photo;
+  }
   return (
     <>
       <div className="flex gap-2 lg:gap-5">
-        <img className="w-12 h-12" src={directSowingIcon} alt="" />
-        <img className="w-12 h-12" src={carrotIcon} alt="" />
+        <img className="w-12 h-12" src={harvestIcon} alt="" />
+        {vegetableAsset && (
+          <img className="w-12 h-12" src={vegetableAsset?.assets} alt="" />
+        )}
       </div>
-      <div className="cursor-pointer">4 rangées de Carotte - Nantaise </div>
-      <p className="text-justify">
-        <span className="font-semibold">Notes : </span>
-        {action.note}
-      </p>
-      <img className="w-3/4 rounded-sm" src={placeHolderImage} alt="" />
+      <div className="cursor-pointer">
+        {action.harvest_quantity} {action.harvest_unit || "kg"}{" "}
+        {action.fertilizer_unit || ""}{" "}
+        {action.vegetable &&
+          `de : ${action.vegetable.name} (${action.vegetable?.variety})`}
+      </div>
+      {action.note && (
+        <p className="text-justify">
+          <span className="font-semibold">Notes : </span>
+          {action.note}
+        </p>
+      )}
+      {file_path && (
+        <img
+          className="w-3/4 max-h-72 object-contain rounded-sm"
+          src={file_path}
+          alt=""
+        />
+      )}
     </>
   );
 };
 
 const DiaryItemWatering = ({ action }) => {
+  let vegetableAsset;
+  if (action.vegetable) {
+    vegetableAsset = vegetableIconsMaps.find(
+      (asset) => asset.name.fr === action.vegetable.name.toLowerCase()
+    );
+  }
+  let file_path;
+  if (action.photo) {
+    file_path = "http://127.0.0.1:8001/" + action.photo;
+  }
   return (
     <>
       <div className="flex gap-2 lg:gap-5">
-        <img className="w-12 h-12" src={directSowingIcon} alt="" />
-        <img className="w-12 h-12" src={carrotIcon} alt="" />
+        <img className="w-12 h-12" src={waterIcon} alt="" />
+        {vegetableAsset && (
+          <img className="w-12 h-12" src={vegetableAsset?.assets} alt="" />
+        )}
       </div>
-      <div className="cursor-pointer">4 rangées de Carotte - Nantaise </div>
-      <p className="text-justify">
-        <span className="font-semibold">Notes : </span>
-        {action.note}
-      </p>
-      <img className="w-3/4 rounded-sm" src={placeHolderImage} alt="" />
+      <div className="cursor-pointer">
+        {action.watering_quantity || ""} {action.watering_unit || ""}{" "}
+        {action.vegetable &&
+          `: ${action.vegetable.name} (
+        ${action.vegetable?.variety})`}
+      </div>
+      {action.note && (
+        <p className="text-justify">
+          <span className="font-semibold">Notes : </span>
+          {action.note}
+        </p>
+      )}
+      {file_path && (
+        <img
+          className="w-3/4 max-h-72 object-cover rounded-sm"
+          src={file_path}
+          alt=""
+        />
+      )}
     </>
   );
 };
 
 const DiaryItemWeeding = ({ action }) => {
+  let vegetableAsset;
+  if (action.vegetable) {
+    vegetableAsset = vegetableIconsMaps.find(
+      (asset) => asset.name.fr === action.vegetable.name.toLowerCase()
+    );
+  }
+  let file_path;
+  if (action.photo) {
+    file_path = "http://127.0.0.1:8001/" + action.photo;
+  }
   return (
     <>
       <div className="flex gap-2 lg:gap-5">
-        <img className="w-12 h-12" src={directSowingIcon} alt="" />
-        <img className="w-12 h-12" src={carrotIcon} alt="" />
+        <img className="w-12 h-12" src={weedIcon} alt="" />
+        {vegetableAsset && (
+          <img className="w-12 h-12" src={vegetableAsset?.assets} alt="" />
+        )}
       </div>
-      <div className="cursor-pointer">4 rangées de Carotte - Nantaise </div>
-      <p className="text-justify">
-        <span className="font-semibold">Notes : </span>
-        {action.note}
-      </p>
-      <img className="w-3/4 rounded-sm" src={placeHolderImage} alt="" />
+      <div className="cursor-pointer">
+        {action.vegetable &&
+          `${action.vegetable.name} (${action.vegetable?.variety})`}
+      </div>
+      {action.note && (
+        <p className="text-justify">
+          <span className="font-semibold">Notes : </span>
+          {action.note}
+        </p>
+      )}
+      {file_path && (
+        <img
+          className="w-3/4 max-h-72 object-contain rounded-sm"
+          src={file_path}
+          alt=""
+        />
+      )}
     </>
   );
 };
 
 const DiaryItemFertilizing = ({ action }) => {
+  let vegetableAsset;
+  if (action.vegetable) {
+    vegetableAsset = vegetableIconsMaps.find(
+      (asset) => asset.name.fr === action.vegetable.name.toLowerCase()
+    );
+  }
+  let file_path;
+  if (action.photo) {
+    file_path = "http://127.0.0.1:8001/" + action.photo;
+  }
   return (
     <>
       <div className="flex gap-2 lg:gap-5">
-        <img className="w-12 h-12" src={directSowingIcon} alt="" />
-        <img className="w-12 h-12" src={carrotIcon} alt="" />
+        <img className="w-12 h-12" src={treatIcon} alt="" />
+        {vegetableAsset && (
+          <img className="w-12 h-12" src={vegetableAsset?.assets} alt="" />
+        )}
       </div>
-      <div className="cursor-pointer">4 rangées de Carotte - Nantaise </div>
-      <p className="text-justify">
-        <span className="font-semibold">Notes : </span>
-        {action.note}
-      </p>
-      <img className="w-3/4 rounded-sm" src={placeHolderImage} alt="" />
+      <div className="cursor-pointer">
+        {action.fertilizer_name} : {action.fertilizer_quantity || ""}{" "}
+        {action.fertilizer_unit || ""}{" "}
+        {action.vegetable &&
+          `pour ${action.vegetable.name} (${action.vegetable?.variety})`}
+      </div>
+      {action.note && (
+        <p className="text-justify">
+          <span className="font-semibold">Notes : </span>
+          {action.note}
+        </p>
+      )}
+      {file_path && (
+        <img
+          className="w-3/4 max-h-72 object-contain rounded-sm"
+          src={file_path}
+          alt=""
+        />
+      )}
     </>
   );
 };
@@ -249,39 +347,84 @@ const DiaryItemRemoving = ({ action }) => {
   );
 };
 
-const DiaryItemMulching = ({ action }) => {
+const DiaryItemObservation = ({ action }) => {
+  let vegetableAsset;
+  if (action.vegetable) {
+    vegetableAsset = vegetableIconsMaps.find(
+      (asset) => asset.name.fr === action.vegetable.name.toLowerCase()
+    );
+  }
+  let file_path;
+  if (action.photo) {
+    file_path = "http://127.0.0.1:8001/" + action.photo;
+  }
   return (
     <>
       <div className="flex gap-2 lg:gap-5">
-        <img className="w-12 h-12" src={directSowingIcon} alt="" />
-        <img className="w-12 h-12" src={carrotIcon} alt="" />
+        <img className="w-12 h-12" src={cameraIcon} alt="" />
+        {vegetableAsset && (
+          <img className="w-12 h-12" src={vegetableAsset?.assets} alt="" />
+        )}
       </div>
       <div className="cursor-pointer">
-        {action.vegetable.quantity} {action.vegetable.quantity_unit} de{" "}
-        {action.vegetable.quantity_unit}- Nantaise{" "}
+        {action.vegetable?.name &&
+          `${action.vegetable.name} (${action.vegetable.variety})`}
       </div>
-      <p className="text-justify">
-        <span className="font-semibold">Notes : </span>
-        {action.note}
-      </p>
-      <img className="w-3/4 rounded-sm" src={placeHolderImage} alt="" />
+      {action.note && (
+        <p className="text-justify">
+          <span className="font-semibold">Notes : </span>
+          {action.note}
+        </p>
+      )}
+      {file_path && (
+        <img
+          className="w-3/4 max-h-72 object-contain rounded-sm"
+          src={file_path}
+          alt=""
+        />
+      )}
     </>
   );
 };
 
 const DiaryItemTreating = ({ action }) => {
+  let vegetableAsset;
+  if (action.vegetable) {
+    vegetableAsset = vegetableIconsMaps.find(
+      (asset) => asset.name.fr === action.vegetable.name.toLowerCase()
+    );
+  }
+  let file_path;
+  if (action.photo) {
+    file_path = "http://127.0.0.1:8001/" + action.photo;
+  }
   return (
     <>
       <div className="flex gap-2 lg:gap-5">
-        <img className="w-12 h-12" src={directSowingIcon} alt="" />
-        <img className="w-12 h-12" src={carrotIcon} alt="" />
+        <img className="w-12 h-12" src={treatIcon} alt="" />
+        {vegetableAsset && (
+          <img className="w-12 h-12" src={vegetableAsset?.assets} alt="" />
+        )}
       </div>
-      <div className="cursor-pointer">4 rangées de Carotte - Nantaise </div>
-      <p className="text-justify">
-        <span className="font-semibold">Notes : </span>
-        {action.note}
-      </p>
-      <img className="w-3/4 rounded-sm" src={placeHolderImage} alt="" />
+      <div className="cursor-pointer">
+        {action.treatment_name} : {action.treatment_quantity || ""}{" "}
+        {action.treatment_unit || ""}{" "}
+        {action.vegetable &&
+          `sur ${action.vegetable.name} (${action.vegetable?.variety})`}
+      </div>
+      {action.note && (
+        <p className="text-justify">
+          <span className="font-semibold">Notes : </span>
+          {action.note}
+        </p>
+      )}
+      {file_path && (
+        <img
+          className="w-3/4 max-h-72 object-contain rounded-sm"
+          src={file_path}
+          alt=""
+        />
+      )}
     </>
   );
 };
@@ -313,10 +456,10 @@ const DiaryItemGeneral: React.FC<DiaryItemGeneralProps> = ({ action }) => {
     Planter: [<DiaryItemPlanting action={action} />, "Plantation"],
     Arroser: [<DiaryItemWatering action={action} />, "Arrosage"],
     Fertiliser: [<DiaryItemFertilizing action={action} />, "Fertilisation"],
-    Traîter: [<DiaryItemTreating action={action} />, "Traîtement"],
+    Traiter: [<DiaryItemTreating action={action} />, "Traitement"],
     Récolter: [<DiaryItemHarvesting action={action} />, "Récolte"],
     Désherber: [<DiaryItemWeeding action={action} />, "Désherbage"],
-    Pailler: [<DiaryItemMulching action={action} />, "Paillage"],
+    Observation: [<DiaryItemObservation action={action} />, "Observation"],
     "Fin de culture": [<DiaryItemRemoving action={action} />, "Fin de culture"],
     Création: [<DiaryItemCreating action={action} />, "Création"],
   };
@@ -351,9 +494,9 @@ const Diary: React.FC<DiarayProps> = ({ area }) => {
     "Récolter",
     "Arroser",
     "Fertiliser",
-    "Traîter",
+    "Traiter",
     "Désherber",
-    "Pailler",
+    "Observation",
   ];
   const [actions, setActions] = useState([]);
   const [actionTypes, setActionTypes] = useState(actionType);
@@ -378,11 +521,11 @@ const Diary: React.FC<DiarayProps> = ({ area }) => {
     { icon: plantingIcon, text: "Plantation", type: "Planter" },
     { icon: waterIcon, text: "Arrosage", type: "Arroser" },
     { icon: fertilizeIcon, text: "Fertilisation", type: "Fertiliser" },
-    { icon: treatIcon, text: "Traitement", type: "Traîter" },
+    { icon: treatIcon, text: "Traitement", type: "Traiter" },
     { icon: harvestIcon, text: "Récolte", type: "Récolter" },
     { icon: removeIcon, text: "Fin de culture", type: "Fin de culture" },
     { icon: weedIcon, text: "Désherbage", type: "Désherber" },
-    { icon: mulchIcon, text: "Paillage", type: "Pailler" },
+    { icon: cameraIcon, text: "Observation", type: "Observation" },
   ];
 
   return (

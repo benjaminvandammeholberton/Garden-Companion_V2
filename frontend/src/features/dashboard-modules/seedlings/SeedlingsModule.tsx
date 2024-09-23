@@ -7,12 +7,14 @@ import SeedlingsList from "./SeedlingsList";
 
 // assets
 import { addIcon, sortIcon, backIcon } from "../../../assets/assets-path";
+import { ArrowDownNarrowWide, CirclePlus, Undo2 } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 const SeedlingsModule = () => {
-  const [isSortOpen, toggleSort, sortedBy, handleClickSort] =
-    useSort(localStorage.getItem("sort-seedlings") || ("created_at desc"));
+  const [isSortOpen, toggleSort, sortedBy, handleClickSort] = useSort(
+    localStorage.getItem("sort-seedlings") || "created_at desc"
+  );
   const [addOpen, handleClickAdd] = useAdd();
-
 
   const sortChoices = [
     ["date d'ajout (ancien en tête)", "created_at asc"],
@@ -23,26 +25,26 @@ const SeedlingsModule = () => {
 
   return (
     <div>
-      <div
+      <Button variant={"ghost"} size={"icon"}
         onClick={handleClickAdd}
-        className={`absolute top-2 ${
-          addOpen ? "right-4" : "right-2"
-        } cursor-pointer`}
+        className={`absolute top-3 right-3`}
       >
-        <img
+      {addOpen ? <Undo2 size={"30"} strokeWidth={1.5} /> : <CirclePlus size={"30"} strokeWidth={1.5} />}
+
+        {/* <img
           className={addOpen ? "w-8 h-8" : "w-10 h-10"}
-          src={addOpen ? backIcon : addIcon}
+          src={addOpen ? ckIconba : addIcon}
           alt=""
-        />
-      </div>
-      <div
-        className={`absolute top-2 left-2 cursor-pointer ${
+        /> */}
+      </Button>
+      <Button size={"icon"} variant={"ghost"}
+        className={`absolute top-3 left-3 ${
           addOpen ? "hidden" : "visible"
         }`}
         onClick={toggleSort}
       >
-        <img className="w-10 h-10" src={sortIcon} alt="" />
-      </div>
+        <ArrowDownNarrowWide size={"30"} strokeWidth={1.5}/>
+      </Button>
       <div className={`ml-3 ${isSortOpen ? "visible" : "hidden"}`}>
         Trier par :
         <ul className="ml-5">

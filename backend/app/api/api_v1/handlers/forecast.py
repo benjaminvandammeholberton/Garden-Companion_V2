@@ -5,7 +5,7 @@ This module defines FastAPI routes for retrieving information related to
     cities and forecast weather.
 """
 
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, Query
 
 from app.core.dependencies import get_current_user
 from app.models.user_model import User
@@ -44,6 +44,8 @@ async def retrieve_cities_by_postal_code(
     response_model=list[DailyForecastType]
 )
 async def get_forecast(
+    lat: float = Query(..., description="Latitude for the forecast"),
+    lng: float = Query(..., description="Longitude for the forecast"),
     current_user: User = Depends(get_current_user)
 ):
     """
@@ -53,7 +55,4 @@ async def get_forecast(
     Returns:
     Forecast weather information for the user latitude and longitude.
     """
-    latitude = current_user.localisation.latitude
-    longitude = current_user.localisation.longitude
-
-    return await ForecastService.get_forecast(latitude, longitude)
+    return await ForecastService.get_forecast(lat, lng)

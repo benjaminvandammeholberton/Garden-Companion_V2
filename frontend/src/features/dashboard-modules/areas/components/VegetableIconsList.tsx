@@ -30,7 +30,9 @@ const VegetableIconsList: React.FC<VegetableIconsListInterface> = ({
           if (acc.some((v) => v.name === vegetable.name)) {
             return acc;
           }
-          acc.push(vegetable);
+          if (!vegetable.remove_date) {
+            acc.push(vegetable);
+          }
           return acc;
         },
         []
@@ -66,7 +68,8 @@ const VegetableIconsList: React.FC<VegetableIconsListInterface> = ({
                     opacity-0 
                     group-hover:opacity-100 
                     pointer-events-none
-                    ">
+                    "
+                >
                   {vegetable.name}
                 </div>
               </div>

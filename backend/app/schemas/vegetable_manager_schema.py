@@ -61,7 +61,7 @@ class VegetableManagerCreate(BaseModel):
     sowing_date: date | None = None
     planting_date: date | None = None
     note: list[NoteType] | None = None
-    area: str | None = Field(max_length=50, min_length=1)
+    area: UUID
 
 
 class VegetableManagerUpdate(BaseModel):
@@ -82,6 +82,7 @@ class VegetableManagerUpdate(BaseModel):
     remove_date: date | None = None
     note: NoteType | None = None
     area: str | None = Field(None, max_length=50, min_length=1)
+    harvest_unit: str | None = None
 
 
 class VegetableManagerOut(BaseModel):
@@ -107,3 +108,5 @@ class VegetableManagerOut(BaseModel):
     remove_date: date | None
     note: list[NoteType] | None
     area: UUID | None
+    harvest_unit: str | None
+    quantity_harvested: float | None

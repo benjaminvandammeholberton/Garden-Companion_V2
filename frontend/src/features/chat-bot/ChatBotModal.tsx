@@ -12,6 +12,9 @@ import { v4 as uuidv4 } from "uuid";
 import "../../index.css";
 
 import CloseModal from "../../components/CloseModal";
+import { Card } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { SendHorizontal } from "lucide-react";
 
 interface ChatBotModalProps {
   isOpen: boolean;
@@ -148,7 +151,7 @@ const ChatBotModal: React.FC<ChatBotModalProps> = ({ isOpen, onClose }) => {
   if (!isOpen) return null;
 
   return ReactDOM.createPortal(
-    <div
+    <Card
       className="
     fixed
     bottom-0 
@@ -159,9 +162,6 @@ const ChatBotModal: React.FC<ChatBotModalProps> = ({ isOpen, onClose }) => {
     z-50
     flex-col 
     items-center 
-    bg-white 
-    md:rounded-t-3xl 
-    md:border 
     overflow-hidden
     "
     >
@@ -169,7 +169,7 @@ const ChatBotModal: React.FC<ChatBotModalProps> = ({ isOpen, onClose }) => {
 
       <h1 className="mt-3 text-2xl font-thin">Chatbot</h1>
       <div
-        className="w-full h-full md:h-[390px] overflow-y-scroll pb-20 md:pb-1"
+        className="w-full h-full md:h-[370px] overflow-y-scroll pb-20 md:pb-1"
         ref={modalContainerRef}
       >
         <div className="flex flex-col gap-3 justify-end min-h-full">
@@ -187,8 +187,9 @@ const ChatBotModal: React.FC<ChatBotModalProps> = ({ isOpen, onClose }) => {
                   rounded-3xl 
                   px-4 
                   py-2 
-                  bg-green-300 
+                  bg-green-100 
                   leading-tight
+                  text-black
                   "
                   key={message.id}
                 >
@@ -204,11 +205,12 @@ const ChatBotModal: React.FC<ChatBotModalProps> = ({ isOpen, onClose }) => {
                   border
                   w-fit
                   max-w-[220px]
-                  rounded-3xl
+                  rounded-lg
                   px-4
                   py-2
-                  bg-blue-300
+                  bg-blue-100
                   leading-tight
+                  text-black
                   "
                   key={message.id}
                 >
@@ -228,19 +230,20 @@ const ChatBotModal: React.FC<ChatBotModalProps> = ({ isOpen, onClose }) => {
             rounded-3xl
             px-4
             py-2
-           bg-blue-300
+           bg-blue-100
             leading-tight
+            text-black
             "
             ></p>
           )}
         </div>
-        <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 bg-white w-full  py-2">
+        <Card className="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-full  py-2">
           <div
             className="
           w-11/12 
           mb-2 
           mx-auto 
-          rounded-3xl  
+          rounded-lg  
           border 
           bg-white 
           px-4 
@@ -252,7 +255,7 @@ const ChatBotModal: React.FC<ChatBotModalProps> = ({ isOpen, onClose }) => {
           >
             <textarea
               ref={textareaRef}
-              className="w-3/4 h-full outline-none resize-none overflow-y-hidden pt-1"
+              className="w-3/4 h-full outline-none resize-none overflow-y-hidden pt-1 text-black"
               value={inputValue}
               onChange={handleInputChange}
               onKeyDown={handleEnterKeyPress}
@@ -260,16 +263,17 @@ const ChatBotModal: React.FC<ChatBotModalProps> = ({ isOpen, onClose }) => {
               rows={textareaRows}
               disabled={isLoading}
             />
-            <img
-              className="w-8 h-8 cursor-pointer"
-              onClick={sendChatBotRquest}
-              src={sendIcon}
-              alt=""
-            />
+            <Button variant={"ghost"} size={"icon"} onClick={sendChatBotRquest}>
+              <SendHorizontal
+                size={30}
+                strokeWidth={1.5}
+                className="dark:text-black"
+              />
+            </Button>
           </div>
-        </div>
+        </Card>
       </div>
-    </div>,
+    </Card>,
     document.getElementById("portal")!
   );
 };

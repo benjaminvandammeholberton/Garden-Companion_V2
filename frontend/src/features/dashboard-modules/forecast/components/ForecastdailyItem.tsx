@@ -67,12 +67,12 @@ const ForecastDailyItem: React.FC<ForecastDailyItemInterface> = ({
             </div>
           )}
 
-          {wind > 10 && (
+          {/* {wind > 10 && (
             <div className="flex flex-col justify-center items-center w-11 ">
               <img className="w-4 h-4" src={windIcon} alt="" />
               <span className="text-xs leading-0">{wind}km/h</span>
             </div>
-          )}
+          )} */}
         </div>
 
         <div className="flex items-center w-24 justify-center ">

@@ -7,6 +7,11 @@ from pydantic import BaseModel, EmailStr, Field
 from uuid import UUID
 
 
+class UpdatePasswordSchema(BaseModel):
+    password: str
+    new_password: str
+
+
 class LocalisationSchema(BaseModel):
     city: str
     postal_code: str

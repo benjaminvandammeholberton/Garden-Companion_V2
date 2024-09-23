@@ -45,10 +45,10 @@ class VegetableManagerService:
         :return: Created vegetable.
         """
         # Check if the area exists
-        area_id = UUID(data.area)
+        # area_id = UUID(data.area)
         area = await AreaService.retrieve_area(
             current_user=user,
-            area_id=area_id,
+            area_id=data.area,
             with_vegetable_details=False
         )
         if not area:

@@ -2,24 +2,25 @@
 import ReactDOM from "react-dom";
 
 // hooks
-import { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 
 // assets
-import { greenhouse } from "../../../../assets/assets-path";
-import settingsIcon from "../../../../assets/common/settings.png";
+import { greenhouse, outdoor, indoor } from "../../../../assets/assets-path";
 
 // components
 import Diary from "../../../diary/Diary";
 import TableProduction from "../../../../components/table-production/TableProduction";
-import AreasContext from "@/contexts/AreasContext";
-import { Button } from "@/components/ui/button";
-import { useToast } from "@/components/ui/use-toast";
 import { AreaInterface } from "@/interfaces/interfaces";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
+import { Card } from "@/components/ui/card";
+
+import AreaFormModify from "../components/AreaFormModify";
+import { Settings } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 interface AreaModalProps {
   isOpen: boolean;
@@ -27,14 +28,22 @@ interface AreaModalProps {
   area: AreaInterface | undefined;
 }
 
-const AreaModal: React.FC<AreaModalProps> = ({ isOpen, onClose, area }) => {
-  const areasContext = useContext(AreasContext);
-  if (!areasContext) {
-    throw new Error("AreasContext must be used within an AreasProvider");
-  }
-  const { areas, deleteArea } = areasContext;
+// function to get the right area icon based of the environnement
+const getAreaIcon = (env: string) => {
+  let areaIcon: string | undefined;
+  if (env === "indoor") areaIcon = indoor;
+  if (env === "greenhouse") areaIcon = greenhouse;
+  if (env === "outdoor") areaIcon = outdoor;
+  return areaIcon;
+};
 
-  const { toast } = useToast();
+const AreaModal: React.FC<AreaModalProps> = ({ isOpen, onClose, area }) => {
+  const [currentArea, setCurrentArea] = useState();
+  const [isPopoverOpen, setIsPopoverOpen] = useState(false);
+
+  useEffect(() => {
+    setCurrentArea(area);
+  }, [area]);
 
   const [diaryOpen, setDiaryOpen] = useState(false);
   const [tableOpen, setTableOpen] = useState(true);
@@ -53,45 +62,15 @@ const AreaModal: React.FC<AreaModalProps> = ({ isOpen, onClose, area }) => {
     }
   };
 
-  // useEffect(() => {
-  //   const handleOutsideClick = (event: MouseEvent) => {
-  //     const target = event.target as HTMLElement;
-  //     if (!target.closest(".area-modal-content") && isOpen) {
-  //       onClose();
-  //     }
-  //   };
-
-  //   if (isOpen) {
-  //     document.addEventListener("mousedown", handleOutsideClick);
-  //   }
-
-  //   return () => {
-  //     document.removeEventListener("mousedown", handleOutsideClick);
-  //   };
-  // }, [isOpen, onClose]);
-
-  const handleDelete = (areaId: string) => {
-    onClose();
-    const deletedArea = areas.filter(
-      (area: AreaInterface) => area.area_id === areaId
-    );
-    toast({
-      title: "Zone de culture suprimée 👍",
-      description: `${deletedArea[0].name}`,
-    });
-    deleteArea(areaId);
-  };
-
   if (!isOpen) return null;
 
   return ReactDOM.createPortal(
     <div className="fixed inset-0 flex justify-center z-50">
       <div className="absolute inset-0 bg-gray-900 opacity-50 "></div>
-      <div
+      <Card
         className="
         area-modal-content 
-        px-5 
-        bg-white 
+        bg-green-50 dark:bg-slate-600 
         fixed 
         left-1/2
         top-1/2 
@@ -101,36 +80,40 @@ const AreaModal: React.FC<AreaModalProps> = ({ isOpen, onClose, area }) => {
         md:rounded-sm 
         flex 
         flex-col
-        w-full md:w-[700px] 
+        w-full md:w-5/6 
         h-full md:h-5/6
         space-y-3
         "
       >
-        <div className="space-y-5">
+        <div className="space-y-5 bg-white dark:bg-slate-900 w-full">
           <div
             className="absolute cursor-pointer top-5 right-5"
             onClick={onClose}
           >
             <span className="p-2 text-4xl md:text-2xl">&times;</span>
           </div>
-          <div className="flex gap-3 items-end justify-center">
-            <img className="w-10 h-10" src={greenhouse} alt="" />
+          <div className="flex gap-3 items-center justify-center">
+            <img
+              className="w-8 h-8"
+              src={getAreaIcon(currentArea?.environnement)}
+              alt=""
+            />
             <div className="flex items-center gap-2">
-              <span className="text-3xl">{area?.name}</span>
-              <Popover>
-                <PopoverTrigger>
-                  <img
-                    className="w-4 h-4 cursor-pointer"
-                    src={settingsIcon}
-                    alt=""
-                  />
+              <span className="text-3xl">{currentArea?.name}</span>
+              <Popover open={isPopoverOpen} onOpenChange={setIsPopoverOpen}>
+                <PopoverTrigger asChild>
+                  <Button variant={"ghost"} size={"icon"}>
+                    <Settings size={20} />
+                  </Button>
                 </PopoverTrigger>
-                <PopoverContent>
-                  <div className="flex justify-center gap-5">
-                    <Button>Modifier</Button>
-                    <Button variant={"destructive"} onClick={() => handleDelete(area?.area_id ?? "")}>
-                      Supprimer
-                    </Button>
+                <PopoverContent asChild>
+                  <div className="flex flex-col justify-center items-center gap-5 w-96 mt-2 mr-30">
+                    <AreaFormModify
+                      area={currentArea}
+                      setArea={setCurrentArea}
+                      onClose={onClose}
+                      onModify={setIsPopoverOpen}
+                    />
                   </div>
                 </PopoverContent>
               </Popover>
@@ -155,10 +138,10 @@ const AreaModal: React.FC<AreaModalProps> = ({ isOpen, onClose, area }) => {
             </li>
           </ul>
         </div>
-        <div className="w-full h-full overflow-scroll px-5 mr-10">
-          {diaryOpen ? <Diary area={area} /> : <TableProduction />}
+        <div className="w-full h-full overflow-auto px-5 mr-10 scrollbar-thin scrollbar-thumb-rounded-full scrollbar-track-rounded-full scrollbar-thumb-slate-400 scrollbar-track-gray-100 dark:scrollbar-thumb-gray-100 dark:scrollbar-track-slate-900">
+          {diaryOpen ? <Diary area={area} /> : <TableProduction area={area} />}
         </div>
-      </div>
+      </Card>
     </div>,
     document.getElementById("portal")!
   );

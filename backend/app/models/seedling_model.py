@@ -15,3 +15,12 @@ class Seedling(Document):
     variety: str = Field(max_length=55, min_length=1)
     quantity: int = Field(gt=0, lt=9999)
     owner: UUID
+
+    class Settings:
+        """
+        Settings class for the Area model.
+
+        Attributes:
+        - name (str): The name of the collection in the database.
+        """
+        name = "seedlings"

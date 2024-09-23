@@ -27,6 +27,8 @@ class VegetableManager(Document):
     sowing_date: date | None = None
     planting_date: date | None = None
     ready_to_harvest: date | None = None
+    quantity_harvested: float | None = None
+    harvest_unit: str | None = None
     harvest: list[HarvestType] = []
     prune: list[PruneType] = []
     water: list[WaterType] = []

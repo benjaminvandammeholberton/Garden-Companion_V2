@@ -47,7 +47,17 @@ class ForecastService:
                 response = await client.get(api_url)
 
             if response.status_code == 200:
-                return response.json()
+                raw_data = response.json()
+                cities = []
+                for city in raw_data['postalCodes']:
+                    if city['countryCode'] == 'FR':
+                        formated_city = {
+                            'name': city['placeName'],
+                            'latitude': city['lat'],
+                            'longitude': city['lng'],
+                        }
+                        cities.append(formated_city)
+                return cities
 
             else:
                 raise HTTPException(

@@ -40,13 +40,18 @@ import { CalendarIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Calendar } from "@/components/ui/calendar";
 import { AreaInterface } from "@/interfaces/interfaces";
+import { Textarea } from "@/components/ui/textarea";
+import axiosInstance, { axiosInstanceFile } from "@/api/axios";
 
 interface PlantingFormInterface {
   onClose: () => void;
-  defaultValues?: object
+  defaultValues?: object;
 }
 
-const PlantingForm: React.FC<PlantingFormInterface> = ({ onClose, defaultValues }) => {
+const PlantingForm: React.FC<PlantingFormInterface> = ({
+  onClose,
+  defaultValues,
+}) => {
   const { toast } = useToast();
   const vegetablesContext = useContext(VegetablesContext);
   if (!vegetablesContext) {
@@ -73,52 +78,77 @@ const PlantingForm: React.FC<PlantingFormInterface> = ({ onClose, defaultValues 
       .positive(),
     quantity_unit: z.string().min(2).max(50),
     area: z.string(),
-    planting_date: z.date({}),
+    date: z.date({}),
+    note: z.string().max(500).optional(),
+    file: z.instanceof(FileList).optional(),
   });
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      name: defaultValues?.planting?.name  ?? "",
+      name: defaultValues?.planting?.name ?? "",
       variety: defaultValues?.planting?.variety ?? "",
       quantity: defaultValues?.planting?.quantity ?? 0,
       quantity_unit: "",
       area: "",
-      planting_date: new Date(),
+      date: new Date(),
+      note: "",
     },
   });
 
+  const fileRef = form.register("file");
+
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
+    const { file, ...rest } = values;
+
     const data = {
-      ...values,
-      planting_date: values.planting_date.toISOString().slice(0, 10),
+      ...rest,
+      date: values.date.toISOString().slice(0, 10),
+      type: "Planter",
     };
+    if (defaultValues?.planting) {
+      data["sowing_date"] = defaultValues.planting.created_at.slice(0, 10);
+    }
+    if (file && file.length > 0) {
+      const formData = new FormData();
+      formData.append("file", file[0]);
+      try {
+        const response = await axiosInstanceFile.post("/upload", formData);
+        data["photo"] = response.data;
+      } catch (error) {
+        console.error("Error submitting the file:", error);
+      }
+    }
+
     try {
-      let selected_area: AreaInterface | undefined = undefined;
-      const newVegetable = await createVegetable(data);
-      const newAreas = areas.map((area) => {
-        if (area.area_id === newVegetable?.area) {
-          selected_area = area;
-          return {
-            ...area,
-            vegetables: [...(area.vegetables ?? []), newVegetable],
-          };
-        }
-        return area;
-      });
-      setAreas(newAreas);
-      toast({
-        title: "Nouvelle plantation 👍",
-        description: `${newVegetable?.name} - ${newVegetable?.variety} (${newVegetable?.quantity}) dans votre espace: ${selected_area?.name}`,
-      });
-      onClose();
+      let selected_area: AreaInterface | undefined;
+      const response = await axiosInstance.post("/api/v1/action/", data);
+      const newVegetable = response.data;
+      if (newVegetable) {
+        const newAreas = areas.map((area) => {
+          if (area.area_id === newVegetable?.area) {
+            selected_area = area;
+            return {
+              ...area,
+              vegetables: [...(area.vegetables || []), newVegetable],
+            };
+          }
+          return area;
+        });
+        setAreas(newAreas);
+        toast({
+          title: "Nouvelle plantation 👍",
+          description: `${newVegetable?.name} - ${newVegetable?.variety} (${newVegetable?.quantity}) dans votre espace: ${selected_area?.name}`,
+        });
+        onClose();
+      }
     } catch (error) {
       console.error(error);
     }
   };
 
   return (
-    <div className="flex flex-col gap-10 w-1/2">
+    <div className="flex flex-col gap-10 w-4/5">
       <Form {...form}>
         <FormHeader icon={plantingIcon} name="Planter" />
         <form
@@ -131,7 +161,7 @@ const PlantingForm: React.FC<PlantingFormInterface> = ({ onClose, defaultValues 
             render={() => (
               <InputAllVegetables
                 setInput={(value) => form.setValue("name", value)}
-                defaultValue = {defaultValues?.planting?.name}
+                defaultValue={defaultValues?.planting?.name}
               />
             )}
           />
@@ -189,7 +219,7 @@ const PlantingForm: React.FC<PlantingFormInterface> = ({ onClose, defaultValues 
           />
           <FormField
             control={form.control}
-            name="planting_date"
+            name="date"
             render={({ field }) => (
               <FormItem className="flex flex-col items-center">
                 <FormLabel>Date</FormLabel>
@@ -225,6 +255,39 @@ const PlantingForm: React.FC<PlantingFormInterface> = ({ onClose, defaultValues 
                 <FormMessage />
               </FormItem>
             )}
+          />
+          <FormField
+            control={form.control}
+            name="note"
+            render={({ field }) => (
+              <FormItem className="flex flex-col items-center">
+                <FormLabel>Note</FormLabel>
+                <FormControl>
+                  <Textarea
+                    {...field}
+                    rows={4}
+                    className="w-full p-2 border rounded" // Add styling as needed
+                    placeholder="Ajoutez une note..."
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="file"
+            render={() => {
+              return (
+                <FormItem className="flex flex-col items-center">
+                  <FormLabel>Photo</FormLabel>
+                  <FormControl>
+                    <Input type="file" {...fileRef} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              );
+            }}
           />
           <Button type="submit">Planter</Button>
         </form>

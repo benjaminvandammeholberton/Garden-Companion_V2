@@ -6,7 +6,7 @@ API router for handling User-related operations.
 from fastapi import APIRouter, HTTPException, status, Depends
 import pymongo
 
-from app.schemas.user_schema import UserOut, UserRegister
+from app.schemas.user_schema import UpdatePasswordSchema, UserOut, UserRegister
 from app.core.dependencies import get_current_user
 from app.core.security import verify_password
 from app.models.user_model import User
@@ -47,12 +47,16 @@ async def get_info(current_user: User = Depends(get_current_user)):
 
 @user_router.put('/update_password', summary="Update the user password")
 async def update_password(
-        data: dict,
+        data: UpdatePasswordSchema,
         current_user: User = Depends(get_current_user)
 ):
     """
     """
-    return await UserService.update_user_password(data, current_user)
+    if (verify_password(data.password, current_user.hashed_password)):
+        return await UserService.update_user_password(data.new_password, current_user)
+    else:
+        raise HTTPException(
+            status_code=401, detail="Current password not valid")
 
 
 @user_router.delete('/delete_account', summary='Delete the current user')
@@ -69,7 +73,7 @@ async def delete_user(current_user: User = Depends(get_current_user)):
 # ):
 #     """
 #     """
-#     return verify_password(data['password'], current_user.hashed_password)
+#     return verify_password(data.password, current_user.hashed_password)
 
 
 # @user_router.get('/byemail/{email}', summary="Get user by email")

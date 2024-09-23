@@ -35,10 +35,12 @@ class UserService:
         await user_in.create()
 
         # add vegetable_info to the user
-        # await VegetableInfoService.add_all_vegetable_info_to_user(user_in)
+        await VegetableInfoService.add_all_vegetable_info_to_user(user_in)
 
-        if not settings.DEBUG:
-            await send_verification_email(user.email, user)
+        # if not settings.DEBUG:
+        #     await send_verification_email(user.email, user)
+
+        await send_verification_email(user.email, user)
 
         return user_in
 
@@ -88,9 +90,9 @@ class UserService:
         return user
 
     @staticmethod
-    async def update_user_password(data: dict, current_user: User) -> dict:
+    async def update_user_password(new_password: str, current_user: User) -> dict:
         """ """
-        hashed_password = get_password(data['new_password'])
+        hashed_password = get_password(new_password)
         current_user.hashed_password = hashed_password
         await current_user.save()
         new_access_token = create_access_token(current_user.user_id)

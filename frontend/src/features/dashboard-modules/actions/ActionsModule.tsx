@@ -6,7 +6,7 @@ import directSowingIcon from "../../../assets/actions-icons/direct-sowing.png";
 import harvestIcon from "../../../assets/actions-icons/harvest.png";
 import plantingIcon from "../../../assets/actions-icons/planting.png";
 import removeIcon from "../../../assets/actions-icons/remove.png";
-import mulchIcon from "../../../assets/actions-icons/mulch.png";
+import cameraIcon from "../../../assets/actions-icons/camera.png";
 import wateringIcon from "../../../assets/actions-icons/watering.png";
 import fertilizeIcon from "../../../assets/actions-icons/fertilize.png";
 import weedIcon from "../../../assets/actions-icons/weed.png";
@@ -41,42 +41,42 @@ const ActionsModule: React.FC<ActionsModuleProps> = () => {
           className="transition ease-in-out hover:scale-110 flex flex-col items-center cursor-pointer"
         >
           <img className="w-12" src={directSowingIcon} alt="" />
-          <p className="text-sm text-gray-500">Semer</p>
+          <p className="text-sm text-gray-500 dark:text-white">Semer</p>
         </div>
         <div
           onClick={() => openModal("planting")}
           className="transition ease-in-out hover:scale-110 flex flex-col items-center cursor-pointer"
         >
           <img className="w-12" src={plantingIcon} alt="" />
-          <p className="text-sm text-gray-500">Planter</p>
+          <p className="text-sm text-gray-500 dark:text-white">Planter</p>
         </div>
         <div
           onClick={() => openModal("water")}
           className="transition ease-in-out hover:scale-110 flex flex-col items-center cursor-pointer"
         >
           <img className="w-12" src={wateringIcon} alt="" />
-          <p className="text-sm text-gray-500">Arroser</p>
+          <p className="text-sm text-gray-500 dark:text-white">Arroser</p>
         </div>
         <div
           onClick={() => openModal("fertilize")}
           className="transition ease-in-out hover:scale-110 flex flex-col items-center cursor-pointer"
         >
           <img className="w-12" src={fertilizeIcon} alt="" />
-          <p className="text-sm text-gray-500">Fertiliser</p>
+          <p className="text-sm text-gray-500 dark:text-white">Fertiliser</p>
         </div>
         <div
           onClick={() => openModal("treat")}
           className="transition ease-in-out hover:scale-110 flex flex-col items-center cursor-pointer"
         >
           <img className="w-12" src={parasiteIcon} alt="" />
-          <p className="text-sm text-gray-500">Traiter</p>
+          <p className="text-sm text-gray-500 dark:text-white">Traiter</p>
         </div>
         <div
           onClick={() => openModal("harvest")}
           className="transition ease-in-out hover:scale-110 flex flex-col items-center cursor-pointer"
         >
           <img className="w-12" src={harvestIcon} alt="" />
-          <p className="text-sm text-gray-500">Récolter</p>
+          <p className="text-sm text-gray-500 dark:text-white">Récolter</p>
         </div>
 
         <div
@@ -84,7 +84,9 @@ const ActionsModule: React.FC<ActionsModuleProps> = () => {
           className="transition ease-in-out hover:scale-110 flex flex-col items-center cursor-pointer"
         >
           <img className="w-12" src={removeIcon} alt="" />
-          <p className="text-sm text-gray-500">Fin de culture</p>
+          <p className="text-sm text-gray-500 dark:text-white text-center">
+            Fin de culture
+          </p>
         </div>
 
         <div
@@ -92,15 +94,15 @@ const ActionsModule: React.FC<ActionsModuleProps> = () => {
           className="transition ease-in-out hover:scale-110 flex flex-col items-center cursor-pointer"
         >
           <img className="w-12" src={weedIcon} alt="" />
-          <p className="text-sm text-gray-500">Désherber</p>
+          <p className="text-sm text-gray-500 dark:text-white">Désherber</p>
         </div>
 
         <div
-          onClick={() => openModal("mulch")}
+          onClick={() => openModal("observation")}
           className="transition ease-in-out hover:scale-110 flex flex-col items-center cursor-pointer"
         >
-          <img className="w-12" src={mulchIcon} alt="" />
-          <p className="text-sm text-gray-500">Pailler</p>
+          <img className="w-12" src={cameraIcon} alt="" />
+          <p className="text-sm text-gray-500 dark:text-white">Observation</p>
         </div>
       </div>
       {/* <div className="flex justify-center gap-20 mt-5">

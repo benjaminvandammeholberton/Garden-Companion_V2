@@ -92,9 +92,14 @@ async def confirm_email(token: str):
             detail="Your account has not been verified"
         )
     await update_verified_user(verification['email'])
+    # if verification['check']:
+    #     return RedirectResponse(
+    #         url=f'{settings.FRONT_END_URL}/login.html',
+    #         status_code=302
+    #     )
     if verification['check']:
         return RedirectResponse(
-            url=f'{settings.FRONT_END_URL}/login.html',
+            url='http://localhost:3000/auth/login',
             status_code=302
         )
 

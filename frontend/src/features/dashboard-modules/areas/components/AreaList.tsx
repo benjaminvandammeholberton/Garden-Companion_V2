@@ -1,5 +1,5 @@
 // hooks
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 
 // assets
 import { greenhouse, outdoor, indoor } from "../../../../assets/assets-path";
@@ -13,6 +13,7 @@ import AreasContext from "@/contexts/AreasContext";
 
 // ui
 import { Skeleton } from "@/components/ui/skeleton";
+import { CirclePlus } from "lucide-react";
 
 interface AreaListProps {
   sortedBy: string;
@@ -36,8 +37,20 @@ const AreaList: React.FC<AreaListProps> = ({ sortedBy, openModal }) => {
     return areaIcon;
   };
 
+  if (areas.length === 0) {
+    return (
+      <div className="text-lg w-full mx-auto text-center flex items-center mt-5 leading-8">
+        <span>
+          {" "}
+          Pour commencer, créez une zone de culture en cliquant sur{" "}
+          <CirclePlus className="inline" size={"25"} strokeWidth={1.5} />
+        </span>
+      </div>
+    );
+  }
+
   return (
-    <div className="overflow-y-scroll overflow-x-hidden h-[285px] my-2 pr-2 mx-2 font-thin text-xl">
+    <div className="overflow-y-auto overflow-x-hidden h-[280px] px-2 font-thin text-xl scrollbar-thin scrollbar-thumb-rounded-full scrollbar-track-rounded-full scrollbar-thumb-slate-400 scrollbar-track-gray-100 dark:scrollbar-thumb-gray-100 dark:scrollbar-track-slate-900">
       {isLoading ? (
         <div className="space-y-2">
           {Array.from({ length: 8 }).map((_, index) => (
@@ -78,14 +91,15 @@ const AreaList: React.FC<AreaListProps> = ({ sortedBy, openModal }) => {
             .slice()
             .sort((a, b) => a.name.localeCompare(b.name))
             .map((area: AreaInterface, index: number) => {
-              return (
-                <AreaListItem
-                  key={index}
-                  area={area}
-                  openModal={openModal}
-                  areaIcon={getAreaIcon(area.environnement)}
-                />
-              );
+              if (area)
+                return (
+                  <AreaListItem
+                    key={index}
+                    area={area}
+                    openModal={openModal}
+                    areaIcon={getAreaIcon(area.environnement)}
+                  />
+                );
             })}
         </ul>
       )}

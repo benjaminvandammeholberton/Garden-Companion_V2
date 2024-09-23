@@ -9,7 +9,7 @@ interface PlantManagerModalProps {
   isOpen: boolean;
   onClose: () => void;
   actionName: string | null;
-  defaultValues?: object
+  defaultValues?: object;
 }
 
 const PlantManagerModal: React.FC<PlantManagerModalProps> = ({
@@ -18,22 +18,22 @@ const PlantManagerModal: React.FC<PlantManagerModalProps> = ({
   actionName,
   defaultValues,
 }) => {
-  useEffect(() => {
-    const handleOutsideClick = (event: MouseEvent) => {
-      const target = event.target as HTMLElement;
-      if (!target.closest(".plant-manager-modal-content") && isOpen) {
-        onClose();
-      }
-    };
+  // useEffect(() => {
+  //   const handleOutsideClick = (event: MouseEvent) => {
+  //     const target = event.target as HTMLElement;
+  //     if (!target.closest(".plant-manager-modal-content") && isOpen) {
+  //       onClose();
+  //     }
+  //   };
 
-    if (isOpen) {
-      document.addEventListener("mousedown", handleOutsideClick);
-    }
+  //   if (isOpen) {
+  //     document.addEventListener("mousedown", handleOutsideClick);
+  //   }
 
-    return () => {
-      document.removeEventListener("mousedown", handleOutsideClick);
-    };
-  }, [isOpen, onClose]);
+  //   return () => {
+  //     document.removeEventListener("mousedown", handleOutsideClick);
+  //   };
+  // }, [isOpen, onClose]);
 
   // Prevent scrolling of body content when modal is open
   useEffect(() => {
@@ -55,26 +55,23 @@ const PlantManagerModal: React.FC<PlantManagerModalProps> = ({
 
   return ReactDOM.createPortal(
     <div className="fixed inset-0 flex items-center justify-center z-50">
-      <div className="absolute inset-0 bg-gray-900 opacity-50"></div>
+      <div className="absolute inset-0 bg-black/80"></div>
       <div
         className="
       flex
       items-center
       plant-manager-modal-content 
-      bg-white 
-      fixed md:absolute 
-      left-1/2 
-      top-1/2 
-      transform 
-      -translate-x-1/2
-      -translate-y-1/2
-      p-5
-      w-full md:w-[500px]
-      h-full md:h-[700px]
+      md:absolute 
+      md:left-1/2 
+      md:top-1/2 
+      md:transform 
+      md:-translate-x-1/2
+      md:-translate-y-1/2
+
       "
       >
-        <CloseModal {...{ onClose }} />
-        <Card className="flex flex-col justify-center items-center w-3/4 px-5 py-5 mx-auto">
+        <Card className="flex flex-col justify-center items-center w-screen h-screen md:h-auto md:w-[400px] p-10 mx-auto relative">
+          <CloseModal {...{ onClose }} />
           <RenderPlantManagerModalContent
             content={actionName}
             onClose={onClose}

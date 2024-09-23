@@ -54,7 +54,6 @@ const InputAllVegetables: React.FC<InputAllVegetablesInterface> = ({
             `}
           />
         </FormControl>
-        <FormMessage />
         {nameInput.length > 0 && (
           <img
             className="absolute top-2 left-2 w-6"

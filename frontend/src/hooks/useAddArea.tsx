@@ -27,7 +27,7 @@ const useAddArea = (): useAddAreaReturnType => {
       await createAreaApi(data);
     } catch (error) {
       setError("Une erreur est survenue");
-      console.log(error);
+      console.error(error);
     } finally {
       SetIsLoading(false);
     }

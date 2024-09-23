@@ -1,6 +1,3 @@
-// assets
-import { addIcon, sortIcon, backIcon } from "../../../../assets/assets-path";
-
 // components
 import AreaList from "./AreaList";
 import AreaFormAdd from "./AreaFormAdd";
@@ -15,6 +12,8 @@ import AreaModal from "../modals/AreaModal";
 
 // interfaces
 import { AreaInterface } from "../../../../interfaces/interfaces";
+import { ArrowDownNarrowWide, CirclePlus, Undo2 } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 interface AreasModuleProps {
   areas: AreaInterface[];
@@ -39,26 +38,27 @@ const AreasModule: React.FC<AreasModuleProps> = ({
           <p>Veuillez rafraîchir la page.</p>
         </div>
       )}
-      <div
+      <Button
+        variant={"ghost"}
+        size={"icon"}
         onClick={handleClickAdd}
-        className={`absolute top-2 ${
-          addOpen ? "right-4" : "right-2"
-        } cursor-pointer`}
+        className={`absolute top-3 
+        right-3`}
       >
-        <img
-          className={addOpen ? "w-8 h-8" : "w-10 h-10"}
-          src={addOpen ? backIcon : addIcon}
-          alt=""
-        />
-      </div>
-      <div
-        className={`absolute top-2 left-2 cursor-pointer ${
-          addOpen ? "hidden" : "visible"
-        }`}
+        {addOpen ? (
+          <Undo2 size={"30"} strokeWidth={1.5} />
+        ) : (
+          <CirclePlus size={"30"} strokeWidth={1.5} />
+        )}
+      </Button>
+      <Button
+        variant={"ghost"}
+        size={"icon"}
+        className={`absolute top-3 left-3 ${addOpen ? "hidden" : "visible"}`}
         onClick={toggleSort}
       >
-        <img className="w-10 h-10" src={sortIcon} alt="" />
-      </div>
+        <ArrowDownNarrowWide size={"30"} strokeWidth={1.5} />
+      </Button>
       <div className={`ml-3 ${isSortOpen && !addOpen ? "visible" : "hidden"}`}>
         Trier par :
         <ul className="ml-5">

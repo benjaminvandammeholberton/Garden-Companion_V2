@@ -15,6 +15,16 @@ const axiosInstance = axios.create({
   },
 });
 
+export const axiosInstanceFile = axios.create({
+  baseURL: "http://localhost:8001",
+  headers: {
+    common: {
+      Authorization: `Bearer ${getToken()}`,
+      "Content-Type": "multipart/form-data",
+    },
+  },
+});
+
 export const updateTokenInAxiosHeaders = (token: string) => {
   axiosInstance.defaults.headers.common["Authorization"] = `Bearer ${token}`;
 };
